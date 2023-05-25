@@ -17,9 +17,9 @@ import javax.swing.JButton;
  */
 public class pruebas extends javax.swing.JFrame {
 
-     
-     public static String fechaV="";
-     public static JDateChooser dateChooser;
+    public static String fechaV = "";
+    public static JDateChooser dateChooser;
+
     public pruebas() {
         initComponents();
         dateChooser = new JDateChooser();
@@ -33,10 +33,9 @@ public class pruebas extends javax.swing.JFrame {
             }
         });
 //        getContentPane().add(btnFecha);
-        
 
         
-        
+
     }
 
     /**

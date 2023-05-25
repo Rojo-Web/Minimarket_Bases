@@ -310,7 +310,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         } else {
             jbImg.setEnabled(true);
         }
-    }//Hasta aqui hay que mirar la forma de que cuando no haya un texto diferente al que le ponemos en el plesjolde, no se puede activar el boton, cosa que aun no pasa 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
