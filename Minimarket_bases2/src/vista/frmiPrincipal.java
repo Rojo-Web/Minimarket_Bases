@@ -52,21 +52,14 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIEmpresa.setText("Empresa");
         JmPrincipales.add(jMIEmpresa);
 
-        jMICaja.setText("Caja");
-        JmPrincipales.add(jMICaja);
 
         fileMenu.add(JmPrincipales);
 
-        jMSecundarias.setText("Secundarias");
+        jMSecundarias.setText("Admin");
 
         jMIEmpleado.setText("Empleado");
         jMSecundarias.add(jMIEmpleado);
 
-        jMIDetalle.setText("Detalle");
-        jMSecundarias.add(jMIDetalle);
-
-        jMIEncabezado.setText("Encabezado");
-        jMSecundarias.add(jMIEncabezado);
 
         fileMenu.add(jMSecundarias);
 
@@ -80,7 +73,14 @@ public class frmiPrincipal extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+        
+        jMSecundarias.setEnabled(false);
 
+        //BLoque por si no es admin
+        if (Modelo.C_login.Val_admin==true) {
+            jMSecundarias.setEnabled(true);
+        }
+        
         //Fin del seccion del menu nav
         setLocationRelativeTo(null);
         //setSize(700,600);
@@ -104,11 +104,8 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIProducto = new javax.swing.JMenuItem();
         jMICliente = new javax.swing.JMenuItem();
         jMIEmpresa = new javax.swing.JMenuItem();
-        jMICaja = new javax.swing.JMenuItem();
         jMSecundarias = new javax.swing.JMenu();
         jMIEmpleado = new javax.swing.JMenuItem();
-        jMIDetalle = new javax.swing.JMenuItem();
-        jMIEncabezado = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -132,21 +129,12 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIEmpresa.setText("jMenuItem3");
         JmPrincipales.add(jMIEmpresa);
 
-        jMICaja.setText("jMenuItem4");
-        JmPrincipales.add(jMICaja);
-
         fileMenu.add(JmPrincipales);
 
         jMSecundarias.setText("jMenu1");
 
-        jMIEmpleado.setText("jMenuItem5");
+        jMIEmpleado.setText("jMenuItem7");
         jMSecundarias.add(jMIEmpleado);
-
-        jMIDetalle.setText("jMenuItem6");
-        jMSecundarias.add(jMIDetalle);
-
-        jMIEncabezado.setText("jMenuItem7");
-        jMSecundarias.add(jMIEncabezado);
 
         fileMenu.add(jMSecundarias);
 
@@ -234,12 +222,9 @@ public class frmiPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenuItem jMICaja;
     private javax.swing.JMenuItem jMICliente;
-    private javax.swing.JMenuItem jMIDetalle;
     private javax.swing.JMenuItem jMIEmpleado;
     private javax.swing.JMenuItem jMIEmpresa;
-    private javax.swing.JMenuItem jMIEncabezado;
     private javax.swing.JMenuItem jMIProducto;
     private javax.swing.JMenu jMSecundarias;
     private javax.swing.JMenuBar menuBar;

@@ -33,11 +33,6 @@
                     <Property name="text" type="java.lang.String" value="jMenuItem3"/>
                   </Properties>
                 </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMICaja">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="jMenuItem4"/>
-                  </Properties>
-                </MenuItem>
               </SubComponents>
             </Menu>
             <Menu class="javax.swing.JMenu" name="jMSecundarias">
@@ -46,16 +41,6 @@
               </Properties>
               <SubComponents>
                 <MenuItem class="javax.swing.JMenuItem" name="jMIEmpleado">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="jMenuItem5"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMIDetalle">
-                  <Properties>
-                    <Property name="text" type="java.lang.String" value="jMenuItem6"/>
-                  </Properties>
-                </MenuItem>
-                <MenuItem class="javax.swing.JMenuItem" name="jMIEncabezado">
                   <Properties>
                     <Property name="text" type="java.lang.String" value="jMenuItem7"/>
                   </Properties>

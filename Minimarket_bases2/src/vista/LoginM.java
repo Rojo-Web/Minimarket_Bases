@@ -112,6 +112,7 @@ public class LoginM extends javax.swing.JFrame {
 
     
     public void barrapro2() {
+        C_login.ver_nivel(jTuser.getText());
         escuchar = new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent ae) {
@@ -126,7 +127,7 @@ public class LoginM extends javax.swing.JFrame {
                 }
             }
         };
-        tmr = new Timer(100, escuchar);
+        tmr = new Timer(10, escuchar);
         tmr.start();
     }
     

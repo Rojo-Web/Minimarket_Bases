@@ -63,17 +63,6 @@ public class MySQL {
         }
     }
 
-    //create table empleados ( id_empl int unsigned auto_increment, nombre varchar(30), apellido varchar(30), turno varchar(2), fecha_nacimi varchar(50), edad varchar(30), nivel varchar(50), primary key(id_empl));
-//    public void createTable(String name){
-//        try {
-//            String Query = "CREATE TABLE "+ name + "" + "(ID_empl VARCHAR(25), Nombre VARCHAR(50), Apellido VARCHAR(50),"+"Edad VARCHAR(3),Sexo VARCHAR(1))";
-//            JOptionPane.showMessageDialog(null, "Se ha creado la base de tabla "+ name + " de forma exitosa");
-//            Statement st = Conexion.createStatement();
-//            st.executeUpdate(Query);
-//        } catch (SQLException ex) {
-//            Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE,null,ex);
-//        }
-//    }
     public static void insertData(String table_name, String ID, String name, String lastname, String age, String genero) {
         try {
             String Query = "INSERT INTO " + table_name + " VALUES("
@@ -119,27 +108,7 @@ public class MySQL {
         }
     }
 
-//    public static void recuperarImg(String user) {
-//        try {
-//
-//            
-//
-//            //Codigo para mandar ordenes a la base de datos
-//            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT img FROM empleados where nombre = ?");
-//            stp.setString(1, user);
-//
-//            ResultSet res3 = (ResultSet) stp.executeQuery();
-//
-//            if (res3.next()) {
-//
-//                imageObt = res3.getString("img");
-//                System.out.println(imageObt);
-//  
-//            }
-//        } catch (SQLException ex) {
-//            System.out.println("Error imagen no encotrada");
-//        }
-//    }
+
 
     public static void Ctabla_empl() {
 
