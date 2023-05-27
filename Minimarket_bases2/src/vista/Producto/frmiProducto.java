@@ -1093,6 +1093,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         setVisible(false);
+        contador=0;
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void JBImprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBImprActionPerformed
