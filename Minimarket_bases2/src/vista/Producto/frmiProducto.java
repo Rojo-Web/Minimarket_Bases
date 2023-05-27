@@ -84,7 +84,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public void componets() {
         //**********COMPONENTES************
         //Labels
-        
+        //lblID
+        jLId.setForeground(new java.awt.Color(0, 0, 0));
+        jLId.setFont(new Font("Arial", Font.BOLD, 14));
+        jLId.setText("ID");
         //lblprecio
         jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
         jlPrecio.setFont(new Font("Arial", Font.BOLD, 14));
@@ -113,7 +116,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jLVenci.setForeground(new java.awt.Color(0, 0, 0));
         jLVenci.setFont(new Font("Arial", Font.BOLD, 14));
         jLVenci.setText("Fecha de vencimiento");
-        
+        //lblMedida
+        jLmedida.setForeground(new java.awt.Color(0, 0, 0));
+        jLmedida.setFont(new Font("Arial", Font.BOLD, 14));
+        jLmedida.setText("Medida de venta");
         //lblFoto
         jlFoto.setForeground(new java.awt.Color(0, 0, 0));
         jlFoto.setFont(new Font("Arial", Font.BOLD, 14));
@@ -238,19 +244,21 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jBUltim.setEnabled(false);
 
         //Panel principal Bloqueado
-       
+        jtId.setEnabled(false);
         jtMarca.setEnabled(false);
         jtNom_prod.setEnabled(false);
         jtPrecio.setEnabled(false);
         jbImg.setEnabled(false);
         dateChooser.setEnabled(false);
-        
+        jCBmedida.setEnabled(false);
 
     }
 
     public void Pjolder() {
         //Caajas de texto
-        
+        jtId.setForeground(Color.GRAY);
+        jtId.setText("Id");
+        jtId.setColumns(5);
 
         jtNom_prod.setForeground(Color.GRAY);
         jtNom_prod.setText("Nombre");
@@ -297,7 +305,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     }
 
     public void rec_dat() {
-        if ( jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null ) {
+        if (jtId.getText().equalsIgnoreCase("Id") || jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
             jbImg.setEnabled(false);
         } else {
             jbImg.setEnabled(true);
@@ -315,6 +323,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jPCent = new javax.swing.JPanel();
+        jLId = new javax.swing.JLabel();
+        jtId = new javax.swing.JTextField();
         jlNom_prod = new javax.swing.JLabel();
         jtNom_prod = new javax.swing.JTextField();
         jlMarca = new javax.swing.JLabel();
@@ -327,6 +337,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jlFoto = new javax.swing.JLabel();
         jLVenci = new javax.swing.JLabel();
         jBVenci = new javax.swing.JButton();
+        jLmedida = new javax.swing.JLabel();
+        jCBmedida = new javax.swing.JComboBox<>();
         jlNav = new javax.swing.JLabel();
         jPNav = new javax.swing.JPanel();
         jBPrimer1 = new javax.swing.JButton();
@@ -361,6 +373,25 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         );
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
+
+        jLId.setText("jLabel1");
+
+        jtId.setText("jTextField1");
+        jtId.setMaximumSize(new java.awt.Dimension(71, 22));
+        jtId.setMinimumSize(new java.awt.Dimension(71, 22));
+        jtId.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jtIdFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jtIdFocusLost(evt);
+            }
+        });
+        jtId.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jtIdActionPerformed(evt);
+            }
+        });
 
         jlNom_prod.setText("jLabel1");
 
@@ -438,6 +469,23 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jLmedida.setText("jLabel2");
+
+        jCBmedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medida", "Libra", "Kilo", "Unidad" }));
+        jCBmedida.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jCBmedidaFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jCBmedidaFocusLost(evt);
+            }
+        });
+        jCBmedida.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBmedidaActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPCentLayout = new javax.swing.GroupLayout(jPCent);
         jPCent.setLayout(jPCentLayout);
         jPCentLayout.setHorizontalGroup(
@@ -445,17 +493,30 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             .addGroup(jPCentLayout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlMarca)
-                            .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 79, Short.MAX_VALUE))
-                    .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
-                .addGap(17, 17, 17)
+                            .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(jlMarca)
+                                    .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jLId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
+                        .addGap(17, 17, 17))
+                    .addGroup(jPCentLayout.createSequentialGroup()
+                        .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(jLmedida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addGap(18, 18, 18))
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)))
                         .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -464,7 +525,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(jlNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 175, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jlFoto)
                         .addGap(76, 76, 76))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -484,9 +545,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                         .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addComponent(jlNom_prod)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(jLId)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(jlNom_prod)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPCentLayout.createSequentialGroup()
@@ -498,9 +565,13 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(18, 18, 18)
-                        .addComponent(jLVenci)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLVenci)
+                            .addComponent(jLmedida))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jBVenci)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jBVenci)
+                            .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -739,13 +810,13 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         if (contador % 2 == 0) {
             if (archivo != null) {
 
-                
+                jtId.setEnabled(false);
                 jtMarca.setEnabled(false);
                 jtNom_prod.setEnabled(false);
                 jtPrecio.setEnabled(false);
                 jbImg.setEnabled(false);
                 dateChooser.setEnabled(false);
-                
+                jCBmedida.setEnabled(false);
 
                 ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
                 ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
@@ -754,7 +825,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 jBIng.setIcon(mitad_1);
 
                 //Obtencion de datos
-                
+                Datos_p[cont_fil][0] = jtId.getText();
                 Datos_p[cont_fil][1] = jtPrecio.getText();
                 Datos_p[cont_fil][2] = jtNom_prod.getText();
                 Datos_p[cont_fil][3] = jtMarca.getText();
@@ -781,14 +852,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
 
                 //Volver a poner vacios los jtextfield
-               
+                jtId.setText("");
                 jtMarca.setText("");
                 jtNom_prod.setText("");
                 jtPrecio.setText("");
                 Date Vacio_fech = null;
                 dateChooser.setDate(Vacio_fech);
 
-              
+                jCBmedida.setSelectedIndex(0);
                 Pjolder();
                 jBIng.setToolTipText("Ingreso");
 
@@ -821,7 +892,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     //PAra que de je la imagen puesta
                     for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
 
-                       
+                        jtId.setText(Datos_p[cont_fil_nav][0]);
                         jtPrecio.setText(Datos_p[cont_fil_nav][1]);
                         jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
                         jtMarca.setText(Datos_p[cont_fil_nav][3]);
@@ -845,10 +916,20 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                         System.out.println(selec_act2);
                         System.out.println(selec_act2.trim());
 
-                        
-                        
-                        
-                        
+                        switch (selec_act2.trim()) {
+                            case "Libra":
+                                jCBmedida.setSelectedIndex(1);
+                                break;
+                            case "Kilo":
+                                jCBmedida.setSelectedIndex(2);
+                                break;
+                            case "Unidad":
+                                jCBmedida.setSelectedIndex(3);
+                                break;
+                            default:
+                                throw new AssertionError();
+                        }
+
                         //Poner la imagen en el label
                         ImageIcon proFotorec = new ImageIcon(Datos_p[cont_fil_nav][6]);
                         ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
@@ -867,7 +948,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         } else {
             dateChooser.setEnabled(true);
-           
+            jCBmedida.setEnabled(true);
+            jtId.setEnabled(true);
             jtMarca.setEnabled(true);
             jtNom_prod.setEnabled(true);
             jtPrecio.setEnabled(true);
@@ -901,6 +983,26 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
     }//GEN-LAST:event_jBConsultaActionPerformed
+
+    private void jtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusGained
+        if (jtId.getText().equals("Id")) {
+            jtId.setForeground(Color.BLACK);
+            jtId.setText("");
+            rec_dat();
+        }
+
+
+    }//GEN-LAST:event_jtIdFocusGained
+
+    private void jtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusLost
+        if (!jtId.getText().isEmpty()) {
+
+        } else {
+            jtId.setForeground(Color.GRAY);
+            jtId.setText("Id");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtIdFocusLost
 
     private void jtNom_prodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusGained
         if (jtNom_prod.getText().equals("Nombre")) {
@@ -1085,7 +1187,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         for (int j = 0; j < Datos_p[0].length; j++) {
 
-          
+            jtId.setText(Datos_p[0][0]);
             jtPrecio.setText(Datos_p[0][1]);
             jtNom_prod.setText(Datos_p[0][2]);
             jtMarca.setText(Datos_p[0][3]);
@@ -1109,7 +1211,19 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             System.out.println(selec_act2);
             System.out.println(selec_act2.trim());
 
-            
+            switch (selec_act2.trim()) {
+                case "Libra":
+                    jCBmedida.setSelectedIndex(1);
+                    break;
+                case "Kilo":
+                    jCBmedida.setSelectedIndex(2);
+                    break;
+                case "Unidad":
+                    jCBmedida.setSelectedIndex(3);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
 
             //Poner la imagen en el label
             ImageIcon proFoto2 = new ImageIcon(Datos_p[0][6]);
@@ -1137,7 +1251,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
          */
         for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
 
-            
+            jtId.setText(Datos_p[cont_fil_nav][0]);
             jtPrecio.setText(Datos_p[cont_fil_nav][1]);
             jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
             jtMarca.setText(Datos_p[cont_fil_nav][3]);
@@ -1161,7 +1275,19 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             System.out.println(selec_act2);
             System.out.println(selec_act2.trim());
 
-            
+            switch (selec_act2.trim()) {
+                case "Libra":
+                    jCBmedida.setSelectedIndex(1);
+                    break;
+                case "Kilo":
+                    jCBmedida.setSelectedIndex(2);
+                    break;
+                case "Unidad":
+                    jCBmedida.setSelectedIndex(3);
+                    break;
+                default:
+                    throw new AssertionError();
+            }
 
             //Poner la imagen en el label
             ImageIcon proFotorec = new ImageIcon(Datos_p[cont_fil_nav][6]);
@@ -1188,7 +1314,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         for (int j = 0; j < Datos_p[cont_flec].length; j++) {
             if (j == 0) {
 
-               
+                jtId.setText(Datos_p[cont_flec][0]);
                 jtPrecio.setText(Datos_p[cont_flec][1]);
                 jtNom_prod.setText(Datos_p[cont_flec][2]);
                 jtMarca.setText(Datos_p[cont_flec][3]);
@@ -1212,7 +1338,19 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 System.out.println(selec_act2);
                 System.out.println(selec_act2.trim());
 
-               
+                switch (selec_act2.trim()) {
+                    case "Libra":
+                        jCBmedida.setSelectedIndex(1);
+                        break;
+                    case "Kilo":
+                        jCBmedida.setSelectedIndex(2);
+                        break;
+                    case "Unidad":
+                        jCBmedida.setSelectedIndex(3);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
 
                 //Poner la imagen en el label
                 ImageIcon proFotorec = new ImageIcon(Datos_p[cont_flec][6]);
@@ -1238,7 +1376,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         for (int j = 0; j < Datos_p[cont_flec].length; j++) {
             if (j == 0) {
 
-           
+                jtId.setText(Datos_p[cont_flec][0]);
                 jtPrecio.setText(Datos_p[cont_flec][1]);
                 jtNom_prod.setText(Datos_p[cont_flec][2]);
                 jtMarca.setText(Datos_p[cont_flec][3]);
@@ -1262,7 +1400,19 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 System.out.println(selec_act2);
                 System.out.println(selec_act2.trim());
 
-              
+                switch (selec_act2.trim()) {
+                    case "Libra":
+                        jCBmedida.setSelectedIndex(1);
+                        break;
+                    case "Kilo":
+                        jCBmedida.setSelectedIndex(2);
+                        break;
+                    case "Unidad":
+                        jCBmedida.setSelectedIndex(3);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
 
                 //Poner la imagen en el label
                 ImageIcon proFotorec = new ImageIcon(Datos_p[cont_flec][6]);
@@ -1285,6 +1435,62 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private void jBVenciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVenciActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jBVenciActionPerformed
+
+    private void jCBmedidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBmedidaActionPerformed
+        int indice = jCBmedida.getSelectedIndex();
+        switch (indice) {
+            case 0:
+                if (val_com == false) {
+                } else {
+                    selec_med = null;
+                }
+
+                //JOptionPane.showMessageDialog(rootPane, "Selecciona una unidad de medida correcta", "error", JOptionPane.WARNING_MESSAGE);
+                break;
+            case 1:
+                if (val_com == false) {
+                } else {
+                    selec_med = "Libra";
+                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
+                }
+                break;
+            case 2:
+                if (val_com == false) {
+                } else {
+                    selec_med = "Kilo";
+                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
+                }
+                break;
+            case 3:
+                if (val_com == false) {
+                } else {
+                    selec_med = "Unidad";
+                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
+                }
+                break;
+//                    case 4:
+//                        selec_med="Unidad";
+//                        cant_med=Integer.parseInt(JOptionPane.showInputDialog("Cuantas "+selec_med+"s:"));
+//                        break;
+        }
+
+        if (selec_med != null) {
+            combo_result = cant_med + " " + selec_med;
+            JOptionPane.showMessageDialog(rootPane, combo_result, "Resultado", JOptionPane.PLAIN_MESSAGE);
+        }
+    }//GEN-LAST:event_jCBmedidaActionPerformed
+
+    private void jCBmedidaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusGained
+        rec_dat();
+    }//GEN-LAST:event_jCBmedidaFocusGained
+
+    private void jCBmedidaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusLost
+        rec_dat();
+    }//GEN-LAST:event_jCBmedidaFocusLost
+
+    private void jtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtIdActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jtIdActionPerformed
 
     public void modificarDatos(int fils, int cols) {
         if (cols == 6) {
@@ -1370,12 +1576,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JButton jBSigui;
     private javax.swing.JButton jBUltim;
     private javax.swing.JButton jBVenci;
+    private javax.swing.JComboBox<String> jCBmedida;
     private javax.swing.JLabel jLCrud;
     private javax.swing.JLabel jLFn;
+    private javax.swing.JLabel jLId;
     private javax.swing.JLabel jLImg;
     private javax.swing.JLabel jLInfo;
     private javax.swing.JLabel jLVenci;
     private javax.swing.JLabel jLfech;
+    private javax.swing.JLabel jLmedida;
     private javax.swing.JPanel jPCent;
     private javax.swing.JPanel jPFn;
     private javax.swing.JPanel jPNav;
@@ -1390,6 +1599,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlNav;
     private javax.swing.JLabel jlNom_prod;
     private javax.swing.JLabel jlPrecio;
+    private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtMarca;
     private javax.swing.JTextField jtNom_prod;
     private javax.swing.JTextField jtPrecio;
