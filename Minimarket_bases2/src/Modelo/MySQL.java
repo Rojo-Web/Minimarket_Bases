@@ -10,10 +10,6 @@ package Modelo;
  */
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.ResultSet;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -27,7 +23,7 @@ public class MySQL {
     public static Connection Conexion;
     private static byte[] imageBytes;
     public static String imageObt;
-    private static int id_em;
+    private static int id_verifi, cant_fin, tabla_exist;
 
     public static void MySQLConnection(String user, String pass, String db_name) {
         try {
@@ -108,8 +104,78 @@ public class MySQL {
         }
     }
 
+    
+    //**************************Metodos fotos********************************************************************************
+    public static String imgenEnviar(String enlace) {
+//        Reemplazar "\\" por "/"
+        String enlaceConvertido = enlace.replace("\\", "/");
 
+        String cadenaOriginal = enlaceConvertido;
+        String palabra = "/imagenes";
 
+        // Obtener el índice de la palabra en la cadena
+        int indice = cadenaOriginal.indexOf(palabra);
+
+        if (indice != -1) {
+            // Obtener la subcadena a partir del índice de la palabra
+            String subcadena = cadenaOriginal.substring(indice);
+            return subcadena;
+        } else {
+            // La palabra no se encontró en la cadena
+            return "";
+        }
+    }
+
+    
+    
+    //*****************************Metodos extras****************************************************************************
+    //OBTENER CUANTOS REGISTROS HAY EN LA TABLA 
+    public static int cantRegistros(String Tabla, String campVerficador) {
+        
+        MySQLConnection("root", "", "minimarket");
+
+        //Validar cuantos registros
+        try {
+            System.out.println(Tabla + " " + campVerficador);
+            //Codigo para mandar ordenes a la base de datos
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("select count(*) as " + campVerficador + " from " + Tabla + ";");
+
+            ResultSet res_cont = (ResultSet) stp.executeQuery();
+
+            if (res_cont.next()) {
+                int total_users = res_cont.getInt(campVerficador);
+                System.out.println(total_users);
+                id_verifi = total_users + 1;
+                System.out.println(id_verifi);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error cant no encotrado");
+        }
+
+        return cant_fin;
+    }
+
+    //SABER SI UNA TABLA EXISTE O NO, PARA ASI CREALA O NO
+    public static int verif_table(String table_name) {
+        MySQLConnection("root", "", "minimarket");
+        try {
+//        PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = "+table_name);
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'minimarket' AND table_name = '" + table_name + "' );");
+
+            ResultSet res_ver = (ResultSet) stp.executeQuery();
+
+            if (res_ver.next()) {
+                tabla_exist = res_ver.getInt(1);
+
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error usuario no encotrado");
+        }
+
+        return tabla_exist;
+    }
+    
+    //*********************************************Todo para empleados******************************************************* 
     public static void Ctabla_empl() {
 
         try {
@@ -126,32 +192,15 @@ public class MySQL {
 
     public static void insert_empl(String table_name, String name, String lastname, String clave, String turno, String nivel, String fech_naci, String edad) {
         MySQLConnection("root", "", "minimarket");
-        
-        //Validar cuantos registros
-        try {
-            
-            //System.out.println(user);
-            
-            //Codigo para mandar ordenes a la base de datos
-            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("select count(*) as id_empl from empleados;");
-            
-            ResultSet res_cont = (ResultSet) stp.executeQuery();
-            
-            if (res_cont.next()) {
-                int total_users = res_cont.getInt("id_empl");
-                System.out.println(total_users);
-                id_em=total_users+1;
-                System.out.println(id_em);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error cant no encotrado");
-        }
 
+        int id_em = cantRegistros("empleados", "id_empl");
+
+        System.out.println(id_em);
 
         try {
             System.out.println("Entre");
             String Query = "INSERT INTO " + table_name + "(id_empl, nombre, apellido, turno, fecha_nacimi, edad, nivel, clave) VALUES("
-                    +id_em+","
+                    + id_em + ","
                     + "'" + name + "' ,"
                     + "'" + lastname + "' ,"
                     + "'" + turno + "' ,"
@@ -169,4 +218,55 @@ public class MySQL {
         }
     }
 
+    
+
+    
+    
+    //**********************************************TODO PARA PRODUCTOS*********************************************************************************************
+    public static void Ctabla_prod() {
+        int exist = verif_table("productos");
+        System.out.println(exist);
+
+        if (exist == 1) {
+
+        } else {
+            try {
+
+                String Query = "CREATE TABLE " + "productos (id_prod int(100) auto_increment, nombre_prod varchar(30) NOT NULL, marca varchar(50) NOT NULL, precio INTEGER(255) NOT NULL, fecha_venci varchar(70) NOT NULL, cantidad INTEGER(255) NOT NULL, medida varchar(100) NOT NULL, img_prod varchar(1000), primary key(id_prod))";
+                JOptionPane.showMessageDialog(null, "Se ha creado la tabla productos de forma exitosa");
+                Statement st = Conexion.createStatement();
+                st.executeUpdate(Query);
+            } catch (SQLException ex) {
+                Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+
+    public static void insert_prod(String table_name, String name_prod, String marca, int precio, String vencimiento, int cantidad, String medida, String img_prod) {
+        MySQLConnection("root", "", "minimarket");
+
+        int id_prod = cantRegistros("empleados", "id_empl");
+        System.out.println(id_prod);
+
+        try {
+            System.out.println("Entre");
+            String Query = "INSERT INTO " + table_name + "(id_prod, nombre_prod, marca, precio, fecha_venci, cantidad, medida, img_prod) VALUES("
+                    + id_prod + ","
+                    + "'" + name_prod + "' ,"
+                    + "'" + marca + "' ,"
+                    + "'" + precio + "' ,"
+                    + "'" + vencimiento + "' ,"
+                    + "'" + cantidad + "' ,"
+                    + "'" + medida + "' ,"
+                    + "'" + img_prod + "')";
+            Statement st = Conexion.createStatement();
+            st.executeUpdate(Query);
+
+            JOptionPane.showMessageDialog(null, "Nuevo producto almacenado de forma exitosa");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos producto");
+        }
+    }
 }

@@ -4,6 +4,7 @@
  */
 package vista;
 
+import Modelo.MySQL;
 import vista.Producto.frmiProducto;
 import java.awt.Component;
 import java.awt.Image;
@@ -182,6 +183,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
             }
             producto.setVisible(true);
+            MySQL.Ctabla_prod();
 
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Se requiere de un Numero. Error: " + e);

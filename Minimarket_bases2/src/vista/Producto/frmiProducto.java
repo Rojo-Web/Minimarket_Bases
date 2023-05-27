@@ -4,6 +4,7 @@
  */
 package vista.Producto;
 
+import Modelo.MySQL;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -20,7 +21,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import vista.Login;
 import vista.frmiPrincipal;
 import static vista.frmiPrincipal.nFils;
 
@@ -33,6 +33,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
+    private static String Tabla="productos",ID="id_prod";
 
     //Tabla de consulta
     public static String[] sCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca", "Vence", "Medida", "Ruta_foto"};
@@ -814,124 +815,52 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
                 // establece el icono en el botón
                 jBIng.setIcon(mitad_1);
-
-                //Obtencion de datos
-                Datos_p[cont_fil][0] = jtId.getText();
-                Datos_p[cont_fil][1] = jtPrecio.getText();
-                Datos_p[cont_fil][2] = jtNom_prod.getText();
-                Datos_p[cont_fil][3] = jtMarca.getText();
-
+                
+                //Entrada de datos a la base
+                
                 //Obtencion de la fecha de vencimiento
                 Date fechaVenci = dateChooser.getDate();
                 SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
                 String fechaV = form.format(fechaVenci);
+                
+                //Conversion de la imgen 
+                String img_paht=MySQL.imgenEnviar(archivo.getAbsolutePath());
+                System.out.println(img_paht);
+                
+                //Enviar los datos                                                                                                      cantidad  medida  img
+                MySQL.insert_prod("productos", jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, cant_med, selec_med, img_paht);
 
-                Datos_p[cont_fil][4] = fechaV;
-                System.out.println(fechaV);
 
-                System.out.println(combo_result);
-                //Obtencion de datos del combox
-                Datos_p[cont_fil][5] = combo_result;
+//                MIRAR COMO VAN A FUNCIONAR AHORA ESTOS CONTADORES
+//                cont_fil++;
+//                cont_fil_nav++;
+//                cont_label = cont_fil;
+//                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
 
-                //Aqui iria la optencion del combo
-                //Obtencion de la imagen
-                Datos_p[cont_fil][6] = archivo.getPath();
+                
 
-                cont_fil++;
-                cont_fil_nav++;
-                cont_label = cont_fil;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
+                
+//                  AQUI ESTABA LA CONDICION DE CUANDO LLEGABA A EL TOPE
+                    
 
-                //Volver a poner vacios los jtextfield
-                jtId.setText("");
-                jtMarca.setText("");
-                jtNom_prod.setText("");
-                jtPrecio.setText("");
-                Date Vacio_fech = null;
-                dateChooser.setDate(Vacio_fech);
-
-                jCBmedida.setSelectedIndex(0);
-                Pjolder();
-                jBIng.setToolTipText("Ingreso");
-
-                //Para que se reinicie el label
-                ImageIcon proRei = new ImageIcon(getClass().getResource(""));
-                ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(rei_pro);
-
-                if (frmiPrincipal.nFils == cont_fil) {
-
-//                    if (nFils < 1) {
-//                        jBSigui.setEnabled(false);
-//                        jBAnterior.setEnabled(false);
-//                        jBPrimer1.setEnabled(false);
-//                        jBUltim.setEnabled(false);
-//                    }
                     val_com = false;
-                    jBIng.setEnabled(false);
-                    cont_fil_nav = cont_fil_nav - 1;
-                    cont_flec = cont_fil_nav;
+//                    MIRAR COMO VAN AHORA ESTOS CONTADORES
+//                    cont_fil_nav = cont_fil_nav - 1;
+//                    cont_flec = cont_fil_nav;
 
                     //Esto por si solo hay un dato
-                    if (nFils == 1) {
+                    int cont_prod=MySQL.cantRegistros(Tabla, ID);
+                    if (cont_prod == 1) {
                         jBSigui.setEnabled(false);
                         jBAnterior.setEnabled(false);
                         jBPrimer1.setEnabled(false);
                         jBUltim.setEnabled(false);
                     }
-
-                    //PAra que de je la imagen puesta
-                    for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
-
-                        jtId.setText(Datos_p[cont_fil_nav][0]);
-                        jtPrecio.setText(Datos_p[cont_fil_nav][1]);
-                        jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
-                        jtMarca.setText(Datos_p[cont_fil_nav][3]);
-
-                        //Set fecha
-                        //Obtencion de la fecha de vencimiento
-                        String fech_actual = Datos_p[cont_fil_nav][4];
-                        SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
-                        try {
-                            Date fechaVenciS = S.parse(fech_actual);
-                            dateChooser.setDate(fechaVenciS);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        //set Medida
-                        String selec_act = Datos_p[cont_fil_nav][5];
-                        System.out.println(selec_act);
-                        String selec_act2 = selec_act.substring(2);
-                        System.out.println(selec_act2);
-                        System.out.println(selec_act2.trim());
-
-                        switch (selec_act2.trim()) {
-                            case "Libra":
-                                jCBmedida.setSelectedIndex(1);
-                                break;
-                            case "Kilo":
-                                jCBmedida.setSelectedIndex(2);
-                                break;
-                            case "Unidad":
-                                jCBmedida.setSelectedIndex(3);
-                                break;
-                            default:
-                                throw new AssertionError();
-                        }
-
-                        //Poner la imagen en el label
-                        ImageIcon proFotorec = new ImageIcon(Datos_p[cont_fil_nav][6]);
-                        ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                        jLImg.setIcon(icono_prorec);
-
-                    }
+                    jBIng.setToolTipText("Ingreso");
 
                     bloc_sigui();
                     bloc_ant();
-                }
-
+                    
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Porfavor llena todos los campos faltantes", "Error de insercion", JOptionPane.WARNING_MESSAGE);
                 contador--;
@@ -954,6 +883,23 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
             //Esto para que la condicion del bloque del boton cobre sentido
             archivo = null;
+            
+            //Volver a poner vacios los jtextfield
+                jtId.setText("");
+                jtMarca.setText("");
+                jtNom_prod.setText("");
+                jtPrecio.setText("");
+                Date Vacio_fech = null;
+                dateChooser.setDate(Vacio_fech);
+
+                jCBmedida.setSelectedIndex(0);
+                Pjolder();
+                
+
+                //Para que se reinicie el label
+                ImageIcon proRei = new ImageIcon(getClass().getResource(""));
+                ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(rei_pro);
 
             rec_dat();
 
@@ -1509,45 +1455,45 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     }
 
-    public static void main(String args[]) {
+//    public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
          */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmiPrincipal().setVisible(true);
-            }
-        });
-    }
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmiPrincipal().setVisible(true);
+//            }
+//        });
+//    }
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
