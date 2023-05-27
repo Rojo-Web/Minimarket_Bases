@@ -85,10 +85,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public void componets() {
         //**********COMPONENTES************
         //Labels
-        //lblID
-        jLId.setForeground(new java.awt.Color(0, 0, 0));
-        jLId.setFont(new Font("Arial", Font.BOLD, 14));
-        jLId.setText("ID");
         //lblprecio
         jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
         jlPrecio.setFont(new Font("Arial", Font.BOLD, 14));
@@ -245,7 +241,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jBUltim.setEnabled(false);
 
         //Panel principal Bloqueado
-        jtId.setEnabled(false);
         jtMarca.setEnabled(false);
         jtNom_prod.setEnabled(false);
         jtPrecio.setEnabled(false);
@@ -257,10 +252,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     public void Pjolder() {
         //Caajas de texto
-        jtId.setForeground(Color.GRAY);
-        jtId.setText("Id");
-        jtId.setColumns(5);
-
         jtNom_prod.setForeground(Color.GRAY);
         jtNom_prod.setText("Nombre");
         jtNom_prod.setColumns(5);
@@ -306,7 +297,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     }
 
     public void rec_dat() {
-        if (jtId.getText().equalsIgnoreCase("Id") || jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
+        if ( jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
             jbImg.setEnabled(false);
         } else {
             jbImg.setEnabled(true);
@@ -324,8 +315,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jPCent = new javax.swing.JPanel();
-        jLId = new javax.swing.JLabel();
-        jtId = new javax.swing.JTextField();
         jlNom_prod = new javax.swing.JLabel();
         jtNom_prod = new javax.swing.JTextField();
         jlMarca = new javax.swing.JLabel();
@@ -374,20 +363,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         );
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLId.setText("jLabel1");
-
-        jtId.setText("jTextField1");
-        jtId.setMaximumSize(new java.awt.Dimension(71, 22));
-        jtId.setMinimumSize(new java.awt.Dimension(71, 22));
-        jtId.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtIdFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtIdFocusLost(evt);
-            }
-        });
 
         jlNom_prod.setText("jLabel1");
 
@@ -487,28 +462,21 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jPCentLayout.setHorizontalGroup(
             jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCentLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
+                .addGap(14, 14, 14)
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlMarca)
-                            .addComponent(jLId, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jtId, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)
-                            .addComponent(jtMarca))
+                            .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(17, 17, 17)
+                    .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(jLmedida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jLmedida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18))
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -538,32 +506,26 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jLId)
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPCentLayout.createSequentialGroup()
+                                .addComponent(jlMarca)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLVenci)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBVenci)
+                                .addGap(28, 28, 28)
+                                .addComponent(jLmedida))
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addComponent(jlNom_prod)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jlMarca)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
                                 .addComponent(jlPrecio)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLVenci)
-                            .addComponent(jLmedida))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBVenci)
-                            .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(46, 46, 46)
+                                .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -802,7 +764,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         if (contador % 2 == 0) {
             if (archivo != null) {
 
-                jtId.setEnabled(false);
                 jtMarca.setEnabled(false);
                 jtNom_prod.setEnabled(false);
                 jtPrecio.setEnabled(false);
@@ -830,13 +791,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 //Enviar los datos                                                                                                      cantidad  medida  img
                 MySQL.insert_prod("productos", jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, cant_med, selec_med, img_paht);
 
-
+                    
 //                MIRAR COMO VAN A FUNCIONAR AHORA ESTOS CONTADORES
 //                cont_fil++;
 //                cont_fil_nav++;
 //                cont_label = cont_fil;
 //                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
 
+                jCBmedida.setSelectedIndex(0);
                 
 
                 
@@ -869,7 +831,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         } else {
             dateChooser.setEnabled(true);
             jCBmedida.setEnabled(true);
-            jtId.setEnabled(true);
             jtMarca.setEnabled(true);
             jtNom_prod.setEnabled(true);
             jtPrecio.setEnabled(true);
@@ -885,14 +846,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             archivo = null;
             
             //Volver a poner vacios los jtextfield
-                jtId.setText("");
                 jtMarca.setText("");
                 jtNom_prod.setText("");
                 jtPrecio.setText("");
                 Date Vacio_fech = null;
                 dateChooser.setDate(Vacio_fech);
+                
 
                 jCBmedida.setSelectedIndex(0);
+                
                 Pjolder();
                 
 
@@ -920,26 +882,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
     }//GEN-LAST:event_jBConsultaActionPerformed
-
-    private void jtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusGained
-        if (jtId.getText().equals("Id")) {
-            jtId.setForeground(Color.BLACK);
-            jtId.setText("");
-            rec_dat();
-        }
-
-
-    }//GEN-LAST:event_jtIdFocusGained
-
-    private void jtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusLost
-        if (!jtId.getText().isEmpty()) {
-
-        } else {
-            jtId.setForeground(Color.GRAY);
-            jtId.setText("Id");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtIdFocusLost
 
     private void jtNom_prodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusGained
         if (jtNom_prod.getText().equals("Nombre")) {
@@ -1124,7 +1066,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         for (int j = 0; j < Datos_p[0].length; j++) {
 
-            jtId.setText(Datos_p[0][0]);
             jtPrecio.setText(Datos_p[0][1]);
             jtNom_prod.setText(Datos_p[0][2]);
             jtMarca.setText(Datos_p[0][3]);
@@ -1188,7 +1129,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
          */
         for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
 
-            jtId.setText(Datos_p[cont_fil_nav][0]);
             jtPrecio.setText(Datos_p[cont_fil_nav][1]);
             jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
             jtMarca.setText(Datos_p[cont_fil_nav][3]);
@@ -1251,7 +1191,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         for (int j = 0; j < Datos_p[cont_flec].length; j++) {
             if (j == 0) {
 
-                jtId.setText(Datos_p[cont_flec][0]);
                 jtPrecio.setText(Datos_p[cont_flec][1]);
                 jtNom_prod.setText(Datos_p[cont_flec][2]);
                 jtMarca.setText(Datos_p[cont_flec][3]);
@@ -1313,7 +1252,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         for (int j = 0; j < Datos_p[cont_flec].length; j++) {
             if (j == 0) {
 
-                jtId.setText(Datos_p[cont_flec][0]);
                 jtPrecio.setText(Datos_p[cont_flec][1]);
                 jtNom_prod.setText(Datos_p[cont_flec][2]);
                 jtMarca.setText(Datos_p[cont_flec][3]);
@@ -1512,7 +1450,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> jCBmedida;
     private javax.swing.JLabel jLCrud;
     private javax.swing.JLabel jLFn;
-    private javax.swing.JLabel jLId;
     private javax.swing.JLabel jLImg;
     private javax.swing.JLabel jLInfo;
     private javax.swing.JLabel jLVenci;
@@ -1532,7 +1469,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jlNav;
     private javax.swing.JLabel jlNom_prod;
     private javax.swing.JLabel jlPrecio;
-    private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtMarca;
     private javax.swing.JTextField jtNom_prod;
     private javax.swing.JTextField jtPrecio;
