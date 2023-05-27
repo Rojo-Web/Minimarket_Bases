@@ -4,16 +4,13 @@
  */
 package vista;
 
+import Modelo.MySQL;
 import vista.Producto.frmiProducto;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import javax.swing.JInternalFrame;
-import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.JOptionPane;
+import vista.Cliente.frmiCliente;
+import vista.empresa.Empresa;
 
 /**
  *
@@ -26,6 +23,8 @@ public class frmiPrincipal extends javax.swing.JFrame {
      */
     public static int nFils = 0;
     private frmiProducto producto = null;
+    private frmiCliente cliente = null;
+    private Empresa emp = null;
 
     public frmiPrincipal() {
         //titulo
@@ -52,21 +51,14 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIEmpresa.setText("Empresa");
         JmPrincipales.add(jMIEmpresa);
 
-        jMICaja.setText("Caja");
-        JmPrincipales.add(jMICaja);
 
         fileMenu.add(JmPrincipales);
 
-        jMSecundarias.setText("Secundarias");
+        jMSecundarias.setText("Admin");
 
         jMIEmpleado.setText("Empleado");
         jMSecundarias.add(jMIEmpleado);
 
-        jMIDetalle.setText("Detalle");
-        jMSecundarias.add(jMIDetalle);
-
-        jMIEncabezado.setText("Encabezado");
-        jMSecundarias.add(jMIEncabezado);
 
         fileMenu.add(jMSecundarias);
 
@@ -80,7 +72,14 @@ public class frmiPrincipal extends javax.swing.JFrame {
         fileMenu.add(exitMenuItem);
 
         menuBar.add(fileMenu);
+        
+        jMSecundarias.setEnabled(false);
 
+        //BLoque por si no es admin
+        if (Modelo.C_login.Val_admin==true) {
+            jMSecundarias.setEnabled(true);
+        }
+        
         //Fin del seccion del menu nav
         setLocationRelativeTo(null);
         //setSize(700,600);
@@ -104,11 +103,8 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIProducto = new javax.swing.JMenuItem();
         jMICliente = new javax.swing.JMenuItem();
         jMIEmpresa = new javax.swing.JMenuItem();
-        jMICaja = new javax.swing.JMenuItem();
         jMSecundarias = new javax.swing.JMenu();
         jMIEmpleado = new javax.swing.JMenuItem();
-        jMIDetalle = new javax.swing.JMenuItem();
-        jMIEncabezado = new javax.swing.JMenuItem();
         exitMenuItem = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -127,26 +123,27 @@ public class frmiPrincipal extends javax.swing.JFrame {
         JmPrincipales.add(jMIProducto);
 
         jMICliente.setText("jMenuItem2");
+        jMICliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIClienteActionPerformed(evt);
+            }
+        });
         JmPrincipales.add(jMICliente);
 
         jMIEmpresa.setText("jMenuItem3");
+        jMIEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIEmpresaActionPerformed(evt);
+            }
+        });
         JmPrincipales.add(jMIEmpresa);
-
-        jMICaja.setText("jMenuItem4");
-        JmPrincipales.add(jMICaja);
 
         fileMenu.add(JmPrincipales);
 
         jMSecundarias.setText("jMenu1");
 
-        jMIEmpleado.setText("jMenuItem5");
+        jMIEmpleado.setText("jMenuItem7");
         jMSecundarias.add(jMIEmpleado);
-
-        jMIDetalle.setText("jMenuItem6");
-        jMSecundarias.add(jMIDetalle);
-
-        jMIEncabezado.setText("jMenuItem7");
-        jMSecundarias.add(jMIEncabezado);
 
         fileMenu.add(jMSecundarias);
 
@@ -185,8 +182,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
     private void jMIProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIProductoActionPerformed
         try {
-//            String registros = JOptionPane.showInputDialog("Digite Cantidad de Registros:");
-//            nFils = Integer.parseInt(registros);
+
             if (producto == null || producto.isClosed()) {
                 
                 producto = new frmiProducto();
@@ -194,11 +190,32 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
             }
             producto.setVisible(true);
+            MySQL.Ctabla_prod();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Se requiere de un Numero. Error: " + e);
+            JOptionPane.showMessageDialog(null, "" + e);
         }
     }//GEN-LAST:event_jMIProductoActionPerformed
+
+    private void jMIClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIClienteActionPerformed
+        if (cliente == null || cliente.isClosed()) {
+                
+                cliente = new frmiCliente();
+                this.desktopPane.add(cliente);
+
+            }
+            cliente.setVisible(true);
+    }//GEN-LAST:event_jMIClienteActionPerformed
+
+    private void jMIEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIEmpresaActionPerformed
+        if (emp == null || emp.isClosed()) {
+                
+                emp = new Empresa();
+                this.desktopPane.add(emp);
+
+            }
+            emp.setVisible(true);
+    }//GEN-LAST:event_jMIEmpresaActionPerformed
 
     /**
      * @param args the command line arguments
@@ -234,12 +251,9 @@ public class frmiPrincipal extends javax.swing.JFrame {
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
-    private javax.swing.JMenuItem jMICaja;
     private javax.swing.JMenuItem jMICliente;
-    private javax.swing.JMenuItem jMIDetalle;
     private javax.swing.JMenuItem jMIEmpleado;
     private javax.swing.JMenuItem jMIEmpresa;
-    private javax.swing.JMenuItem jMIEncabezado;
     private javax.swing.JMenuItem jMIProducto;
     private javax.swing.JMenu jMSecundarias;
     private javax.swing.JMenuBar menuBar;
