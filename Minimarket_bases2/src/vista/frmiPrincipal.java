@@ -6,16 +6,11 @@ package vista;
 
 import Modelo.MySQL;
 import vista.Producto.frmiProducto;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import javax.swing.JInternalFrame;
-import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.JOptionPane;
 import vista.Cliente.frmiCliente;
+import vista.empresa.Empresa;
 
 /**
  *
@@ -29,6 +24,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
     public static int nFils = 0;
     private frmiProducto producto = null;
     private frmiCliente cliente = null;
+    private Empresa emp = null;
 
     public frmiPrincipal() {
         //titulo
@@ -135,6 +131,11 @@ public class frmiPrincipal extends javax.swing.JFrame {
         JmPrincipales.add(jMICliente);
 
         jMIEmpresa.setText("jMenuItem3");
+        jMIEmpresa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIEmpresaActionPerformed(evt);
+            }
+        });
         JmPrincipales.add(jMIEmpresa);
 
         fileMenu.add(JmPrincipales);
@@ -205,6 +206,16 @@ public class frmiPrincipal extends javax.swing.JFrame {
             }
             cliente.setVisible(true);
     }//GEN-LAST:event_jMIClienteActionPerformed
+
+    private void jMIEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIEmpresaActionPerformed
+        if (emp == null || emp.isClosed()) {
+                
+                emp = new Empresa();
+                this.desktopPane.add(emp);
+
+            }
+            emp.setVisible(true);
+    }//GEN-LAST:event_jMIEmpresaActionPerformed
 
     /**
      * @param args the command line arguments

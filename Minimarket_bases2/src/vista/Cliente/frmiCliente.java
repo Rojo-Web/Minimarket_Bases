@@ -49,7 +49,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     public frmiCliente() {
         initComponents();
 
-        setSize(500, 470);
+        setSize(501, 395);
         jCalFecNac.setEnabled(false);
         setResizable(false); // Deshabilitar el redimensionamiento
         setLocation(0, 0);
@@ -61,11 +61,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         comboGenero.addItem("Masculino");
         comboGenero.addItem("Femenino");
 
-        //CHECKBOX
-        checkCasado.setText("Casado");
-        checkSoltero.setText("Soltero");
-        checkDivorciado.setText("Divorciado");
-        checkViudo.setText("Viudo");
+
 
         //LBLS
         jlFoto.setText("Foto");
@@ -226,10 +222,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jbImg.setEnabled(false);
         dateChooser.setEnabled(false);
         comboGenero.setEnabled(false);
-        checkCasado.setEnabled(false);
-        checkDivorciado.setEnabled(false);
-        checkSoltero.setEnabled(false);
-        checkViudo.setEnabled(false);
+        jCBestado.setEnabled(false);
 
         //BOTONES
     }
@@ -302,10 +295,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 jbImg.setEnabled(false);
                 dateChooser.setEnabled(false);
                 comboGenero.setEnabled(false);
-                checkCasado.setEnabled(false);
-                checkDivorciado.setEnabled(false);
-                checkSoltero.setEnabled(false);
-                checkViudo.setEnabled(false);
+                jCBestado.setEnabled(false);
 
                 // establece el icono en el botón
                 ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
@@ -321,7 +311,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
                 System.out.println(combo_result);
                 //Obtencion de datos del combox
-                DatosCli[cont_fil][5] = combo_result;
+                DatosCli[cont_fil][5] = selec_med;
 
                 //Obtencion de la fecha de vencimiento
                 Date fechaVenci = dateChooser.getDate();
@@ -341,26 +331,9 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
                 String estadoCivil = "";
 
-                if (checkCasado.isSelected()) {
-                    estadoCivil += "Casado, ";
-                }
-                if (checkSoltero.isSelected()) {
-                    estadoCivil += "Soltero, ";
-                }
-                if (checkViudo.isSelected()) {
-                    estadoCivil += "Viudo, ";
-                }
-                if (checkDivorciado.isSelected()) {
-                    estadoCivil += "Divorciado, ";
-                }
+                
 
-                if (!estadoCivil.isEmpty()) {
-                    estadoCivil = estadoCivil.substring(0, estadoCivil.length() - 2); //Para eliminar la coma al final de la cadena
-                } else {
-                    estadoCivil = "No se seleccionó";
-                }
-
-                DatosCli[cont_fil][8] = estadoCivil;
+               //DatosCli[cont_fil][8] = selec_estado;
 
                 //Obtencion de la imagen
                 DatosCli[cont_fil][9] = archivo.getPath();
@@ -427,33 +400,8 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                             e.printStackTrace();
                         }
 
-                        //EDAD [7]
-                        if (DatosCli[cont_fil_nav][8].equals("Casado")) {
-                            checkCasado.setSelected(true);
-                            checkSoltero.setSelected(false);
-                            checkDivorciado.setSelected(false);
-                            checkViudo.setSelected(false);
-                        } else if (DatosCli[cont_fil_nav][8].equals("Viudo")) {
-                            checkViudo.setSelected(true);
-                            checkSoltero.setSelected(false);
-                            checkDivorciado.setSelected(false);
-                            checkCasado.setSelected(false);
-                        } else if (DatosCli[cont_fil_nav][8].equals("Soltero")) {
-                            checkSoltero.setSelected(true);
-                            checkViudo.setSelected(false);
-                            checkDivorciado.setSelected(false);
-                            checkCasado.setSelected(false);
-                        } else if (DatosCli[cont_fil_nav][8].equals("Divorciado")) {
-                            checkDivorciado.setSelected(true);
-                            checkViudo.setSelected(false);
-                            checkSoltero.setSelected(false);
-                            checkCasado.setSelected(false);
-                        } else {
-                            checkViudo.setSelected(false);
-                            checkSoltero.setSelected(false);
-                            checkDivorciado.setSelected(false);
-                            checkCasado.setSelected(false);
-                        }
+                        //Aqui iria el combo de estado
+                        
 
                         //Poner la imagen en el label
                         ImageIcon proFotorec = new ImageIcon(DatosCli[cont_fil_nav][9]);
@@ -482,10 +430,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             dateChooser.setDate(Vacio_fech);
             comboGenero.setSelectedIndex(0);
             Placeholders();
-            checkCasado.setSelected(false);
-            checkViudo.setSelected(false);
-            checkSoltero.setSelected(false);
-            checkDivorciado.setSelected(false);
+            jCBestado.setSelectedIndex(0);
 
             //Para que se reinicie el label
             ImageIcon proRei = new ImageIcon(getClass().getResource(""));
@@ -502,10 +447,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             jbImg.setEnabled(true);
             ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
             ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
-            checkCasado.setEnabled(true);
-            checkViudo.setEnabled(true);
-            checkSoltero.setEnabled(true);
-            checkDivorciado.setEnabled(true);
+            jCBestado.setEnabled(true);
 
             // establece el icono en el botón
             jBIng.setIcon(mitad_1);
@@ -550,10 +492,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         lblTelCli = new javax.swing.JLabel();
         txtTelCli = new javax.swing.JTextField();
         lblEstCiv = new javax.swing.JLabel();
-        checkCasado = new javax.swing.JCheckBox();
-        checkSoltero = new javax.swing.JCheckBox();
-        checkViudo = new javax.swing.JCheckBox();
-        checkDivorciado = new javax.swing.JCheckBox();
+        jCBestado = new javax.swing.JComboBox<>();
         jPPie = new javax.swing.JPanel();
         jLInfo = new javax.swing.JLabel();
         jLfech = new javax.swing.JLabel();
@@ -707,121 +646,11 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
         lblEstCiv.setText("jLabel1");
 
-        checkCasado.setText("jCheckBox1");
-
-        checkSoltero.setText("jCheckBox1");
-
-        checkViudo.setText("jCheckBox1");
-
-        checkDivorciado.setText("jCheckBox1");
-
-        javax.swing.GroupLayout jPCentLayout = new javax.swing.GroupLayout(jPCent);
-        jPCent.setLayout(jPCentLayout);
-        jPCentLayout.setHorizontalGroup(
-            jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPCentLayout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(lblFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblApeCli)
-                    .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jCalFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(52, 52, 52)
-                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblEstCiv)
-                            .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(checkViudo, javax.swing.GroupLayout.PREFERRED_SIZE, 1, Short.MAX_VALUE)
-                                    .addComponent(checkCasado, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(jPCentLayout.createSequentialGroup()
-                                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                        .addComponent(checkSoltero, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
-                                        .addGap(4, 4, 4)
-                                        .addComponent(checkDivorciado, javax.swing.GroupLayout.PREFERRED_SIZE, 74, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                            .addComponent(lblDireCli)
-                            .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtDireCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblGenCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(lblNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)))
-                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
-                        .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
-                        .addComponent(jlFoto)
-                        .addGap(76, 76, 76))))
-        );
-        jPCentLayout.setVerticalGroup(
-            jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPCentLayout.createSequentialGroup()
-                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGap(4, 4, 4)
-                        .addComponent(jlFoto)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGap(9, 9, 9)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(lblNomCli)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(lblIdCli)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblDireCli)
-                            .addComponent(lblApeCli))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtDireCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblGenCli)
-                            .addComponent(lblTelCli))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblEstCiv)
-                            .addComponent(lblFecNac))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jCalFecNac)
-                            .addComponent(checkCasado, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkSoltero, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(checkViudo, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(checkDivorciado, javax.swing.GroupLayout.PREFERRED_SIZE, 14, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 25, Short.MAX_VALUE)))
-                .addContainerGap())
-        );
+        jCBestado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estado", "Soltero", "Casado", "Divorciado", "Viudo" }));
 
         jLInfo.setText("jLabel1");
 
-        jLfech.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jLfech.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         jLfech.setText("jLabel1");
         jLfech.setToolTipText("");
 
@@ -979,13 +808,14 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jPPie.setLayout(jPPieLayout);
         jPPieLayout.setHorizontalGroup(
             jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jSeparator1, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPPieLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPPieLayout.createSequentialGroup()
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPPieLayout.createSequentialGroup()
                         .addComponent(jLInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(18, 18, 18)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLfech, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPPieLayout.createSequentialGroup()
                         .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1015,27 +845,121 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                     .addComponent(jPNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPFn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLInfo)
                     .addComponent(jLfech))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPCentLayout = new javax.swing.GroupLayout(jPCent);
+        jPCent.setLayout(jPCentLayout);
+        jPCentLayout.setHorizontalGroup(
+            jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPCentLayout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPCentLayout.createSequentialGroup()
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblApeCli)
+                            .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jCalFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(52, 52, 52)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblEstCiv)
+                                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lblDireCli)
+                                    .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtDireCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(lblGenCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addGroup(jPCentLayout.createSequentialGroup()
+                                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                            .addComponent(lblNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                            .addComponent(jCBestado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                        .addGap(0, 38, Short.MAX_VALUE)))
+                                .addGap(18, 18, 18)))
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
+                                .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
+                                .addComponent(jlFoto)
+                                .addGap(76, 76, 76))))
+                    .addComponent(jPPie, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+        );
+        jPCentLayout.setVerticalGroup(
+            jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPCentLayout.createSequentialGroup()
+                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPCentLayout.createSequentialGroup()
+                        .addGap(4, 4, 4)
+                        .addComponent(jlFoto)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(jPCentLayout.createSequentialGroup()
+                        .addGap(9, 9, 9)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(lblNomCli)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addComponent(lblIdCli)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblDireCli)
+                            .addComponent(lblApeCli))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(txtDireCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblGenCli)
+                            .addComponent(lblTelCli))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(lblEstCiv)
+                            .addComponent(lblFecNac))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jCalFecNac)
+                            .addComponent(jCBestado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPPie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPPie, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jPCent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPCent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPCent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jPPie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14))
         );
 
         pack();
@@ -1125,33 +1049,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 e.printStackTrace();
             }
 
-            //EDAD [7]
-            if (DatosCli[0][8].equals("Casado")) {
-                checkCasado.setSelected(true);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkViudo.setSelected(false);
-            } else if (DatosCli[0][8].equals("Viudo")) {
-                checkViudo.setSelected(true);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            } else if (DatosCli[0][8].equals("Soltero")) {
-                checkSoltero.setSelected(true);
-                checkViudo.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            } else if (DatosCli[0][8].equals("Divorciado")) {
-                checkDivorciado.setSelected(true);
-                checkViudo.setSelected(false);
-                checkSoltero.setSelected(false);
-                checkCasado.setSelected(false);
-            } else {
-                checkViudo.setSelected(false);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            }
+            //Aqui iria el comobo de estado
 
             //Poner la imagen en el label
             ImageIcon proFoto2 = new ImageIcon(DatosCli[0][9]);
@@ -1212,33 +1110,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                     e.printStackTrace();
                 }
 
-                //EDAD [7]
-                if (DatosCli[cont_flec][8].equals("Casado")) {
-                    checkCasado.setSelected(true);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkViudo.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Viudo")) {
-                    checkViudo.setSelected(true);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Soltero")) {
-                    checkSoltero.setSelected(true);
-                    checkViudo.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Divorciado")) {
-                    checkDivorciado.setSelected(true);
-                    checkViudo.setSelected(false);
-                    checkSoltero.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else {
-                    checkViudo.setSelected(false);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                }
+                //Aqui va el combo de estado
 
                 //Poner la imagen en el label
                 ImageIcon proFotorec = new ImageIcon(DatosCli[cont_flec][9]);
@@ -1298,33 +1170,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                     e.printStackTrace();
                 }
 
-                //EDAD [7]
-                if (DatosCli[cont_flec][8].equals("Casado")) {
-                    checkCasado.setSelected(true);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkViudo.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Viudo")) {
-                    checkViudo.setSelected(true);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Soltero")) {
-                    checkSoltero.setSelected(true);
-                    checkViudo.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else if (DatosCli[cont_flec][8].equals("Divorciado")) {
-                    checkDivorciado.setSelected(true);
-                    checkViudo.setSelected(false);
-                    checkSoltero.setSelected(false);
-                    checkCasado.setSelected(false);
-                } else {
-                    checkViudo.setSelected(false);
-                    checkSoltero.setSelected(false);
-                    checkDivorciado.setSelected(false);
-                    checkCasado.setSelected(false);
-                }
+                //aqui va el combo estado
 
                 //Poner la imagen en el label
                 ImageIcon proFotorec = new ImageIcon(DatosCli[cont_flec][9]);
@@ -1388,33 +1234,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 e.printStackTrace();
             }
 
-            //EDAD [7]
-            if (DatosCli[cont_fil_nav][8].equals("Casado")) {
-                checkCasado.setSelected(true);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkViudo.setSelected(false);
-            } else if (DatosCli[cont_fil_nav][8].equals("Viudo")) {
-                checkViudo.setSelected(true);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            } else if (DatosCli[cont_fil_nav][8].equals("Soltero")) {
-                checkSoltero.setSelected(true);
-                checkViudo.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            } else if (DatosCli[cont_fil_nav][8].equals("Divorciado")) {
-                checkDivorciado.setSelected(true);
-                checkViudo.setSelected(false);
-                checkSoltero.setSelected(false);
-                checkCasado.setSelected(false);
-            } else {
-                checkViudo.setSelected(false);
-                checkSoltero.setSelected(false);
-                checkDivorciado.setSelected(false);
-                checkCasado.setSelected(false);
-            }
+            //aqui va el combo estado
 
             //Poner la imagen en el label
             ImageIcon proFotorec = new ImageIcon(DatosCli[cont_fil_nav][9]);
@@ -1596,10 +1416,6 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBImpr;
-    private javax.swing.JCheckBox checkCasado;
-    private javax.swing.JCheckBox checkDivorciado;
-    private javax.swing.JCheckBox checkSoltero;
-    private javax.swing.JCheckBox checkViudo;
     private javax.swing.JComboBox<String> comboGenero;
     private javax.swing.JButton jBAnterior;
     private javax.swing.JButton jBConsulta;
@@ -1611,6 +1427,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     private javax.swing.JButton jBPrimer1;
     private javax.swing.JButton jBSigui;
     private javax.swing.JButton jBUltim;
+    private javax.swing.JComboBox<String> jCBestado;
     private javax.swing.JButton jCalFecNac;
     private javax.swing.JLabel jLCrud;
     private javax.swing.JLabel jLFn;
