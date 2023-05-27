@@ -23,7 +23,8 @@ public class MySQL {
     public static Connection Conexion;
     private static byte[] imageBytes;
     public static String imageObt;
-    private static int id_verifi, cant_fin, tabla_exist;
+    private static int cant_fin;
+    private static int id_verifi, tabla_exist;
 
     public static void MySQLConnection(String user, String pass, String db_name) {
         try {
@@ -92,6 +93,22 @@ public class MySQL {
             JOptionPane.showMessageDialog(null, "Error en la adquisicion de datos");
         }
     }
+    
+    public static void obtValores(String table_name,String camp_id, int id_fila){
+        try {
+            String Query = "SELECT * FROM " + table_name;
+            Statement st = Conexion.createStatement();
+            java.sql.ResultSet resultSet;
+            resultSet = st.executeQuery(Query);
+
+            while (resultSet.next()) {
+                System.out.println("ID: " + resultSet.getString("ID") + " " + "Nombre: " + resultSet.getString("Nombre") + " " + resultSet.getString("Apellido") + "" + "Edad: " + resultSet.getString("Edad") + "" + "Sexo:" + resultSet.getString("Sexo"));
+
+            }
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(null, "Error en la adquisicion de datos");
+        }
+    }
 
     public static void deleteRecord(String table_name, String ID) {
         try {
@@ -144,15 +161,16 @@ public class MySQL {
 
             if (res_cont.next()) {
                 int total_users = res_cont.getInt(campVerficador);
-                System.out.println(total_users);
-                id_verifi = total_users + 1;
-                System.out.println(id_verifi);
+                cant_fin=total_users;
+                System.out.println(cant_fin);
+                
             }
         } catch (SQLException ex) {
             System.out.println("Error cant no encotrado");
         }
-
-        return cant_fin;
+        
+        int can_total = cant_fin;
+        return can_total;
     }
 
     //SABER SI UNA TABLA EXISTE O NO, PARA ASI CREALA O NO
@@ -194,6 +212,7 @@ public class MySQL {
         MySQLConnection("root", "", "minimarket");
 
         int id_em = cantRegistros("empleados", "id_empl");
+        id_em++;
 
         System.out.println(id_em);
 
@@ -246,7 +265,8 @@ public class MySQL {
     public static void insert_prod(String table_name, String name_prod, String marca, int precio, String vencimiento, int cantidad, String medida, String img_prod) {
         MySQLConnection("root", "", "minimarket");
 
-        int id_prod = cantRegistros("empleados", "id_empl");
+        int id_prod = cantRegistros("productos", "id_prod");
+        id_prod++;
         System.out.println(id_prod);
 
         try {

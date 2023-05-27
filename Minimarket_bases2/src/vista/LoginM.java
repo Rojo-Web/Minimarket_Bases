@@ -282,6 +282,7 @@ public class LoginM extends javax.swing.JFrame {
             }
             
         }
+        db.closeConnection();
     }//GEN-LAST:event_jTuserKeyPressed
 
     private void jPFclaveKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jPFclaveKeyPressed
@@ -305,6 +306,7 @@ public class LoginM extends javax.swing.JFrame {
             }
             
         }
+        db.closeConnection();
     }//GEN-LAST:event_jPFclaveKeyPressed
 
     private void jBsingUpActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBsingUpActionPerformed

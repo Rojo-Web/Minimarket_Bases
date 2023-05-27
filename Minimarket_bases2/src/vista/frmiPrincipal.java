@@ -174,8 +174,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
     private void jMIProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIProductoActionPerformed
         try {
-//            String registros = JOptionPane.showInputDialog("Digite Cantidad de Registros:");
-//            nFils = Integer.parseInt(registros);
+
             if (producto == null || producto.isClosed()) {
                 
                 producto = new frmiProducto();
