@@ -5,15 +5,10 @@
 package vista;
 
 import vista.Producto.frmiProducto;
-import java.awt.Component;
 import java.awt.Image;
 import java.awt.Toolkit;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import javax.swing.JInternalFrame;
-import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.JOptionPane;
+import vista.Cliente.frmiCliente;
 
 /**
  *
@@ -127,6 +122,11 @@ public class frmiPrincipal extends javax.swing.JFrame {
         JmPrincipales.add(jMIProducto);
 
         jMICliente.setText("jMenuItem2");
+        jMICliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIClienteActionPerformed(evt);
+            }
+        });
         JmPrincipales.add(jMICliente);
 
         jMIEmpresa.setText("jMenuItem3");
@@ -191,7 +191,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
                 
                 producto = new frmiProducto();
                 this.desktopPane.add(producto);
-
+                setSize(515, 455);
             }
             producto.setVisible(true);
 
@@ -199,6 +199,13 @@ public class frmiPrincipal extends javax.swing.JFrame {
             JOptionPane.showMessageDialog(null, "Se requiere de un Numero. Error: " + e);
         }
     }//GEN-LAST:event_jMIProductoActionPerformed
+
+    private void jMIClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIClienteActionPerformed
+        frmiCliente Cliente = new frmiCliente();
+        this.desktopPane.add(Cliente);
+        Cliente.setVisible(true);
+        setSize(515, 535);
+    }//GEN-LAST:event_jMIClienteActionPerformed
 
     /**
      * @param args the command line arguments

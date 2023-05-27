@@ -8,6 +8,8 @@ import java.awt.Color;
 import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
+
+
 import java.awt.event.KeyEvent;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +69,8 @@ public class Login extends javax.swing.JFrame {
         jTcontraseña.setText("*******");
         jTcontraseña.setEnabled(false);
 
+        
+        
     }
     
 
@@ -197,8 +201,7 @@ public class Login extends javax.swing.JFrame {
     }//GEN-LAST:event_jTUserFocusGained
 
     private void jTUserFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTUserFocusLost
-        jTUser.setForeground(Color.GRAY);
-        jTUser.setText("pepito");
+       
     }//GEN-LAST:event_jTUserFocusLost
 
     private void jTUserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTUserActionPerformed
