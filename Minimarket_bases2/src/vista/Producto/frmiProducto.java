@@ -4,6 +4,10 @@
  */
 package vista.Producto;
 
+import Modelo.MySQL;
+import static Modelo.MySQL.Conexion;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.ResultSet;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -13,14 +17,16 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import vista.Login;
 import vista.frmiPrincipal;
 import static vista.frmiPrincipal.nFils;
 
@@ -30,9 +36,10 @@ import static vista.frmiPrincipal.nFils;
  */
 public class frmiProducto extends javax.swing.JInternalFrame {
 
-    public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0;
+    public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
+    private static String Tabla = "productos", ID = "id_prod";
 
     //Tabla de consulta
     public static String[] sCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca", "Vence", "Medida", "Ruta_foto"};
@@ -40,9 +47,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public static String[][] Datos_p = new String[frmiPrincipal.nFils][7];
     public static File archivo;
     //final de tabla
-
-    //validador de seteador del combo
-    public static boolean val_com = true;
 
     //Fecha de vencimiento
     public static String fechaV = "";
@@ -77,21 +81,16 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         componets();
 
-        Pjolder();
-
+        //Pjolder();
     }
 
     public void componets() {
         //**********COMPONENTES************
         //Labels
-        //lblID
-        jLId.setForeground(new java.awt.Color(0, 0, 0));
-        jLId.setFont(new Font("Arial", Font.BOLD, 14));
-        jLId.setText("ID");
         //lblprecio
         jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
         jlPrecio.setFont(new Font("Arial", Font.BOLD, 14));
-        jlPrecio.setText("Precio");
+        jlPrecio.setText("Precio_c/u");
         //lblMarca
         jlMarca.setForeground(new java.awt.Color(0, 0, 0));
         jlMarca.setFont(new Font("Arial", Font.BOLD, 14));
@@ -124,8 +123,17 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jlFoto.setForeground(new java.awt.Color(0, 0, 0));
         jlFoto.setFont(new Font("Arial", Font.BOLD, 14));
         jlFoto.setText("Foto");
+        //lbl cantidad
+        jLcantidad.setForeground(new java.awt.Color(0, 0, 0));
+        jLcantidad.setFont(new Font("Arial", Font.BOLD, 14));
+        jLcantidad.setText("Cantidad:");
+
         //lblinfo
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
+        cant_prods = MySQL.cantRegistros(Tabla, ID);
+        System.out.println("hola cantida_prd: " + cant_prods);
+
+        cont_label = 0;
+        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
         //lblFech
         //jLfech.setT
         jLfech.setForeground(new java.awt.Color(255, 0, 0));
@@ -237,29 +245,25 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         jBVenci.add(dateChooser);
 
-        //Bloqueo del nav
-        jBSigui.setEnabled(false);
+//        //Bloqueo del nav
+//        jBSigui.setEnabled(false);
         jBAnterior.setEnabled(false);
         jBPrimer1.setEnabled(false);
-        jBUltim.setEnabled(false);
+//        jBUltim.setEnabled(false);
 
         //Panel principal Bloqueado
-        jtId.setEnabled(false);
         jtMarca.setEnabled(false);
         jtNom_prod.setEnabled(false);
         jtPrecio.setEnabled(false);
         jbImg.setEnabled(false);
         dateChooser.setEnabled(false);
         jCBmedida.setEnabled(false);
+        jTcantidad.setEnabled(false);
 
     }
 
     public void Pjolder() {
         //Caajas de texto
-        jtId.setForeground(Color.GRAY);
-        jtId.setText("Id");
-        jtId.setColumns(5);
-
         jtNom_prod.setForeground(Color.GRAY);
         jtNom_prod.setText("Nombre");
         jtNom_prod.setColumns(5);
@@ -272,45 +276,51 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jtPrecio.setText("$$$$");
         jtPrecio.setColumns(5);
 
+        jTcantidad.setForeground(Color.GRAY);
+        jTcantidad.setText("cantidad");
+        jTcantidad.setColumns(5);
+
     }
 
     public void bloc_sigui() {
-        if (cont_flec == cont_fil_nav) {
+        int ult_regis = MySQL.cantRegistros(Tabla, ID);
+
+        if (cont_flec == ult_regis) {
             jBSigui.setEnabled(false);
             jBUltim.setEnabled(false);
-//                jBPrimer1.setEnabled(false);
+        } else if (cont_flec != ult_regis && jBSigui.isEnabled() == false && jBUltim.isEnabled() == false) {
+            jBSigui.setEnabled(true);
+            jBUltim.setEnabled(true);
         } else {
             jBSigui.setEnabled(true);
             jBUltim.setEnabled(true);
-//            if (cont_flec<cont_fil_nav) {
-//                jBPrimer1.setEnabled(true);
-//            }
         }
-        bloc_ant();
+        //bloc_ant();
+
     }
 
     public void bloc_ant() {
-        if (cont_flec == 0) {
+        if (cont_flec == 1) {
             jBAnterior.setEnabled(false);
             jBPrimer1.setEnabled(false);
-//                    jBUltim.setEnabled(false);
+        } else if (cont_flec != 1 && jBAnterior.isEnabled() == false && jBPrimer1.isEnabled() == false) {
+            jBAnterior.setEnabled(true);
+            jBPrimer1.setEnabled(true);
         } else {
             jBAnterior.setEnabled(true);
             jBPrimer1.setEnabled(true);
-//            if (cont_flec<cont_fil_nav) {
-//                jBUltim.setEnabled(true);
-//            }
         }
-        bloc_sigui();
+        //bloc_sigui();
+
     }
 
     public void rec_dat() {
-        if (jtId.getText().equalsIgnoreCase("Id") || jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
+        if (jTcantidad.getText().equalsIgnoreCase("cantidad") || jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
             jbImg.setEnabled(false);
         } else {
             jbImg.setEnabled(true);
         }
-    }//Hasta aqui hay que mirar la forma de que cuando no haya un texto diferente al que le ponemos en el plesjolde, no se puede activar el boton, cosa que aun no pasa 
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -323,8 +333,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jPCent = new javax.swing.JPanel();
-        jLId = new javax.swing.JLabel();
-        jtId = new javax.swing.JTextField();
         jlNom_prod = new javax.swing.JLabel();
         jtNom_prod = new javax.swing.JTextField();
         jlMarca = new javax.swing.JLabel();
@@ -339,6 +347,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jBVenci = new javax.swing.JButton();
         jLmedida = new javax.swing.JLabel();
         jCBmedida = new javax.swing.JComboBox<>();
+        jLcantidad = new javax.swing.JLabel();
+        jTcantidad = new javax.swing.JTextField();
         jlNav = new javax.swing.JLabel();
         jPNav = new javax.swing.JPanel();
         jBPrimer1 = new javax.swing.JButton();
@@ -373,25 +383,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         );
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        jLId.setText("jLabel1");
-
-        jtId.setText("jTextField1");
-        jtId.setMaximumSize(new java.awt.Dimension(71, 22));
-        jtId.setMinimumSize(new java.awt.Dimension(71, 22));
-        jtId.addFocusListener(new java.awt.event.FocusAdapter() {
-            public void focusGained(java.awt.event.FocusEvent evt) {
-                jtIdFocusGained(evt);
-            }
-            public void focusLost(java.awt.event.FocusEvent evt) {
-                jtIdFocusLost(evt);
-            }
-        });
-        jtId.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jtIdActionPerformed(evt);
-            }
-        });
 
         jlNom_prod.setText("jLabel1");
 
@@ -469,6 +460,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jLmedida.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLmedida.setText("jLabel2");
 
         jCBmedida.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Medida", "Libra", "Kilo", "Unidad" }));
@@ -486,37 +478,46 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
 
+        jLcantidad.setText("jLabel1");
+
+        jTcantidad.setText("jTextField1");
+        jTcantidad.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jTcantidadFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jTcantidadFocusLost(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPCentLayout = new javax.swing.GroupLayout(jPCent);
         jPCent.setLayout(jPCentLayout);
         jPCentLayout.setHorizontalGroup(
             jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCentLayout.createSequentialGroup()
-                .addGap(15, 15, 15)
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
+                        .addGap(14, 14, 14)
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jLmedida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addComponent(jlMarca)
                                     .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLId, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, 176, Short.MAX_VALUE))
-                        .addGap(17, 17, 17))
+                                    .addComponent(jBVenci, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))
+                        .addGap(18, 18, 18))
                     .addGroup(jPCentLayout.createSequentialGroup()
-                        .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(43, 43, 43)
+                        .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jLmedida, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addGap(18, 18, 18))
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGap(28, 28, 28)
-                                .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 85, Short.MAX_VALUE)))
+                            .addComponent(jLcantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jTcantidad))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(20, 20, 20))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -525,7 +526,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(jlNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
                         .addComponent(jlFoto)
                         .addGap(76, 76, 76))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -545,34 +546,33 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                         .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGap(15, 15, 15)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jLId)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtId, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addComponent(jlNom_prod)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                                .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jlPrecio)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addComponent(jlMarca)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addComponent(jlPrecio)
+                                .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(jLVenci)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jBVenci)
+                                .addGap(18, 18, 18)
+                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jLmedida)
+                                    .addComponent(jLcantidad))
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLVenci)
-                            .addComponent(jLmedida))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jBVenci)
-                            .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                    .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(jTcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
 
@@ -608,7 +608,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             jPNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPNavLayout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jBPrimer1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jBPrimer1, javax.swing.GroupLayout.PREFERRED_SIZE, 29, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jBAnterior, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -619,13 +619,13 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         );
         jPNavLayout.setVerticalGroup(
             jPNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPNavLayout.createSequentialGroup()
+            .addGroup(jPNavLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(jPNavLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jBPrimer1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBAnterior, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
-                    .addComponent(jBSigui, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBUltim, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBAnterior, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBSigui, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBUltim, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -665,7 +665,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
                     .addComponent(jBEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBEli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -810,13 +810,13 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         if (contador % 2 == 0) {
             if (archivo != null) {
 
-                jtId.setEnabled(false);
                 jtMarca.setEnabled(false);
                 jtNom_prod.setEnabled(false);
                 jtPrecio.setEnabled(false);
                 jbImg.setEnabled(false);
                 dateChooser.setEnabled(false);
                 jCBmedida.setEnabled(false);
+                jTcantidad.setEnabled(false);
 
                 ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
                 ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
@@ -824,136 +824,58 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 // establece el icono en el botón
                 jBIng.setIcon(mitad_1);
 
-                //Obtencion de datos
-                Datos_p[cont_fil][0] = jtId.getText();
-                Datos_p[cont_fil][1] = jtPrecio.getText();
-                Datos_p[cont_fil][2] = jtNom_prod.getText();
-                Datos_p[cont_fil][3] = jtMarca.getText();
-
+                //Entrada de datos a la base
                 //Obtencion de la fecha de vencimiento
                 Date fechaVenci = dateChooser.getDate();
                 SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
                 String fechaV = form.format(fechaVenci);
 
-                Datos_p[cont_fil][4] = fechaV;
-                System.out.println(fechaV);
+                //Conversion de la imgen 
+                String img_paht = MySQL.imgenEnviar(archivo.getAbsolutePath());
+                System.out.println(img_paht);
 
-                System.out.println(combo_result);
-                //Obtencion de datos del combox
-                Datos_p[cont_fil][5] = combo_result;
+                //Enviar los datos                                                                                                      cantidad                               medida  img
+                MySQL.insert_prod("productos", jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, Integer.parseInt(jTcantidad.getText()), selec_med, img_paht);
 
-                //Aqui iria la optencion del combo
-                //Obtencion de la imagen
-                Datos_p[cont_fil][6] = archivo.getPath();
+//                MIRAR COMO VAN A FUNCIONAR AHORA ESTOS CONTADORES
+                cant_prods = MySQL.cantRegistros(Tabla, ID);
 
-                cont_fil++;
-                cont_fil_nav++;
-                cont_label = cont_fil;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-
-                //Volver a poner vacios los jtextfield
-                jtId.setText("");
-                jtMarca.setText("");
-                jtNom_prod.setText("");
-                jtPrecio.setText("");
-                Date Vacio_fech = null;
-                dateChooser.setDate(Vacio_fech);
+                cont_label = cant_prods;
+                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
 
                 jCBmedida.setSelectedIndex(0);
-                Pjolder();
+
+//                  AQUI ESTABA LA CONDICION DE CUANDO LLEGABA A EL TOPE
+//                    MIRAR COMO VAN AHORA ESTOS CONTADORES
+                cont_flec = cant_prods;
+
+                //Esto por si solo hay un dato
+                int cont_prod = MySQL.cantRegistros(Tabla, ID);
+                if (cont_prod == 1) {
+                    jBSigui.setEnabled(false);
+                    jBAnterior.setEnabled(false);
+                    jBPrimer1.setEnabled(false);
+                    jBUltim.setEnabled(false);
+                }
                 jBIng.setToolTipText("Ingreso");
 
-                //Para que se reinicie el label
-                ImageIcon proRei = new ImageIcon(getClass().getResource(""));
-                ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(rei_pro);
-
-                if (frmiPrincipal.nFils == cont_fil) {
-
-//                    if (nFils < 1) {
-//                        jBSigui.setEnabled(false);
-//                        jBAnterior.setEnabled(false);
-//                        jBPrimer1.setEnabled(false);
-//                        jBUltim.setEnabled(false);
-//                    }
-                    val_com = false;
-                    jBIng.setEnabled(false);
-                    cont_fil_nav = cont_fil_nav - 1;
-                    cont_flec = cont_fil_nav;
-
-                    //Esto por si solo hay un dato
-                    if (nFils == 1) {
-                        jBSigui.setEnabled(false);
-                        jBAnterior.setEnabled(false);
-                        jBPrimer1.setEnabled(false);
-                        jBUltim.setEnabled(false);
-                    }
-
-                    //PAra que de je la imagen puesta
-                    for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
-
-                        jtId.setText(Datos_p[cont_fil_nav][0]);
-                        jtPrecio.setText(Datos_p[cont_fil_nav][1]);
-                        jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
-                        jtMarca.setText(Datos_p[cont_fil_nav][3]);
-
-                        //Set fecha
-                        //Obtencion de la fecha de vencimiento
-                        String fech_actual = Datos_p[cont_fil_nav][4];
-                        SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
-                        try {
-                            Date fechaVenciS = S.parse(fech_actual);
-                            dateChooser.setDate(fechaVenciS);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        //set Medida
-                        String selec_act = Datos_p[cont_fil_nav][5];
-                        System.out.println(selec_act);
-                        String selec_act2 = selec_act.substring(2);
-                        System.out.println(selec_act2);
-                        System.out.println(selec_act2.trim());
-
-                        switch (selec_act2.trim()) {
-                            case "Libra":
-                                jCBmedida.setSelectedIndex(1);
-                                break;
-                            case "Kilo":
-                                jCBmedida.setSelectedIndex(2);
-                                break;
-                            case "Unidad":
-                                jCBmedida.setSelectedIndex(3);
-                                break;
-                            default:
-                                throw new AssertionError();
-                        }
-
-                        //Poner la imagen en el label
-                        ImageIcon proFotorec = new ImageIcon(Datos_p[cont_fil_nav][6]);
-                        ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                        jLImg.setIcon(icono_prorec);
-
-                    }
-
-                    bloc_sigui();
-                    bloc_ant();
-                }
+                MySQL.closeConnection();
+                bloc_sigui();
+                bloc_ant();
 
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Porfavor llena todos los campos faltantes", "Error de insercion", JOptionPane.WARNING_MESSAGE);
-                contador--;
+
             }
 
         } else {
             dateChooser.setEnabled(true);
             jCBmedida.setEnabled(true);
-            jtId.setEnabled(true);
             jtMarca.setEnabled(true);
             jtNom_prod.setEnabled(true);
             jtPrecio.setEnabled(true);
             jbImg.setEnabled(true);
+            jTcantidad.setEnabled(true);
             ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
             ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
@@ -963,6 +885,23 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
             //Esto para que la condicion del bloque del boton cobre sentido
             archivo = null;
+
+            //Volver a poner vacios los jtextfield
+            jtMarca.setText("");
+            jtNom_prod.setText("");
+            jtPrecio.setText("");
+            jTcantidad.setText("");
+            Date Vacio_fech = null;
+            dateChooser.setDate(Vacio_fech);
+
+            jCBmedida.setSelectedIndex(0);
+
+            Pjolder();
+
+            //Para que se reinicie el label
+            ImageIcon proRei = new ImageIcon(getClass().getResource(""));
+            ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+            jLImg.setIcon(rei_pro);
 
             rec_dat();
 
@@ -983,26 +922,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
     }//GEN-LAST:event_jBConsultaActionPerformed
-
-    private void jtIdFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusGained
-        if (jtId.getText().equals("Id")) {
-            jtId.setForeground(Color.BLACK);
-            jtId.setText("");
-            rec_dat();
-        }
-
-
-    }//GEN-LAST:event_jtIdFocusGained
-
-    private void jtIdFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtIdFocusLost
-        if (!jtId.getText().isEmpty()) {
-
-        } else {
-            jtId.setForeground(Color.GRAY);
-            jtId.setText("Id");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtIdFocusLost
 
     private void jtNom_prodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusGained
         if (jtNom_prod.getText().equals("Nombre")) {
@@ -1060,6 +979,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jbImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbImgActionPerformed
         JFileChooser jf = new JFileChooser();
+        File directorioInicio = new File("C:\\Users\\santi\\Downloads\\Segundo consolidado\\Minimarket_Bases\\Minimarket_bases2\\src\\imagenes\\productos");
+
+// Establecer la carpeta de inicio del JFileChooser
+        jf.setCurrentDirectory(directorioInicio);
+        
         jf.showOpenDialog(this);
         archivo = jf.getSelectedFile();
         if (archivo != null) {
@@ -1169,6 +1093,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         setVisible(false);
+        contador=0;
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void JBImprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBImprActionPerformed
@@ -1181,66 +1106,71 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBPrimer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrimer1ActionPerformed
         /*
-        *Lo que hacemos aqui es para primero entre al ciclo y lo lleve al primer registro que hizo
-        *Esto mismo ejecuta un contador para los botones del medio del nav se ejecuten correctamente y el contador del label se ejecute contando los registros en los que vamos 
+        *Lo que hacemos aqui es para que vaya a el primer dato y me los muestre
+        *
          */
 
-        for (int j = 0; j < Datos_p[0].length; j++) {
+        //Base de datos
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = 1;");
 
-            jtId.setText(Datos_p[0][0]);
-            jtPrecio.setText(Datos_p[0][1]);
-            jtNom_prod.setText(Datos_p[0][2]);
-            jtMarca.setText(Datos_p[0][3]);
+            ResultSet res = (ResultSet) stp.executeQuery();
 
-            //Set fecha
-            //Obtencion de la fecha de vencimiento
-            String fech_actual = Datos_p[0][4];
-            SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+            if (res.next()) {
 
-            try {
-                Date fechaVenciS = S.parse(fech_actual);
-                dateChooser.setDate(fechaVenciS);
-            } catch (ParseException e) {
-                e.printStackTrace();
+                jtNom_prod.setText(res.getString("nombre_prod"));
+                jtMarca.setText(res.getString("marca"));
+                jtPrecio.setText(res.getString("precio"));
+                jTcantidad.setText(res.getString("cantidad"));
+
+                //Poner fecha
+                String fech_actual = res.getString("fecha_venci");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaVenciS = S.parse(fech_actual);
+                    dateChooser.setDate(fechaVenciS);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de Medida
+                String selec_act = res.getString("medida");
+                System.out.println(selec_act);
+
+                switch (selec_act.trim()) {
+                    case "Libra":
+                        jCBmedida.setSelectedIndex(1);
+                        break;
+                    case "Kilo":
+                        jCBmedida.setSelectedIndex(2);
+                        break;
+                    case "Unidad":
+                        jCBmedida.setSelectedIndex(3);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //Poner la imagen en el label
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
-
-            //set Medida
-            String selec_act = Datos_p[0][5];
-            System.out.println(selec_act);
-            String selec_act2 = selec_act.substring(2);
-            System.out.println(selec_act2);
-            System.out.println(selec_act2.trim());
-
-            switch (selec_act2.trim()) {
-                case "Libra":
-                    jCBmedida.setSelectedIndex(1);
-                    break;
-                case "Kilo":
-                    jCBmedida.setSelectedIndex(2);
-                    break;
-                case "Unidad":
-                    jCBmedida.setSelectedIndex(3);
-                    break;
-                default:
-                    throw new AssertionError();
-            }
-
-            //Poner la imagen en el label
-            ImageIcon proFoto2 = new ImageIcon(Datos_p[0][6]);
-            ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(icono_pro2);
-
-            //Para que el contador sepa la posicion
-            cont_flec = cont_flec - cont_flec;
-            if (cont_label == 0) {
-                jLInfo.setText("Tabla: Producto registro  1  al " + (nFils));
-            } else {
-                cont_label = (cont_label - nFils) + 1;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-            }
-            bloc_ant();
-
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // RESET PARA EL LABEL DE POSICIONES 
+        jLInfo.setText("Tabla: Producto registro  1  al " + (cant_prods));
+
+        cont_flec = 1;
+
+        jBUltim.setEnabled(true);
+        jBSigui.setEnabled(true);
+
+        bloc_ant();
+
 
     }//GEN-LAST:event_jBPrimer1ActionPerformed
 
@@ -1249,81 +1179,92 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         *Lo que hacemos aqui es para primero entre al ciclo y lo lleve al ultimo registro que hizo
         *Esto mismo ejecuta un contador para los botones del medio del nav se ejecuten correctamente y el contador del label se ejecute contando los registros en los que vamos 
          */
-        for (int j = 0; j < Datos_p[cont_fil_nav].length; j++) {
 
-            jtId.setText(Datos_p[cont_fil_nav][0]);
-            jtPrecio.setText(Datos_p[cont_fil_nav][1]);
-            jtNom_prod.setText(Datos_p[cont_fil_nav][2]);
-            jtMarca.setText(Datos_p[cont_fil_nav][3]);
+        int ult_regis = MySQL.cantRegistros(Tabla, ID);
 
-            //Set fecha
-            //Obtencion de la fecha de vencimiento
-            String fech_actual = Datos_p[cont_fil_nav][4];
-            SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + ult_regis + ";");
 
-            try {
-                Date fechaVenciS = S.parse(fech_actual);
-                dateChooser.setDate(fechaVenciS);
-            } catch (ParseException e) {
-                e.printStackTrace();
+            ResultSet res = (ResultSet) stp.executeQuery();
+
+            if (res.next()) {
+
+                jtNom_prod.setText(res.getString("nombre_prod"));
+                jtMarca.setText(res.getString("marca"));
+                jtPrecio.setText(res.getString("precio"));
+                jTcantidad.setText(res.getString("cantidad"));
+
+                //Poner fecha
+                String fech_actual = res.getString("fecha_venci");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaVenciS = S.parse(fech_actual);
+                    dateChooser.setDate(fechaVenciS);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de Medida
+                String selec_act = res.getString("medida");
+                System.out.println(selec_act);
+
+                switch (selec_act.trim()) {
+                    case "Libra":
+                        jCBmedida.setSelectedIndex(1);
+                        break;
+                    case "Kilo":
+                        jCBmedida.setSelectedIndex(2);
+                        break;
+                    case "Unidad":
+                        jCBmedida.setSelectedIndex(3);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //Poner la imagen en el label
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
-
-            //set Medida
-            String selec_act = Datos_p[cont_fil_nav][5];
-            System.out.println(selec_act);
-            String selec_act2 = selec_act.substring(2);
-            System.out.println(selec_act2);
-            System.out.println(selec_act2.trim());
-
-            switch (selec_act2.trim()) {
-                case "Libra":
-                    jCBmedida.setSelectedIndex(1);
-                    break;
-                case "Kilo":
-                    jCBmedida.setSelectedIndex(2);
-                    break;
-                case "Unidad":
-                    jCBmedida.setSelectedIndex(3);
-                    break;
-                default:
-                    throw new AssertionError();
-            }
-
-            //Poner la imagen en el label
-            ImageIcon proFotorec = new ImageIcon(Datos_p[cont_fil_nav][6]);
-            ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(icono_prorec);
-
-            //Para que el contador sepa la posicion
-            cont_flec = cont_fil_nav;
-            if (cont_label == nFils) {
-                jLInfo.setText("Tabla: Producto registro " + nFils + " al " + (nFils));
-            } else {
-                cont_label = (cont_label + nFils) - 1;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-            }
-            bloc_sigui();
-
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // RESET PARA EL LABEL DE POSICIONES 
+        jLInfo.setText("Tabla: Producto registro " + cant_prods + "  al " + (cant_prods));
+
+        cont_flec = ult_regis;
+
+        jBPrimer1.setEnabled(true);
+        jBAnterior.setEnabled(true);
+
+        bloc_sigui();
 
 
     }//GEN-LAST:event_jBUltimActionPerformed
 
     private void jBSiguiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguiActionPerformed
+
+        //Bases de datos
         cont_flec++;
-        for (int j = 0; j < Datos_p[cont_flec].length; j++) {
-            if (j == 0) {
 
-                jtId.setText(Datos_p[cont_flec][0]);
-                jtPrecio.setText(Datos_p[cont_flec][1]);
-                jtNom_prod.setText(Datos_p[cont_flec][2]);
-                jtMarca.setText(Datos_p[cont_flec][3]);
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
 
-                //Set fecha
-                //Obtencion de la fecha de vencimiento
-                String fech_actual = Datos_p[cont_flec][4];
+            ResultSet res = (ResultSet) stp.executeQuery();
+
+            if (res.next()) {
+
+                jtNom_prod.setText(res.getString("nombre_prod"));
+                jtMarca.setText(res.getString("marca"));
+                jtPrecio.setText(res.getString("precio"));
+                jTcantidad.setText(res.getString("cantidad"));
+
+                //Poner fecha
+                String fech_actual = res.getString("fecha_venci");
                 SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
                 try {
                     Date fechaVenciS = S.parse(fech_actual);
                     dateChooser.setDate(fechaVenciS);
@@ -1331,14 +1272,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     e.printStackTrace();
                 }
 
-                //set Medida
-                String selec_act = Datos_p[cont_flec][5];
+                //set tipo de Medida
+                String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                String selec_act2 = selec_act.substring(2);
-                System.out.println(selec_act2);
-                System.out.println(selec_act2.trim());
 
-                switch (selec_act2.trim()) {
+                switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
                         break;
@@ -1353,39 +1291,43 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 }
 
                 //Poner la imagen en el label
-                ImageIcon proFotorec = new ImageIcon(Datos_p[cont_flec][6]);
-                ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(icono_prorec);
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        if (cont_label == nFils) {
-            jLInfo.setText("Tabla: Producto registro  " + nFils + "  al " + (nFils));
-        } else {
-            cont_label++;
-            jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        }
+        // RESET PARA EL LABEL DE POSICIONES 
+        jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
+
         bloc_sigui();
+        bloc_ant();
 
+        //***************
 
     }//GEN-LAST:event_jBSiguiActionPerformed
 
     private void jBAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAnteriorActionPerformed
         cont_flec--;
-        for (int j = 0; j < Datos_p[cont_flec].length; j++) {
-            if (j == 0) {
 
-                jtId.setText(Datos_p[cont_flec][0]);
-                jtPrecio.setText(Datos_p[cont_flec][1]);
-                jtNom_prod.setText(Datos_p[cont_flec][2]);
-                jtMarca.setText(Datos_p[cont_flec][3]);
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
 
-                //Set fecha
-                //Obtencion de la fecha de vencimiento
-                String fech_actual = Datos_p[cont_flec][4];
+            ResultSet res = (ResultSet) stp.executeQuery();
+
+            if (res.next()) {
+
+                jtNom_prod.setText(res.getString("nombre_prod"));
+                jtMarca.setText(res.getString("marca"));
+                jtPrecio.setText(res.getString("precio"));
+                jTcantidad.setText(res.getString("cantidad"));
+
+                //Poner fecha
+                String fech_actual = res.getString("fecha_venci");
                 SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
                 try {
                     Date fechaVenciS = S.parse(fech_actual);
                     dateChooser.setDate(fechaVenciS);
@@ -1393,14 +1335,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     e.printStackTrace();
                 }
 
-                //set Medida
-                String selec_act = Datos_p[cont_flec][5];
+                //set tipo de Medida
+                String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                String selec_act2 = selec_act.substring(2);
-                System.out.println(selec_act2);
-                System.out.println(selec_act2.trim());
 
-                switch (selec_act2.trim()) {
+                switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
                         break;
@@ -1415,20 +1354,20 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 }
 
                 //Poner la imagen en el label
-                ImageIcon proFotorec = new ImageIcon(Datos_p[cont_flec][6]);
-                ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(icono_prorec);
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        if (cont_label == 1) {
-            jLInfo.setText("Tabla: Producto registro  1  al " + (nFils));
-        } else {
-            cont_label--;
-            jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        }
+        // RESET PARA EL LABEL DE POSICIONES 
+        jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
+
         bloc_ant();
+        bloc_sigui();
 
     }//GEN-LAST:event_jBAnteriorActionPerformed
 
@@ -1440,43 +1379,17 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         int indice = jCBmedida.getSelectedIndex();
         switch (indice) {
             case 0:
-                if (val_com == false) {
-                } else {
-                    selec_med = null;
-                }
-
-                //JOptionPane.showMessageDialog(rootPane, "Selecciona una unidad de medida correcta", "error", JOptionPane.WARNING_MESSAGE);
+                selec_med = null;
                 break;
             case 1:
-                if (val_com == false) {
-                } else {
-                    selec_med = "Libra";
-                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
-                }
+                selec_med = "Libra";
                 break;
             case 2:
-                if (val_com == false) {
-                } else {
-                    selec_med = "Kilo";
-                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
-                }
+                selec_med = "Kilo";
                 break;
             case 3:
-                if (val_com == false) {
-                } else {
-                    selec_med = "Unidad";
-                    cant_med = Integer.parseInt(JOptionPane.showInputDialog("Cuantas " + selec_med + "s:"));
-                }
+                selec_med = "Unidad";
                 break;
-//                    case 4:
-//                        selec_med="Unidad";
-//                        cant_med=Integer.parseInt(JOptionPane.showInputDialog("Cuantas "+selec_med+"s:"));
-//                        break;
-        }
-
-        if (selec_med != null) {
-            combo_result = cant_med + " " + selec_med;
-            JOptionPane.showMessageDialog(rootPane, combo_result, "Resultado", JOptionPane.PLAIN_MESSAGE);
         }
     }//GEN-LAST:event_jCBmedidaActionPerformed
 
@@ -1488,9 +1401,23 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         rec_dat();
     }//GEN-LAST:event_jCBmedidaFocusLost
 
-    private void jtIdActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jtIdActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jtIdActionPerformed
+    private void jTcantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusGained
+        if (jTcantidad.getText().equals("cantidad")) {
+            jTcantidad.setForeground(Color.BLACK);
+            jTcantidad.setText("");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jTcantidadFocusGained
+
+    private void jTcantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusLost
+        if (!jTcantidad.getText().isEmpty()) {
+
+        } else {
+            jTcantidad.setForeground(Color.GRAY);
+            jTcantidad.setText("cantidad");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jTcantidadFocusLost
 
     public void modificarDatos(int fils, int cols) {
         if (cols == 6) {
@@ -1522,46 +1449,45 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     }
 
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//    public static void main(String args[]) {
+    /* Set the Nimbus look and feel */
+    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+    /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(Login.class
-                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new frmiPrincipal().setVisible(true);
-            }
-        });
-    }
-
+     */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(Login.class
+//                    .getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new frmiPrincipal().setVisible(true);
+//            }
+//        });
+//    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton JBImpr;
@@ -1579,10 +1505,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JComboBox<String> jCBmedida;
     private javax.swing.JLabel jLCrud;
     private javax.swing.JLabel jLFn;
-    private javax.swing.JLabel jLId;
     private javax.swing.JLabel jLImg;
     private javax.swing.JLabel jLInfo;
     private javax.swing.JLabel jLVenci;
+    private javax.swing.JLabel jLcantidad;
     private javax.swing.JLabel jLfech;
     private javax.swing.JLabel jLmedida;
     private javax.swing.JPanel jPCent;
@@ -1593,13 +1519,13 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPfoto;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JTextField jTcantidad;
     private javax.swing.JButton jbImg;
     private javax.swing.JLabel jlFoto;
     private javax.swing.JLabel jlMarca;
     private javax.swing.JLabel jlNav;
     private javax.swing.JLabel jlNom_prod;
     private javax.swing.JLabel jlPrecio;
-    private javax.swing.JTextField jtId;
     private javax.swing.JTextField jtMarca;
     private javax.swing.JTextField jtNom_prod;
     private javax.swing.JTextField jtPrecio;

@@ -5,10 +5,16 @@
 package Pruebas_de_codigo;
 
 import com.toedter.calendar.JDateChooser;
+import java.awt.Image;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JButton;
 
 /**
@@ -17,9 +23,12 @@ import javax.swing.JButton;
  */
 public class pruebas extends javax.swing.JFrame {
 
-     
-     public static String fechaV="";
-     public static JDateChooser dateChooser;
+    public static String fechaV = "";
+    public static JDateChooser dateChooser;
+    public byte[] imageBytes;
+
+    public String enlaceOriginal = "C:\\Users\\santi\\Downloads\\Segundo consolidado\\Minimarket_Bases\\Minimarket_bases2\\src\\imagenes\\perfil_encontrado.png";
+
     public pruebas() {
         initComponents();
         dateChooser = new JDateChooser();
@@ -33,12 +42,64 @@ public class pruebas extends javax.swing.JFrame {
             }
         });
 //        getContentPane().add(btnFecha);
-        
 
-        
-        
+//        String enlaceConvertido = convertirEnlace(enlaceOriginal);
+//        System.out.println(enlaceConvertido);
+
+        String paht_com22= imgenEnviar(enlaceOriginal);
+//        String cadenaOriginal = enlaceConvertido;
+//        String palabra = "/imagenes";
+
+//        String subcadena = obtenerSubcadena(cadenaOriginal, palabra);
+        System.out.println(paht_com22);
+
+        jLabel1.setText("");
+        ImageIcon img_0 = new ImageIcon(getClass().getResource(paht_com22));
+        ImageIcon foto_0 = new ImageIcon(img_0.getImage().getScaledInstance(jLabel1.getWidth(), jLabel1.getHeight(), Image.SCALE_DEFAULT));
+        jLabel1.setIcon(foto_0);
     }
 
+//    public String convertirEnlace(String enlace) {
+//        // Reemplazar "\\" por "/"
+//        String enlaceConvertido = enlace.replace("\\", "/");
+//        return enlaceConvertido;
+//
+//    }
+//
+//    public String obtenerSubcadena(String cadena, String palabra) {
+//        // Obtener el índice de la palabra en la cadena
+//        int indice = cadena.indexOf(palabra);
+//
+//        if (indice != -1) {
+//            // Obtener la subcadena a partir del índice de la palabra
+//            String subcadena = cadena.substring(indice);
+//            return subcadena;
+//        } else {
+//            // La palabra no se encontró en la cadena
+//            return "";
+//        }
+//    }
+
+    public String imgenEnviar(String enlace){
+//        Reemplazar "\\" por "/"
+        String enlaceConvertido = enlace.replace("\\", "/");
+        
+        
+        String cadenaOriginal = enlaceConvertido;
+        String palabra = "/imagenes";
+        
+        // Obtener el índice de la palabra en la cadena
+        int indice = cadenaOriginal.indexOf(palabra);
+
+        if (indice != -1) {
+            // Obtener la subcadena a partir del índice de la palabra
+            String subcadena = cadenaOriginal.substring(indice);
+            return subcadena;
+        } else {
+            // La palabra no se encontró en la cadena
+            return "";
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -50,7 +111,7 @@ public class pruebas extends javax.swing.JFrame {
 
         jButton1 = new javax.swing.JButton();
         jButton2 = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -63,16 +124,7 @@ public class pruebas extends javax.swing.JFrame {
             }
         });
 
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
-        );
+        jLabel1.setText("jLabel1");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -84,22 +136,24 @@ public class pruebas extends javax.swing.JFrame {
                         .addGap(235, 235, 235)
                         .addComponent(jButton2))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 251, Short.MAX_VALUE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
-                .addContainerGap(171, Short.MAX_VALUE))
+                        .addGap(104, 104, 104)
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 251, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(225, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(34, 34, 34)
+                .addContainerGap()
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(44, 44, 44)
                 .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(92, 92, 92)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jButton2)
-                .addContainerGap(124, Short.MAX_VALUE))
+                .addContainerGap(148, Short.MAX_VALUE))
         );
 
         pack();
@@ -150,6 +204,6 @@ public class pruebas extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel1;
     // End of variables declaration//GEN-END:variables
 }

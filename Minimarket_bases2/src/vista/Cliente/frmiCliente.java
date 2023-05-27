@@ -42,8 +42,6 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     //final de tabla
 
     //validador de seteador del combo
-    public static boolean val_com = true;
-
     //Fecha de vencimiento
     public static String fechaNac = "";
     public static JDateChooser dateChooser;
@@ -340,7 +338,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 long edad = diffMilis / milisPorAno;
 
                 DatosCli[cont_fil][7] = Long.toString(edad);
-                
+
                 String estadoCivil = "";
 
                 if (checkCasado.isSelected()) {
@@ -375,7 +373,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 jBIng.setToolTipText("Ingreso");
 
                 if (frmiPrincipal.nFils == cont_fil) {
-                    val_com = false;
+
                     jBIng.setEnabled(false);
                     jBPrimer1.setEnabled(true);
                     jBAnterior.setEnabled(true);
@@ -1542,28 +1540,22 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         int indice = comboGenero.getSelectedIndex();
         switch (indice) {
             case 0:
-                if (val_com == false) {
-                } else {
-                    selec_med = null;
-                }
+
+                selec_med = null;
+
                 break;
             case 1:
-                if (val_com == false) {
-                } else {
-                    selec_med = "Masculino";
-                }
+
+                selec_med = "Masculino";
+
                 break;
             case 2:
-                if (val_com == false) {
-                } else {
-                    selec_med = "Femenino";
-                }
+
+                selec_med = "Femenino";
+
                 break;
         }
-        if (selec_med != null) {
-            combo_result = selec_med;
-            JOptionPane.showMessageDialog(rootPane, combo_result, "Genero", JOptionPane.PLAIN_MESSAGE);
-        }
+
     }//GEN-LAST:event_comboGeneroActionPerformed
 
     private void jBIngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngActionPerformed
