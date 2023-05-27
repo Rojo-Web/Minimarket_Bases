@@ -15,6 +15,7 @@ import java.awt.event.MouseMotionAdapter;
 import javax.swing.JInternalFrame;
 import javax.swing.JInternalFrame.JDesktopIcon;
 import javax.swing.JOptionPane;
+import vista.Cliente.frmiCliente;
 
 /**
  *
@@ -27,6 +28,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
      */
     public static int nFils = 0;
     private frmiProducto producto = null;
+    private frmiCliente cliente = null;
 
     public frmiPrincipal() {
         //titulo
@@ -125,6 +127,11 @@ public class frmiPrincipal extends javax.swing.JFrame {
         JmPrincipales.add(jMIProducto);
 
         jMICliente.setText("jMenuItem2");
+        jMICliente.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIClienteActionPerformed(evt);
+            }
+        });
         JmPrincipales.add(jMICliente);
 
         jMIEmpresa.setText("jMenuItem3");
@@ -185,9 +192,19 @@ public class frmiPrincipal extends javax.swing.JFrame {
             MySQL.Ctabla_prod();
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Se requiere de un Numero. Error: " + e);
+            JOptionPane.showMessageDialog(null, "" + e);
         }
     }//GEN-LAST:event_jMIProductoActionPerformed
+
+    private void jMIClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIClienteActionPerformed
+        if (cliente == null || cliente.isClosed()) {
+                
+                cliente = new frmiCliente();
+                this.desktopPane.add(cliente);
+
+            }
+            cliente.setVisible(true);
+    }//GEN-LAST:event_jMIClienteActionPerformed
 
     /**
      * @param args the command line arguments

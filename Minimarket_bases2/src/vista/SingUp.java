@@ -58,9 +58,6 @@ public class SingUp extends javax.swing.JFrame {
         jTFclave.setForeground(Color.GRAY);
         jTFclave.setColumns(5);
 
-
-        
-
         //atributos a los labels
         jLTitulo.setForeground(new java.awt.Color(0, 0, 0));
         jLTitulo.setFont(new Font("Arial", Font.BOLD, 14));
@@ -73,7 +70,6 @@ public class SingUp extends javax.swing.JFrame {
 
         jLfecha.setForeground(new java.awt.Color(0, 0, 0));
         jLfecha.setFont(new Font("Arial", Font.BOLD, 14));
-
 
         jLnivel.setForeground(new java.awt.Color(0, 0, 0));
         jLnivel.setFont(new Font("Arial", Font.BOLD, 14));
@@ -95,34 +91,33 @@ public class SingUp extends javax.swing.JFrame {
         buttonGroup1.add(jRBnocturno);
 
         //grupTurn = buttonGroup1.getSelection();
-
         buttonGroup2.add(jRBadmin);
         buttonGroup2.add(jRBempleado);
         //grupNivel = buttonGroup2.getSelection();
-        
+
         jBregistrar.setEnabled(false);
     }
 
     private void rec_dat() {
-        
+
         //Rectifiacar rbuton turno
         if (jRBdiurno.isSelected()) {
-                grupturnsec = "D";
-            } else if (jRBnocturno.isSelected()) {
-                grupturnsec = "N";
-            } else {
-                grupturnsec = null;
-            }
-        
+            grupturnsec = "D";
+        } else if (jRBnocturno.isSelected()) {
+            grupturnsec = "N";
+        } else {
+            grupturnsec = null;
+        }
+
         //Rectifiacar rbuton nivel
         if (jRBadmin.isSelected()) {
-                grupNivelsec = "admin";
-            } else if (jRBempleado.isSelected()) {
-                grupNivelsec = "empleado";
-            } else {
-                grupNivelsec = null;
-            }
-        
+            grupNivelsec = "admin";
+        } else if (jRBempleado.isSelected()) {
+            grupNivelsec = "empleado";
+        } else {
+            grupNivelsec = null;
+        }
+
         if (jTFnom.getText().equals("Nombre") || jTFape.getText().equals("Apellido")
                 || jTFclave.getText().equals("*****") || dateChooser_singUp.getDate() == null || grupturnsec == null || grupNivelsec == null) {
             System.out.println(grupturnsec);
@@ -511,22 +506,22 @@ public class SingUp extends javax.swing.JFrame {
     }//GEN-LAST:event_jTFclaveFocusLost
 
     private void jBregistrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBregistrarActionPerformed
-        
 
         //Obtencion de la fecha de vencimiento
         Date fechaNaci = dateChooser_singUp.getDate();
         SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
         String fechaN = form.format(fechaNaci);
 
-        //Para obtener edad
-        String ultimosCuatroDigitos = fechaN.substring(fechaN.length() - 4);
-        System.out.println(ultimosCuatroDigitos);
+        Date fechaActual = new Date();
+        long diffMilis = fechaActual.getTime() - fechaNaci.getTime();
+        long milisPorAno = 1000L * 60 * 60 * 24 * 365;
+        long edad = diffMilis / milisPorAno;
 
-        int edad_emp = 2023 - Integer.parseInt(ultimosCuatroDigitos);
-        String edad_emp_F=Integer.toString(edad_emp);
-        
+
+        String edad_emp_F = Long.toString(edad);
+
         MySQL.insert_empl("empleados", jTFnom.getText(), jTFape.getText(), jTFclave.getText(), grupturnsec, grupNivelsec, fechaN, edad_emp_F);
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 LoginM ln = new LoginM();
@@ -534,7 +529,7 @@ public class SingUp extends javax.swing.JFrame {
                 setVisible(false);
             }
         });
-        
+
     }//GEN-LAST:event_jBregistrarActionPerformed
 
     private void jRBdiurnoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jRBdiurnoFocusGained
@@ -570,7 +565,7 @@ public class SingUp extends javax.swing.JFrame {
     }//GEN-LAST:event_jRBempleadoFocusLost
 
     private void jBcancelarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBcancelarActionPerformed
-        
+
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 LoginM ln = new LoginM();
