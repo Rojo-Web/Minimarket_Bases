@@ -50,12 +50,12 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     //public static String[][] tabla_p = new String[frmiPrincipal.nFils][7];
     public static String[][] tabla_p;
 
-    public static File archivo;
+    private static File archivo;
     //final de tabla
 
     //Fecha de vencimiento
     public static String fechaV = "";
-    public static JDateChooser dateChooser;
+    private static JDateChooser dateChooser;
 
     //Vector de iconos
     //                                  0                           1                       2                           3                       4                       5                       6
@@ -926,10 +926,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     cont_label = cant_prods;
                     jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
 
-                    jCBmedida.setSelectedIndex(0);
+                    //jCBmedida.setSelectedIndex(0);
 
 //                  AQUI ESTABA LA CONDICION DE CUANDO LLEGABA A EL TOPE
 //                    MIRAR COMO VAN AHORA ESTOS CONTADORES
+cant_prods = MySQL.cantRegistros(Tabla, ID);
                     cont_flec = cant_prods;
 
                     //Esto por si solo hay un dato
@@ -1155,7 +1156,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         if (borrado == 0) {
             MySQL.deleteRecord(Tabla, ID, cont_flec);
 
-            cont_flec++;
+            JOptionPane.showMessageDialog(null, "Registro eliminado con exito", "Registro eliminado", JOptionPane.INFORMATION_MESSAGE);
+            cont_flec--;
 
             try {
                 PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
@@ -1208,8 +1210,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
 
             // RESET PARA EL LABEL DE POSICIONES 
+            cant_prods = MySQL.cantRegistros(Tabla, ID);
             jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
 
+            
             bloc_sigui();
             bloc_ant();
         }
@@ -1303,6 +1307,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
 
         // RESET PARA EL LABEL DE POSICIONES 
+        cant_prods = MySQL.cantRegistros(Tabla, ID);
         jLInfo.setText("Tabla: Producto registro  1  al " + (cant_prods));
 
         cont_flec = 1;
@@ -1374,6 +1379,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
 
         // RESET PARA EL LABEL DE POSICIONES 
+        cant_prods = MySQL.cantRegistros(Tabla, ID);
         jLInfo.setText("Tabla: Producto registro " + cant_prods + "  al " + (cant_prods));
 
         cont_flec = ult_regis;
@@ -1442,6 +1448,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
 
         // RESET PARA EL LABEL DE POSICIONES 
+        cant_prods = MySQL.cantRegistros(Tabla, ID);
         jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
 
         bloc_sigui();
@@ -1505,6 +1512,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
 
         // RESET PARA EL LABEL DE POSICIONES 
+        cant_prods = MySQL.cantRegistros(Tabla, ID);
         jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
 
         bloc_ant();
@@ -1680,18 +1688,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
 
             ingreso();
-            //va la imagen y desbloqueo
-
-//            dateChooser.setEnabled(true);
-//            jCBmedida.setEnabled(true);
-//            jtMarca.setEnabled(true);
-//            jtNom_prod.setEnabled(true);
-//            jtPrecio.setEnabled(true);
-//            jbImg.setEnabled(true);
-//            jTcantidad.setEnabled(true);
-            //jBIng.setToolTipText("Guardar");
-            //iria un metodo que ponga el bton ingreso a guardar pero le reste uno al contador 
-        }
+            
+            }
     }//GEN-LAST:event_jBEditActionPerformed
 
 //    public static void main(String args[]) {

@@ -10,7 +10,8 @@ import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
 import javax.swing.ImageIcon;
 import javax.swing.JFrame;
-import static vista.Producto.JFconsulta.rut_tab;
+//import static vista.Producto.JFconsulta.rut_tab;
+//import static vista.Cliente.frmConsultaCliente.rut_tab;
 
 /**
  *
@@ -21,6 +22,8 @@ public class Muestra_tab extends javax.swing.JFrame {
     /**
      * Creates new form Muestra_tab
      */
+    private static String paht_T="";
+    
     public Muestra_tab() {
         Image icon_inter = Toolkit.getDefaultToolkit().getImage(getClass().getResource("/imagenes/producto.png"));
         setIconImage(icon_inter);
@@ -35,10 +38,18 @@ public class Muestra_tab extends javax.swing.JFrame {
                 setVisible(false);
             }
         });
-        System.out.println(rut_tab);
-        ImageIcon PfotoM = new ImageIcon(rut_tab);
+        
+        System.out.println(paht_T);
+        ImageIcon PfotoM = new ImageIcon(getClass().getResource(paht_T));
         ImageIcon fotoM_mitad = new ImageIcon(PfotoM.getImage().getScaledInstance(jLMuestra.getWidth(), jLMuestra.getHeight(), Image.SCALE_DEFAULT));
         jLMuestra.setIcon(fotoM_mitad);
+    }
+    
+    
+    
+    public static void rec_paht(String rut_tab1){
+        paht_T=rut_tab1;
+        System.out.println("Entramos metodo paht: "+rut_tab1+" y "+paht_T);
     }
 
     /**

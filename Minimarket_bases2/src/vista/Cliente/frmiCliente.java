@@ -1,5 +1,13 @@
 package vista.Cliente;
 
+import Modelo.MySQL;
+import static Modelo.MySQL.Conexion;
+import java.sql.SQLException;
+import com.mysql.jdbc.Connection;
+import com.mysql.jdbc.PreparedStatement;
+import com.mysql.jdbc.ResultSet;
+import com.mysql.jdbc.ResultSetMetaData;
+import com.mysql.jdbc.Statement;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -10,6 +18,8 @@ import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
 import java.text.ParseException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.ImageIcon;
@@ -22,9 +32,13 @@ import static vista.frmiPrincipal.nFils;
 
 public class frmiCliente extends javax.swing.JInternalFrame {
 
-    public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0;
+    public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_clies = 0;
     public final int ancho = 15, alto = 15;
-    public static String selec_med = "", combo_result = "";
+    public static String selec_med = "", selec_estado = "", combo_result = "";
+
+    private static String Tabla = "clientes", ID = "ID_C";
+    private static boolean veri_Bedit = false, bloq_grup = false;
+    public static int contador_edit = 0;
 
     public Font Arial = new Font("Arial", Font.BOLD, 14);
 
@@ -35,16 +49,16 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     //                 7                               8                           9                  10                      11                          12                            13                          14
     //Tabla de consulta
-    public static String[] sCabecera = {"Id", "Nombres", "Apellidos", "Direccion", "Telefono", "Genero", "FechaNacimiento", "Edad", "EstadoCivil", "Ruta_foto"};
-    public static String[][] tablaCli = new String[frmiPrincipal.nFils][10];
+    public static String[] sCabecera = {"ID_C", "Id_Clie", "nombre", "apellidos", "direccion", "telefono", "genero", "F_nacimiento", "Edad", "estado_civil", "img_clie"};
+    public static String[][] tablaCli;
     public static String[][] DatosCli = new String[frmiPrincipal.nFils][10];
-    public static File archivo;
+    private static File archivo;
     //final de tabla
 
     //validador de seteador del combo
     //Fecha de vencimiento
     public static String fechaNac = "";
-    public static JDateChooser dateChooser;
+    private static JDateChooser dateChooser;
 
     public frmiCliente() {
         initComponents();
@@ -60,8 +74,6 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         comboGenero.addItem("Sin seleccionar");
         comboGenero.addItem("Masculino");
         comboGenero.addItem("Femenino");
-
-
 
         //LBLS
         jlFoto.setText("Foto");
@@ -98,7 +110,8 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jLFn.setText("Fn Especiales");
 
         //lblinfo
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
+        cant_clies = MySQL.cantRegistros(Tabla, ID);
+        jLInfo.setText("Tabla: Cliente registro " + cont_label + " al " + (cant_clies));
 
         //jLfech.setT
         jLfech.setForeground(new java.awt.Color(255, 0, 0));
@@ -208,10 +221,10 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jCalFecNac.add(dateChooser);
 
         //Bloqueo del nav
-        jBSigui.setEnabled(false);
+
         jBAnterior.setEnabled(false);
         jBPrimer1.setEnabled(false);
-        jBUltim.setEnabled(false);
+
 
         //Panel principal Bloqueado
         txtIdCli.setEnabled(false);
@@ -252,32 +265,68 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     }
 
     public void bloc_sigui() {
-        if (cont_flec == cont_fil_nav) {
+        int ult_regis = MySQL.cantRegistros(Tabla, ID);
+
+        if (cont_flec == ult_regis) {
+
             jBSigui.setEnabled(false);
             jBUltim.setEnabled(false);
+        } else if (cont_flec != ult_regis && jBSigui.isEnabled() == false && jBUltim.isEnabled() == false) {
+            jBSigui.setEnabled(true);
+            jBUltim.setEnabled(true);
         } else {
             jBSigui.setEnabled(true);
             jBUltim.setEnabled(true);
         }
-        bloc_ant();
+        //bloc_ant();
     }
 
     public void bloc_ant() {
-        if (cont_flec == 0) {
+        if (cont_flec == 1) {
             jBAnterior.setEnabled(false);
             jBPrimer1.setEnabled(false);
+        } else if (cont_flec != 1 && jBAnterior.isEnabled() == false && jBPrimer1.isEnabled() == false) {
+            jBAnterior.setEnabled(true);
+            jBPrimer1.setEnabled(true);
         } else {
             jBAnterior.setEnabled(true);
             jBPrimer1.setEnabled(true);
         }
-        bloc_sigui();
+        //bloc_sigui();
     }
 
     public void rec_dat() {
-        if (txtIdCli.getText().equalsIgnoreCase("Id") || txtApeCli.getText().equalsIgnoreCase("Apellidos") || txtNomCli.getText().equalsIgnoreCase("Nombres") || txtDireCli.getText().equalsIgnoreCase("Dirección") || dateChooser.getDate() == null || comboGenero.getSelectedIndex() == 0) {
+        if (txtIdCli.getText().equalsIgnoreCase("Id") || txtApeCli.getText().equalsIgnoreCase("Apellidos") || txtNomCli.getText().equalsIgnoreCase("Nombres") || txtDireCli.getText().equalsIgnoreCase("Dirección") || dateChooser.getDate() == null || comboGenero.getSelectedIndex() == 0 || jCBestado.getSelectedIndex() == 0) {
             jbImg.setEnabled(false);
         } else {
             jbImg.setEnabled(true);
+        }
+    }
+
+    public void bloq_grup() {
+        if (bloq_grup == true) {
+            JBImpr.setEnabled(false);
+            jBAnterior.setEnabled(false);
+            jBConsulta.setEnabled(false);
+            jBEdit.setEnabled(false);
+            jBEli.setEnabled(false);
+            jBExit.setEnabled(false);
+            jBGuia.setEnabled(false);
+            jBPrimer1.setEnabled(false);
+            jBUltim.setEnabled(false);
+            jBSigui.setEnabled(false);
+
+        } else {
+            JBImpr.setEnabled(true);
+            jBAnterior.setEnabled(true);
+            jBConsulta.setEnabled(true);
+            jBEdit.setEnabled(true);
+            jBEli.setEnabled(true);
+            jBExit.setEnabled(true);
+            jBGuia.setEnabled(true);
+            jBPrimer1.setEnabled(true);
+            jBUltim.setEnabled(true);
+            jBSigui.setEnabled(true);
         }
     }
 
@@ -286,132 +335,116 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
         if (contador % 2 == 0) {
             if (archivo != null) {
+                if (veri_Bedit == true) {
+                    Date fechaVenci = dateChooser.getDate();
+                    SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaNac = form.format(fechaVenci);
 
-                txtIdCli.setEnabled(false);
-                txtNomCli.setEnabled(false);
-                txtApeCli.setEnabled(false);
-                txtDireCli.setEnabled(false);
-                txtTelCli.setEnabled(false);
-                jbImg.setEnabled(false);
-                dateChooser.setEnabled(false);
-                comboGenero.setEnabled(false);
-                jCBestado.setEnabled(false);
+                    Date fechaActual = new Date();
+                    long diffMilis = fechaActual.getTime() - fechaVenci.getTime();
+                    long milisPorAno = 1000L * 60 * 60 * 24 * 365;
+                    long edad = diffMilis / milisPorAno;
+                    int edad_fin = Integer.parseInt(Long.toString(edad));
 
-                // establece el icono en el botón
-                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
-                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
-                jBIng.setIcon(mitad_1);
+                    String img_paht_U = MySQL.imgenEnviar(archivo.getAbsolutePath());
 
-                //Obtencion de datos
-                DatosCli[cont_fil][0] = txtIdCli.getText();
-                DatosCli[cont_fil][1] = txtNomCli.getText();
-                DatosCli[cont_fil][2] = txtApeCli.getText();
-                DatosCli[cont_fil][3] = txtDireCli.getText();
-                DatosCli[cont_fil][4] = txtTelCli.getText();
+                    MySQL.edit_clie(cont_flec, txtNomCli.getText(), txtApeCli.getText(), txtDireCli.getText(), txtTelCli.getText(), selec_med, fechaNac, edad_fin, selec_estado, img_paht_U);
+                    veri_Bedit = false;
 
-                System.out.println(combo_result);
-                //Obtencion de datos del combox
-                DatosCli[cont_fil][5] = selec_med;
+                    //Bloquear campos
+                    txtIdCli.setEnabled(false);
+                    txtNomCli.setEnabled(false);
+                    txtApeCli.setEnabled(false);
+                    txtDireCli.setEnabled(false);
+                    txtTelCli.setEnabled(false);
+                    jbImg.setEnabled(false);
+                    dateChooser.setEnabled(false);
+                    comboGenero.setEnabled(false);
+                    jCBestado.setEnabled(false);
 
-                //Obtencion de la fecha de vencimiento
-                Date fechaVenci = dateChooser.getDate();
-                SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
-                String fechaNac = form.format(fechaVenci);
+                    //Cajas de color gris en texto
+                    txtIdCli.setForeground(Color.GRAY);
+                    txtNomCli.setForeground(Color.GRAY);
+                    txtApeCli.setForeground(Color.GRAY);
+                    txtDireCli.setForeground(Color.GRAY);
+                    txtTelCli.setForeground(Color.GRAY);
 
-                DatosCli[cont_fil][6] = fechaNac;
-                System.out.println(fechaNac);
+                    // establece el icono en el botón
+                    ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+                    ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                    jBIng.setIcon(mitad_1);
 
-                //EDAD [7]
-                Date fechaActual = new Date();
-                long diffMilis = fechaActual.getTime() - fechaVenci.getTime();
-                long milisPorAno = 1000L * 60 * 60 * 24 * 365;
-                long edad = diffMilis / milisPorAno;
+                    ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
+                    ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                    // establece el icono en el botón
+                    jBEdit.setIcon(mitad_edit2);
 
-                DatosCli[cont_fil][7] = Long.toString(edad);
+                    contador_edit = 0;
 
-                String estadoCivil = "";
+                } else {
+                    //Desbloque el grupo de botones
+                    bloq_grup = false;
+                    bloq_grup();
 
-                
+                    txtIdCli.setEnabled(false);
+                    txtNomCli.setEnabled(false);
+                    txtApeCli.setEnabled(false);
+                    txtDireCli.setEnabled(false);
+                    txtTelCli.setEnabled(false);
+                    jbImg.setEnabled(false);
+                    dateChooser.setEnabled(false);
+                    comboGenero.setEnabled(false);
+                    jCBestado.setEnabled(false);
 
-               //DatosCli[cont_fil][8] = selec_estado;
+                    // establece el icono en el botón
+                    ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+                    ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                    jBIng.setIcon(mitad_1);
 
-                //Obtencion de la imagen
-                DatosCli[cont_fil][9] = archivo.getPath();
+                    //Obtencion de la fecha de vencimiento
+                    Date fechaVenci = dateChooser.getDate();
+                    SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaNac = form.format(fechaVenci);
 
-                cont_fil++;
-                cont_fil_nav++;
-                cont_label = cont_fil;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
+                    //EDAD [7]
+                    Date fechaActual = new Date();
+                    long diffMilis = fechaActual.getTime() - fechaVenci.getTime();
+                    long milisPorAno = 1000L * 60 * 60 * 24 * 365;
+                    long edad = diffMilis / milisPorAno;
+                    int edad_fin = Integer.parseInt(Long.toString(edad));
 
-                jBIng.setToolTipText("Ingreso");
+                    //Obtencion de la imagen
+                    String img_paht = MySQL.imgenEnviar(archivo.getAbsolutePath());
+                    System.out.println(img_paht);
 
-                if (frmiPrincipal.nFils == cont_fil) {
+                    //Enviar los datos
+                    MySQL.insert_clie(Tabla, Integer.parseInt(txtIdCli.getText()), txtNomCli.getText(), txtApeCli.getText(), txtDireCli.getText(), txtTelCli.getText(), selec_med, fechaNac, edad_fin, selec_estado, img_paht);
 
-                    jBIng.setEnabled(false);
-                    jBPrimer1.setEnabled(true);
-                    jBAnterior.setEnabled(true);
-                    cont_fil_nav = cont_fil_nav - 1;
-                    cont_flec = cont_fil_nav;
+                    cant_clies = MySQL.cantRegistros(Tabla, ID);
+
+                    cont_label = cant_clies;
+                    jLInfo.setText("Tabla: Clientes registro " + cont_label + " al " + (cant_clies));
+
+                    jBIng.setToolTipText("Ingreso");
+
+                    cont_flec = cant_clies;
 
                     //Esto por si solo hay un dato
-                    if (nFils == 1) {
+                    int cont_clie = MySQL.cantRegistros(Tabla, ID);
+                    if (cont_clie == 1) {
                         jBSigui.setEnabled(false);
                         jBAnterior.setEnabled(false);
                         jBPrimer1.setEnabled(false);
                         jBUltim.setEnabled(false);
                     }
 
-                    //PAra que deje la imagen puesta
-                    for (int j = 0; j < DatosCli[cont_fil_nav].length; j++) {
-
-                        txtIdCli.setText(DatosCli[cont_fil_nav][0]);
-                        txtNomCli.setText(DatosCli[cont_fil_nav][1]);
-                        txtApeCli.setText(DatosCli[cont_fil_nav][2]);
-                        txtDireCli.setText(DatosCli[cont_fil_nav][3]);
-                        txtTelCli.setText(DatosCli[cont_fil_nav][4]);
-
-                        //set Genero
-                        String selec_act = DatosCli[cont_fil_nav][5];
-                        System.out.println(selec_act);
-                        String selec_act2 = selec_act.substring(2);
-                        System.out.println(selec_act2);
-                        System.out.println(selec_act2.trim());
-
-                        switch (selec_act2.trim()) {
-                            case "Masculino":
-                                comboGenero.setSelectedIndex(1);
-                                break;
-                            case "Femenino":
-                                comboGenero.setSelectedIndex(2);
-                                break;
-                            default:
-                                throw new AssertionError();
-                        }
-
-                        //Set fecha
-                        //Obtencion de la fecha de NACIMIENTO
-                        String fech_actual = DatosCli[cont_fil_nav][6];
-                        SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
-                        try {
-                            Date fechaVenciS = S.parse(fech_actual);
-                            dateChooser.setDate(fechaVenciS);
-                        } catch (ParseException e) {
-                            e.printStackTrace();
-                        }
-
-                        //Aqui iria el combo de estado
-                        
-
-                        //Poner la imagen en el label
-                        ImageIcon proFotorec = new ImageIcon(DatosCli[cont_fil_nav][9]);
-                        ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                        jLImg.setIcon(icono_prorec);
-
-                    }
-
+//                    jBIng.setEnabled(false);
+//                    jBPrimer1.setEnabled(true);
+//                    jBAnterior.setEnabled(true);
+                    MySQL.closeConnection();
                     bloc_sigui();
                     bloc_ant();
+
                 }
 
             } else {
@@ -420,44 +453,75 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             }
 
         } else {
-            //Volver a poner vacios los jtextfield
-            txtIdCli.setText("");
-            txtNomCli.setText("");
-            txtApeCli.setText("");
-            txtDireCli.setText("");
-            txtTelCli.setText("");
-            Date Vacio_fech = null;
-            dateChooser.setDate(Vacio_fech);
-            comboGenero.setSelectedIndex(0);
-            Placeholders();
-            jCBestado.setSelectedIndex(0);
 
-            //Para que se reinicie el label
-            ImageIcon proRei = new ImageIcon(getClass().getResource(""));
-            ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(rei_pro);
+            if (veri_Bedit == true) {
 
-            dateChooser.setEnabled(true);
-            comboGenero.setEnabled(true);
-            txtIdCli.setEnabled(true);
-            txtNomCli.setEnabled(true);
-            txtApeCli.setEnabled(true);
-            txtDireCli.setEnabled(true);
-            txtTelCli.setEnabled(true);
-            jbImg.setEnabled(true);
-            ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
-            ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
-            jCBestado.setEnabled(true);
+                dateChooser.setEnabled(true);
+                comboGenero.setEnabled(true);
+                txtIdCli.setEnabled(true);
+                txtNomCli.setEnabled(true);
+                txtApeCli.setEnabled(true);
+                txtDireCli.setEnabled(true);
+                txtTelCli.setEnabled(true);
+                jbImg.setEnabled(true);
+                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
+                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                jCBestado.setEnabled(true);
 
-            // establece el icono en el botón
-            jBIng.setIcon(mitad_1);
-            jBIng.setToolTipText("Guardar");
+                // establece el icono en el botón
+                jBIng.setIcon(mitad_1);
+                jBIng.setToolTipText("Guardar");
 
-            //Esto para que la condicion del bloque del boton cobre sentido
-            archivo = null;
+                txtIdCli.setForeground(Color.BLACK);
+                txtNomCli.setForeground(Color.BLACK);
+                txtApeCli.setForeground(Color.BLACK);
+                txtDireCli.setForeground(Color.BLACK);
+                txtTelCli.setForeground(Color.BLACK);
 
-            rec_dat();
+            } else {
 
+                //Para que se bloquen los botones
+                bloq_grup = true;
+                bloq_grup();
+
+                //Volver a poner vacios los jtextfield
+                txtIdCli.setText("");
+                txtNomCli.setText("");
+                txtApeCli.setText("");
+                txtDireCli.setText("");
+                txtTelCli.setText("");
+                Date Vacio_fech = null;
+                dateChooser.setDate(Vacio_fech);
+                comboGenero.setSelectedIndex(0);
+                Placeholders();
+                jCBestado.setSelectedIndex(0);
+
+                //Para que se reinicie el label
+                ImageIcon proRei = new ImageIcon(getClass().getResource(""));
+                ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(rei_pro);
+
+                dateChooser.setEnabled(true);
+                comboGenero.setEnabled(true);
+                txtIdCli.setEnabled(true);
+                txtNomCli.setEnabled(true);
+                txtApeCli.setEnabled(true);
+                txtDireCli.setEnabled(true);
+                txtTelCli.setEnabled(true);
+                jbImg.setEnabled(true);
+                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
+                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                jCBestado.setEnabled(true);
+
+                // establece el icono en el botón
+                jBIng.setIcon(mitad_1);
+                jBIng.setToolTipText("Guardar");
+
+                //Esto para que la condicion del bloque del boton cobre sentido
+                archivo = null;
+
+                rec_dat();
+            }
         }
     }
 
@@ -647,6 +711,19 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         lblEstCiv.setText("jLabel1");
 
         jCBestado.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Estado", "Soltero", "Casado", "Divorciado", "Viudo" }));
+        jCBestado.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusGained(java.awt.event.FocusEvent evt) {
+                jCBestadoFocusGained(evt);
+            }
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                jCBestadoFocusLost(evt);
+            }
+        });
+        jCBestado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jCBestadoActionPerformed(evt);
+            }
+        });
 
         jLInfo.setText("jLabel1");
 
@@ -975,10 +1052,52 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     private void jBConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBConsultaActionPerformed
 
-        for (int i = 0; i < tablaCli.length; i++) {
-            for (int l = 0; l <= 9; l++) {
-                tablaCli[i][l] = frmiCliente.DatosCli[i][l];
+        MySQL.MySQLConnection("root", "", "minimarket");
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            System.out.println("query");
+            String query = "SELECT * FROM clientes";
+            connection = (Connection) Conexion;
+            statement = (Statement) connection.createStatement();
+
+            resultSet = (ResultSet) statement.executeQuery(query);
+
+            ResultSetMetaData metaData = (ResultSetMetaData) resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            int rowCount = 0;
+
+            System.out.println("avance 2");
+            if (resultSet.last()) {
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst(); // Regresar al inicio del conjunto de resultados
             }
+
+            System.out.println(rowCount);
+
+            //int columnCount = 8; // Número de columnas en la tabla
+            tablaCli = new String[rowCount][columnCount];
+
+            int row = 0;
+
+            System.out.println("avance 3");
+            while (resultSet.next()) {
+                System.out.println("avance 4");
+                for (int col = 0; col < columnCount; col++) {
+                    tablaCli[row][col] = resultSet.getObject(col + 1).toString();
+
+                }
+
+                row++;
+
+            }
+            // Resto del código para almacenar los datos en una matriz
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Cierre de recursos (resultSet, statement, connection)
         }
 
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -989,7 +1108,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBConsultaActionPerformed
 
     private void jBGuiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuiaActionPerformed
-        File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Producto_2/src/imagenes/CRUD.pdf");
+        File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Minimarket_Bases/Minimarket_bases2/src/imagenes/GuiaCliente.pdf");
         if (Desktop.isDesktopSupported()) {
             Desktop escritorio = Desktop.getDesktop();
             try {
@@ -1003,84 +1122,123 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     private void jBPrimer1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPrimer1ActionPerformed
 
-//        jBPrimer1.setEnabled(false);
-//        jBAnterior.setEnabled(false);
-//        jBUltim.setEnabled(true);
-//        jBSigui.setEnabled(true);
-        for (int i = 0; i < DatosCli.length; i++) {
+        /*
+        *Lo que hacemos aqui es para que vaya a el primer dato y me los muestre
+        *
+         */
+        //Base de datos
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM "+Tabla+" where ID_C = 1;");
 
-            txtIdCli.setText(DatosCli[0][0]);
-            txtNomCli.setText(DatosCli[0][1]);
-            txtApeCli.setText(DatosCli[0][2]);
-            txtDireCli.setText(DatosCli[0][3]);
-            txtTelCli.setText(DatosCli[0][4]);
+            ResultSet res = (ResultSet) stp.executeQuery();
 
-            //set Genero
-            String selec_act = DatosCli[0][5];
-            System.out.println(selec_act);
-            String selec_act2 = selec_act.substring(2);
-            System.out.println(selec_act2);
-            System.out.println(selec_act2.trim());
+            if (res.next()) {
 
-            switch (selec_act2.trim()) {
-                case "Masculino":
-                    comboGenero.setSelectedIndex(1);
-                    break;
-                case "Femenino":
-                    comboGenero.setSelectedIndex(2);
-                    break;
-                default:
-                    throw new AssertionError();
+                txtNomCli.setText(res.getString("nombre"));
+                txtApeCli.setText(res.getString("apellidos"));
+                txtTelCli.setText(res.getString("telefono"));
+                txtDireCli.setText(res.getString("direccion"));
+                txtIdCli.setText(res.getString("Id_Clie"));
+
+                //Poner fecha
+                String fech_actual = res.getString("F_nacimiento");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaNacs = S.parse(fech_actual);
+                    dateChooser.setDate(fechaNacs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de genero
+                String selec_act2 = res.getString("genero");
+                System.out.println(selec_act2);
+
+                switch (selec_act2.trim()) {
+                    case "Masculino":
+                        comboGenero.setSelectedIndex(1);
+                        break;
+                    case "Femenino":
+                        comboGenero.setSelectedIndex(2);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //set tipo de estado civil
+                String selec_act3 = res.getString("estado_civil");
+                System.out.println(selec_act3);
+
+                switch (selec_act3.trim()) {
+                    case "Soltero":
+                        jCBestado.setSelectedIndex(1);
+                        break;
+                    case "Casado":
+                        jCBestado.setSelectedIndex(2);
+                        break;
+
+                    case "Divorciado":
+                        jCBestado.setSelectedIndex(3);
+                        break;
+                    case "Viudo":
+                        jCBestado.setSelectedIndex(4);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //Poner la imagen en el label
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
-
-            //Set fecha
-            //Obtencion de la fecha de vencimiento
-            String fech_actual = DatosCli[0][6];
-            SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-            try {
-                Date fechaVenciS = S.parse(fech_actual);
-                dateChooser.setDate(fechaVenciS);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            //Aqui iria el comobo de estado
-
-            //Poner la imagen en el label
-            ImageIcon proFoto2 = new ImageIcon(DatosCli[0][9]);
-            ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(icono_pro2);
-
-            //Para que el contador sepa la posicion
-            cont_flec = cont_flec - cont_flec;
-            if (cont_label == 0) {
-                jLInfo.setText("Tabla: Producto registro  1  al " + (nFils));
-            } else {
-                cont_label = (cont_label - nFils) + 1;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-            }
-            bloc_ant();
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // RESET PARA EL LABEL DE POSICIONES 
+        cant_clies=MySQL.cantRegistros(Tabla, ID);
+        jLInfo.setText("Tabla: Clientes registro  1  al " + (cant_clies));
+
+        cont_flec = 1;
+
+        jBUltim.setEnabled(true);
+        jBSigui.setEnabled(true);
+
+        bloc_ant();
 
     }//GEN-LAST:event_jBPrimer1ActionPerformed
 
     private void jBAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAnteriorActionPerformed
         cont_flec--;
-        for (int j = 0; j < DatosCli[cont_flec].length; j++) {
-            if (j == 0) {
 
-                txtIdCli.setText(DatosCli[cont_flec][0]);
-                txtNomCli.setText(DatosCli[cont_flec][1]);
-                txtApeCli.setText(DatosCli[cont_flec][2]);
-                txtDireCli.setText(DatosCli[cont_flec][3]);
-                txtTelCli.setText(DatosCli[cont_flec][4]);
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM "+Tabla+" where ID_C = " + cont_flec + ";");
 
-                //set genero
-                String selec_act = DatosCli[cont_flec][5];
-                System.out.println(selec_act);
-                String selec_act2 = selec_act.substring(2);
+            ResultSet res = (ResultSet) stp.executeQuery();
+
+            if (res.next()) {
+
+                txtNomCli.setText(res.getString("nombre"));
+                txtApeCli.setText(res.getString("apellidos"));
+                txtTelCli.setText(res.getString("telefono"));
+                txtDireCli.setText(res.getString("direccion"));
+                txtIdCli.setText(res.getString("Id_Clie"));
+
+                //Poner fecha
+                String fech_actual = res.getString("F_nacimiento");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaNacs = S.parse(fech_actual);
+                    dateChooser.setDate(fechaNacs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de genero
+                String selec_act2 = res.getString("genero");
                 System.out.println(selec_act2);
-                System.out.println(selec_act2.trim());
 
                 switch (selec_act2.trim()) {
                     case "Masculino":
@@ -1093,54 +1251,74 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                         throw new AssertionError();
                 }
 
-                //Set fecha
-                //Obtencion de la fecha de vencimiento
-                String fech_actual = DatosCli[cont_flec][6];
-                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                //set tipo de estado civil
+                String selec_act3 = res.getString("estado_civil");
+                System.out.println(selec_act3);
 
-                try {
-                    Date fechaVenciS = S.parse(fech_actual);
-                    dateChooser.setDate(fechaVenciS);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                switch (selec_act3.trim()) {
+                    case "Soltero":
+                        jCBestado.setSelectedIndex(1);
+                        break;
+                    case "Casado":
+                        jCBestado.setSelectedIndex(2);
+                        break;
+
+                    case "Divorciado":
+                        jCBestado.setSelectedIndex(3);
+                        break;
+                    case "Viudo":
+                        jCBestado.setSelectedIndex(4);
+                        break;
+                    default:
+                        throw new AssertionError();
                 }
 
-                //Aqui va el combo de estado
-
                 //Poner la imagen en el label
-                ImageIcon proFotorec = new ImageIcon(DatosCli[cont_flec][9]);
-                ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(icono_prorec);
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        if (cont_label == 1) {
-            jLInfo.setText("Tabla: Producto registro  1  al " + (nFils));
-        } else {
-            cont_label--;
-            jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        }
+        // RESET PARA EL LABEL DE POSICIONES 
+        cant_clies=MySQL.cantRegistros(Tabla, ID);
+        jLInfo.setText("Tabla: Clientes registro  " + cont_flec + "  al " + (cant_clies));
+
         bloc_ant();
+        bloc_sigui();
     }//GEN-LAST:event_jBAnteriorActionPerformed
 
     private void jBSiguiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSiguiActionPerformed
         cont_flec++;
-        for (int j = 0; j < DatosCli[cont_flec].length; j++) {
-            if (j == 0) {
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM "+Tabla+" where ID_C = " + cont_flec + ";");
 
-                txtIdCli.setText(DatosCli[cont_flec][0]);
-                txtNomCli.setText(DatosCli[cont_flec][1]);
-                txtApeCli.setText(DatosCli[cont_flec][2]);
-                txtDireCli.setText(DatosCli[cont_flec][3]);
-                txtTelCli.setText(DatosCli[cont_flec][4]);
+            ResultSet res = (ResultSet) stp.executeQuery();
 
-                //set Medida
-                String selec_act = DatosCli[cont_flec][5];
-                System.out.println(selec_act);
-                String selec_act2 = selec_act.substring(2);
+            if (res.next()) {
+
+                txtNomCli.setText(res.getString("nombre"));
+                txtApeCli.setText(res.getString("apellidos"));
+                txtTelCli.setText(res.getString("telefono"));
+                txtDireCli.setText(res.getString("direccion"));
+                txtIdCli.setText(res.getString("Id_Clie"));
+
+                //Poner fecha
+                String fech_actual = res.getString("F_nacimiento");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaNacs = S.parse(fech_actual);
+                    dateChooser.setDate(fechaNacs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de genero
+                String selec_act2 = res.getString("genero");
                 System.out.println(selec_act2);
-                System.out.println(selec_act2.trim());
 
                 switch (selec_act2.trim()) {
                     case "Masculino":
@@ -1153,99 +1331,130 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                         throw new AssertionError();
                 }
 
-                //Set fecha
-                //Obtencion de la fecha de vencimiento
-                String fech_actual = DatosCli[cont_flec][6];
-                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                //set tipo de estado civil
+                String selec_act3 = res.getString("estado_civil");
+                System.out.println(selec_act3);
 
-                try {
-                    Date fechaVenciS = S.parse(fech_actual);
-                    dateChooser.setDate(fechaVenciS);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+                switch (selec_act3.trim()) {
+                    case "Soltero":
+                        jCBestado.setSelectedIndex(1);
+                        break;
+                    case "Casado":
+                        jCBestado.setSelectedIndex(2);
+                        break;
+
+                    case "Divorciado":
+                        jCBestado.setSelectedIndex(3);
+                        break;
+                    case "Viudo":
+                        jCBestado.setSelectedIndex(4);
+                        break;
+                    default:
+                        throw new AssertionError();
                 }
 
-                //aqui va el combo estado
-
                 //Poner la imagen en el label
-                ImageIcon proFotorec = new ImageIcon(DatosCli[cont_flec][9]);
-                ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(icono_prorec);
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-        jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        if (cont_label == nFils) {
-            jLInfo.setText("Tabla: Producto registro  " + nFils + "  al " + (nFils));
-        } else {
-            cont_label++;
-            jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-        }
+        // RESET PARA EL LABEL DE POSICIONES 
+        cant_clies=MySQL.cantRegistros(Tabla, ID);
+        jLInfo.setText("Tabla: Clientes registro  " + cont_flec + "  al " + (cant_clies));
+
         bloc_sigui();
+        bloc_ant();
 
     }//GEN-LAST:event_jBSiguiActionPerformed
 
     private void jBUltimActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBUltimActionPerformed
+        int ult_regis = MySQL.cantRegistros(Tabla, ID);
+//Base de datos
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM "+Tabla+" where ID_C = " + ult_regis + ";");
 
-//        jBPrimer1.setEnabled(true);
-//        jBAnterior.setEnabled(true);
-//        jBUltim.setEnabled(false);
-//        jBSigui.setEnabled(false);
-        for (int j = 0; j < DatosCli[cont_fil_nav].length; j++) {
+            ResultSet res = (ResultSet) stp.executeQuery();
 
-            txtIdCli.setText(DatosCli[cont_fil_nav][0]);
-            txtNomCli.setText(DatosCli[cont_fil_nav][1]);
-            txtApeCli.setText(DatosCli[cont_fil_nav][2]);
-            txtDireCli.setText(DatosCli[cont_fil_nav][3]);
-            txtTelCli.setText(DatosCli[cont_fil_nav][4]);
+            if (res.next()) {
 
-            //set Medida
-            String selec_act = DatosCli[cont_fil_nav][5];
-            System.out.println(selec_act);
-            String selec_act2 = selec_act.substring(2);
-            System.out.println(selec_act2);
-            System.out.println(selec_act2.trim());
+                txtNomCli.setText(res.getString("nombre"));
+                txtApeCli.setText(res.getString("apellidos"));
+                txtTelCli.setText(res.getString("telefono"));
+                txtDireCli.setText(res.getString("direccion"));
+                txtIdCli.setText(res.getString("Id_Clie"));
 
-            switch (selec_act2.trim()) {
-                case "Masculino":
-                    comboGenero.setSelectedIndex(1);
-                    break;
-                case "Femenino":
-                    comboGenero.setSelectedIndex(2);
-                    break;
-                default:
-                    throw new AssertionError();
+                //Poner fecha
+                String fech_actual = res.getString("F_nacimiento");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaNacs = S.parse(fech_actual);
+                    dateChooser.setDate(fechaNacs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de genero
+                String selec_act2 = res.getString("genero");
+                System.out.println(selec_act2);
+
+                switch (selec_act2.trim()) {
+                    case "Masculino":
+                        comboGenero.setSelectedIndex(1);
+                        break;
+                    case "Femenino":
+                        comboGenero.setSelectedIndex(2);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //set tipo de estado civil
+                String selec_act3 = res.getString("estado_civil");
+                System.out.println(selec_act3);
+
+                switch (selec_act3.trim()) {
+                    case "Soltero":
+                        jCBestado.setSelectedIndex(1);
+                        break;
+                    case "Casado":
+                        jCBestado.setSelectedIndex(2);
+                        break;
+
+                    case "Divorciado":
+                        jCBestado.setSelectedIndex(3);
+                        break;
+                    case "Viudo":
+                        jCBestado.setSelectedIndex(4);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //Poner la imagen en el label
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+
             }
-
-            //Set fecha
-            //Obtencion de la fecha de vencimiento
-            String fech_actual = DatosCli[cont_fil_nav][6];
-            SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-
-            try {
-                Date fechaVenciS = S.parse(fech_actual);
-                dateChooser.setDate(fechaVenciS);
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-
-            //aqui va el combo estado
-
-            //Poner la imagen en el label
-            ImageIcon proFotorec = new ImageIcon(DatosCli[cont_fil_nav][9]);
-            ImageIcon icono_prorec = new ImageIcon(proFotorec.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(icono_prorec);
-
-            //Para que el contador sepa la posicion
-            cont_flec = cont_fil_nav;
-            if (cont_label == nFils) {
-                jLInfo.setText("Tabla: Producto registro " + nFils + " al " + (nFils));
-            } else {
-                cont_label = (cont_label + nFils) - 1;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (nFils));
-            }
-            bloc_sigui();
+        } catch (SQLException ex) {
+            Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+        // RESET PARA EL LABEL DE POSICIONES 
+        cant_clies=MySQL.cantRegistros(Tabla, ID);
+        jLInfo.setText("Tabla: Clientes registro " + cant_clies + "  al " + (cant_clies));
+
+        cont_flec = ult_regis;
+
+        jBUltim.setEnabled(true);
+        jBSigui.setEnabled(true);
+
+        bloc_ant();
 
 
     }//GEN-LAST:event_jBUltimActionPerformed
@@ -1329,6 +1538,12 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     private void jbImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbImgActionPerformed
         JFileChooser jf = new JFileChooser();
+
+        File directorioInicio = new File("C:\\Users\\santi\\Downloads\\Segundo consolidado\\Minimarket_Bases\\Minimarket_bases2\\src\\imagenes\\Clientes");
+
+// Establecer la carpeta de inicio del JFileChooser
+        jf.setCurrentDirectory(directorioInicio);
+
         jf.showOpenDialog(this);
         archivo = jf.getSelectedFile();
         if (archivo != null) {
@@ -1370,6 +1585,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
                 break;
         }
+        rec_dat();
 
     }//GEN-LAST:event_comboGeneroActionPerformed
 
@@ -1380,10 +1596,240 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
 
+        contador_edit++;
+
+        if (contador_edit % 2 == 0) {
+
+            System.out.println("entre 2");
+            //segundo toque en caso de que no quiera hacer la edicion 
+            //que bloque y boolean de confirmacion para saber asi que no le resta al contador
+            //cambio de icono
+            ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
+            ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+            // establece el icono en el botón
+            jBEdit.setIcon(mitad_edit2);
+
+            //bloqueo de campos
+            txtIdCli.setEnabled(false);
+            txtNomCli.setEnabled(false);
+            txtApeCli.setEnabled(false);
+            txtDireCli.setEnabled(false);
+            txtTelCli.setEnabled(false);
+            jbImg.setEnabled(false);
+            dateChooser.setEnabled(false);
+            comboGenero.setEnabled(false);
+            jCBestado.setEnabled(false);
+
+            //contador en 2 para que cuando vuelvan a darle a ingresar siga correctamente
+            //veri_Bedit en false para que no active las condiciones
+            veri_Bedit = false;
+            contador = 2;
+
+            //le restablecemos el icono de ingreso al boton
+            ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+            ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+
+            // establece el icono en el botón
+            jBIng.setIcon(mitad_1);
+
+            txtIdCli.setForeground(Color.GRAY);
+            txtNomCli.setForeground(Color.GRAY);
+            txtApeCli.setForeground(Color.GRAY);
+            txtDireCli.setForeground(Color.GRAY);
+            txtTelCli.setForeground(Color.GRAY);
+
+            //Reintegracion 
+            try {
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM " + Tabla + " where ID_C = " + cont_flec + ";");
+
+                ResultSet res = (ResultSet) stp.executeQuery();
+
+                if (res.next()) {
+
+                    txtNomCli.setText(res.getString("nombre"));
+                    txtApeCli.setText(res.getString("apellidos"));
+                    txtTelCli.setText(res.getString("telefono"));
+                    txtDireCli.setText(res.getString("direccion"));
+                    txtIdCli.setText(res.getString("Id_Clie"));
+
+                    //Poner fecha
+                    String fech_actual = res.getString("F_nacimiento");
+                    SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date fechaNacs = S.parse(fech_actual);
+                        dateChooser.setDate(fechaNacs);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //set tipo de genero
+                    String selec_act2 = res.getString("genero");
+                    System.out.println(selec_act2);
+
+                    switch (selec_act2.trim()) {
+                        case "Masculino":
+                            comboGenero.setSelectedIndex(1);
+                            break;
+                        case "Femenino":
+                            comboGenero.setSelectedIndex(2);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    //set tipo de estado civil
+                    String selec_act3 = res.getString("estado_civil");
+                    System.out.println(selec_act3);
+
+                    switch (selec_act3.trim()) {
+                        case "Soltero":
+                            jCBestado.setSelectedIndex(1);
+                            break;
+                        case "Casado":
+                            jCBestado.setSelectedIndex(2);
+                            break;
+
+                        case "Divorciado":
+                            jCBestado.setSelectedIndex(3);
+                            break;
+                        case "Viudo":
+                            jCBestado.setSelectedIndex(4);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    //Poner la imagen en el label
+                    ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                    ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                    jLImg.setIcon(icono_pro2);
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
+            System.out.println("entre 1");
+            ImageIcon foto_edit = new ImageIcon(getClass().getResource("/imagenes/deshacer.png"));
+            ImageIcon mitad_edit = new ImageIcon(foto_edit.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+            // establece el icono en el botón
+            jBEdit.setIcon(mitad_edit);
+
+            //Primer toque
+            contador = 0;
+            veri_Bedit = true;
+
+            try {
+
+                //Codigo para mandar ordenes a la base de datos 
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("select img_clie from "+Tabla+" where ID_C = ?");
+                stp.setInt(1, cont_flec);
+
+                ResultSet res = (ResultSet) stp.executeQuery();
+
+                if (res.next()) {
+                    String paht = res.getString("img_clie");
+                    archivo = new File(paht);
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error paht no encotrado");
+            }
+
+            ingreso();
+        }
+        
     }//GEN-LAST:event_jBEditActionPerformed
 
     private void jBEliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliActionPerformed
 
+        int borrado = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea borrar este registro?", "Eliminar", JOptionPane.OK_CANCEL_OPTION);
+        if (borrado == 0) {
+            MySQL.deleteRecord(Tabla, ID, cont_flec);
+
+            JOptionPane.showMessageDialog(null, "Registro eliminado con exito", "Registro eliminado", JOptionPane.INFORMATION_MESSAGE);
+            cont_flec--;
+
+            try {
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM "+Tabla+" where ID_C = " + cont_flec + ";");
+
+            ResultSet res = (ResultSet) stp.executeQuery();
+
+            if (res.next()) {
+
+                txtNomCli.setText(res.getString("nombre"));
+                txtApeCli.setText(res.getString("apellidos"));
+                txtTelCli.setText(res.getString("telefono"));
+                txtDireCli.setText(res.getString("direccion"));
+                txtIdCli.setText(res.getString("Id_Clie"));
+
+                //Poner fecha
+                String fech_actual = res.getString("F_nacimiento");
+                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                try {
+                    Date fechaNacs = S.parse(fech_actual);
+                    dateChooser.setDate(fechaNacs);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                //set tipo de genero
+                String selec_act2 = res.getString("genero");
+                System.out.println(selec_act2);
+
+                switch (selec_act2.trim()) {
+                    case "Masculino":
+                        comboGenero.setSelectedIndex(1);
+                        break;
+                    case "Femenino":
+                        comboGenero.setSelectedIndex(2);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //set tipo de estado civil
+                String selec_act3 = res.getString("estado_civil");
+                System.out.println(selec_act3);
+
+                switch (selec_act3.trim()) {
+                    case "Soltero":
+                        jCBestado.setSelectedIndex(1);
+                        break;
+                    case "Casado":
+                        jCBestado.setSelectedIndex(2);
+                        break;
+
+                    case "Divorciado":
+                        jCBestado.setSelectedIndex(3);
+                        break;
+                    case "Viudo":
+                        jCBestado.setSelectedIndex(4);
+                        break;
+                    default:
+                        throw new AssertionError();
+                }
+
+                //Poner la imagen en el label
+                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_clie")));
+                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(icono_pro2);
+            }
+            } catch (SQLException ex) {
+                Logger.getLogger(frmiCliente.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            // RESET PARA EL LABEL DE POSICIONES 
+            cant_clies=MySQL.cantRegistros(Tabla, ID);
+            jLInfo.setText("Tabla: Clientes registro  " + cont_flec + "  al " + (cant_clies));
+
+            bloc_sigui();
+            bloc_ant();
+        }
+        if (borrado == 2) {
+        }
+        
     }//GEN-LAST:event_jBEliActionPerformed
 
     private void txtTelCliFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtTelCliFocusGained
@@ -1407,6 +1853,36 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     private void txtNomCliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomCliActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNomCliActionPerformed
+
+    private void jCBestadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBestadoActionPerformed
+        int indice = jCBestado.getSelectedIndex();
+        switch (indice) {
+            case 0:
+                selec_estado = null;
+                break;
+            case 1:
+                selec_estado = "Soltero";
+                break;
+            case 2:
+                selec_estado = "Casado";
+                break;
+            case 3:
+                selec_estado = "Divorciado";
+                break;
+            case 4:
+                selec_estado = "Viudo";
+                break;
+        }
+        rec_dat();
+    }//GEN-LAST:event_jCBestadoActionPerformed
+
+    private void jCBestadoFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBestadoFocusGained
+        rec_dat();
+    }//GEN-LAST:event_jCBestadoFocusGained
+
+    private void jCBestadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBestadoFocusLost
+        rec_dat();
+    }//GEN-LAST:event_jCBestadoFocusLost
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
