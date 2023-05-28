@@ -187,6 +187,8 @@ public class frmiPrincipal extends javax.swing.JFrame {
                 
                 producto = new frmiProducto();
                 this.desktopPane.add(producto);
+                frmiProducto.contador=0;
+                frmiProducto.contador_edit=0;
 
             }
             producto.setVisible(true);

@@ -93,8 +93,8 @@ public class MySQL {
             JOptionPane.showMessageDialog(null, "Error en la adquisicion de datos");
         }
     }
-    
-    public static void obtValores(String table_name,String camp_id, int id_fila){
+
+    public static void obtValores(String table_name, String camp_id, int id_fila) {
         try {
             String Query = "SELECT * FROM " + table_name;
             Statement st = Conexion.createStatement();
@@ -121,7 +121,6 @@ public class MySQL {
         }
     }
 
-    
     //**************************Metodos fotos********************************************************************************
     public static String imgenEnviar(String enlace) {
 //        Reemplazar "\\" por "/"
@@ -143,12 +142,10 @@ public class MySQL {
         }
     }
 
-    
-    
     //*****************************Metodos extras****************************************************************************
     //OBTENER CUANTOS REGISTROS HAY EN LA TABLA 
     public static int cantRegistros(String Tabla, String campVerficador) {
-        
+
         MySQLConnection("root", "", "minimarket");
 
         //Validar cuantos registros
@@ -161,14 +158,14 @@ public class MySQL {
 
             if (res_cont.next()) {
                 int total_users = res_cont.getInt(campVerficador);
-                cant_fin=total_users;
+                cant_fin = total_users;
                 System.out.println(cant_fin);
-                
+
             }
         } catch (SQLException ex) {
             System.out.println("Error cant no encotrado");
         }
-        
+
         int can_total = cant_fin;
         return can_total;
     }
@@ -177,7 +174,6 @@ public class MySQL {
     public static int verif_table(String table_name) {
         MySQLConnection("root", "", "minimarket");
         try {
-//        PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT SCHEMA_NAME FROM INFORMATION_SCHEMA.SCHEMATA where SCHEMA_NAME = "+table_name);
             PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT EXISTS ( SELECT 1 FROM information_schema.tables WHERE table_schema = 'minimarket' AND table_name = '" + table_name + "' );");
 
             ResultSet res_ver = (ResultSet) stp.executeQuery();
@@ -192,7 +188,7 @@ public class MySQL {
 
         return tabla_exist;
     }
-    
+
     //*********************************************Todo para empleados******************************************************* 
     public static void Ctabla_empl() {
 
@@ -237,10 +233,6 @@ public class MySQL {
         }
     }
 
-    
-
-    
-    
     //**********************************************TODO PARA PRODUCTOS*********************************************************************************************
     public static void Ctabla_prod() {
         int exist = verif_table("productos");
@@ -288,5 +280,38 @@ public class MySQL {
             System.out.println(ex.getMessage());
             JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos producto");
         }
+    }
+
+    public static void edit_prod(int id, String name_prod, String marca, int precio, String vencimiento, int cantidad, String medida, String img_prod) {
+        MySQLConnection("root", "", "minimarket");
+
+        try {
+
+            System.out.println(id);
+
+            //Codigo para mandar ordenes a la base de datos
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("UPDATE productos SET nombre_prod = ?, marca = ?, precio = ?, fecha_venci = ?, cantidad = ?, medida = ?, img_prod = ? WHERE id_prod = ?");
+            stp.setString(1, name_prod);
+            stp.setString(2, marca);
+            stp.setInt(3, precio);
+            stp.setString(4, vencimiento);
+            stp.setInt(5, cantidad);
+            stp.setString(6, medida);
+            stp.setString(7, img_prod);
+            stp.setInt(8, id);
+
+            int res = stp.executeUpdate();
+
+            if (res > 0) {
+                JOptionPane.showConfirmDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showConfirmDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
+
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en actualizacion");
+        }
+
+        closeConnection();
     }
 }
