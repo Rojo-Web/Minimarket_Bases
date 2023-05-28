@@ -303,15 +303,14 @@ public class MySQL {
             int res = stp.executeUpdate();
 
             if (res > 0) {
-                JOptionPane.showConfirmDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showConfirmDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
-
+                JOptionPane.showMessageDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
             System.out.println("Error en actualizacion");
         }
 
-        closeConnection();
+        
     }
 }

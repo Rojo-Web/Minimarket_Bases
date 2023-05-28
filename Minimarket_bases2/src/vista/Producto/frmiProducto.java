@@ -36,10 +36,11 @@ import static vista.frmiPrincipal.nFils;
  */
 public class frmiProducto extends javax.swing.JInternalFrame {
 
-    public static int contador = 0,contador_edit=0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
+    public static int contador = 0, contador_edit = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
     private static String Tabla = "productos", ID = "id_prod";
+    private static boolean veri_Bedit = false,bloq_grup=false;
 
     //Tabla de consulta
     public static String[] sCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca", "Vence", "Medida", "Ruta_foto"};
@@ -813,64 +814,133 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jBIngActionPerformed
 
+    public void bloq_grup(){
+        if (bloq_grup==true) {
+            JBImpr.setEnabled(false);
+            jBAnterior.setEnabled(false);
+            jBConsulta.setEnabled(false);
+            jBEdit.setEnabled(false);
+            jBEli.setEnabled(false);
+            jBExit.setEnabled(false);
+            jBGuia.setEnabled(false);
+            jBPrimer1.setEnabled(false);
+            jBUltim.setEnabled(false);
+            jBSigui.setEnabled(false);
+            
+        }else{
+            JBImpr.setEnabled(true);
+            jBAnterior.setEnabled(true);
+            jBConsulta.setEnabled(true);
+            jBEdit.setEnabled(true);
+            jBEli.setEnabled(true);
+            jBExit.setEnabled(true);
+            jBGuia.setEnabled(true);
+            jBPrimer1.setEnabled(true);
+            jBUltim.setEnabled(true);
+            jBSigui.setEnabled(true);
+        }
+    }
     public void ingreso() {
         contador++;
+        System.out.println(contador);
+        System.out.println(veri_Bedit);
 
         if (contador % 2 == 0) {
             if (archivo != null) {
 
-                jtMarca.setEnabled(false);
-                jtNom_prod.setEnabled(false);
-                jtPrecio.setEnabled(false);
-                jbImg.setEnabled(false);
-                dateChooser.setEnabled(false);
-                jCBmedida.setEnabled(false);
-                jTcantidad.setEnabled(false);
+                if (veri_Bedit == true) {
+                    Date fechaVenci = dateChooser.getDate();
+                    SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaV = form.format(fechaVenci);
 
-                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
-                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                    String img_paht_U = MySQL.imgenEnviar(archivo.getAbsolutePath());
 
-                // establece el icono en el botón
-                jBIng.setIcon(mitad_1);
+                    MySQL.edit_prod(cont_flec, jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, Integer.parseInt(jTcantidad.getText()), selec_med, img_paht_U);
+                    veri_Bedit = false;
 
-                //Entrada de datos a la base
-                //Obtencion de la fecha de vencimiento
-                Date fechaVenci = dateChooser.getDate();
-                SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
-                String fechaV = form.format(fechaVenci);
+                    jtMarca.setEnabled(false);
+                    jtNom_prod.setEnabled(false);
+                    jtPrecio.setEnabled(false);
+                    jbImg.setEnabled(false);
+                    dateChooser.setEnabled(false);
+                    jCBmedida.setEnabled(false);
+                    jTcantidad.setEnabled(false);
+                    jtNom_prod.setForeground(Color.GRAY);
+                    jTcantidad.setForeground(Color.GRAY);
+                    jtMarca.setForeground(Color.GRAY);
+                    jtPrecio.setForeground(Color.GRAY);
 
-                //Conversion de la imgen 
-                String img_paht = MySQL.imgenEnviar(archivo.getAbsolutePath());
-                System.out.println(img_paht);
+                    ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+                    ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
-                //Enviar los datos                                                                                                      cantidad                               medida  img
-                MySQL.insert_prod("productos", jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, Integer.parseInt(jTcantidad.getText()), selec_med, img_paht);
+                    // establece el icono en el botón
+                    jBIng.setIcon(mitad_1);
+
+                    ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
+                    ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+                    // establece el icono en el botón
+                    jBEdit.setIcon(mitad_edit2);
+
+                    contador_edit = 0;
+                } else {
+                    //Desbloque el grupo de botones
+                    bloq_grup=false;
+                    bloq_grup();
+                    
+                    //guardado
+                    jtMarca.setEnabled(false);
+                    jtNom_prod.setEnabled(false);
+                    jtPrecio.setEnabled(false);
+                    jbImg.setEnabled(false);
+                    dateChooser.setEnabled(false);
+                    jCBmedida.setEnabled(false);
+                    jTcantidad.setEnabled(false);
+
+                    ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+                    ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+
+                    // establece el icono en el botón
+                    jBIng.setIcon(mitad_1);
+
+                    //Entrada de datos a la base
+                    //Obtencion de la fecha de vencimiento
+                    Date fechaVenci = dateChooser.getDate();
+                    SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
+                    String fechaV = form.format(fechaVenci);
+
+                    //Conversion de la imgen 
+                    String img_paht = MySQL.imgenEnviar(archivo.getAbsolutePath());
+                    System.out.println(img_paht);
+
+                    //Enviar los datos                                                                                                      cantidad                               medida  img
+                    MySQL.insert_prod("productos", jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, Integer.parseInt(jTcantidad.getText()), selec_med, img_paht);
 
 //                MIRAR COMO VAN A FUNCIONAR AHORA ESTOS CONTADORES
-                cant_prods = MySQL.cantRegistros(Tabla, ID);
+                    cant_prods = MySQL.cantRegistros(Tabla, ID);
 
-                cont_label = cant_prods;
-                jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
+                    cont_label = cant_prods;
+                    jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
 
-                jCBmedida.setSelectedIndex(0);
+                    jCBmedida.setSelectedIndex(0);
 
 //                  AQUI ESTABA LA CONDICION DE CUANDO LLEGABA A EL TOPE
 //                    MIRAR COMO VAN AHORA ESTOS CONTADORES
-                cont_flec = cant_prods;
+                    cont_flec = cant_prods;
 
-                //Esto por si solo hay un dato
-                int cont_prod = MySQL.cantRegistros(Tabla, ID);
-                if (cont_prod == 1) {
-                    jBSigui.setEnabled(false);
-                    jBAnterior.setEnabled(false);
-                    jBPrimer1.setEnabled(false);
-                    jBUltim.setEnabled(false);
+                    //Esto por si solo hay un dato
+                    int cont_prod = MySQL.cantRegistros(Tabla, ID);
+                    if (cont_prod == 1) {
+                        jBSigui.setEnabled(false);
+                        jBAnterior.setEnabled(false);
+                        jBPrimer1.setEnabled(false);
+                        jBUltim.setEnabled(false);
+                    }
+                    jBIng.setToolTipText("Ingreso");
+
+                    MySQL.closeConnection();
+                    bloc_sigui();
+                    bloc_ant();
                 }
-                jBIng.setToolTipText("Ingreso");
-
-                MySQL.closeConnection();
-                bloc_sigui();
-                bloc_ant();
 
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Porfavor llena todos los campos faltantes", "Error de insercion", JOptionPane.WARNING_MESSAGE);
@@ -878,41 +948,70 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
 
         } else {
-            dateChooser.setEnabled(true);
-            jCBmedida.setEnabled(true);
-            jtMarca.setEnabled(true);
-            jtNom_prod.setEnabled(true);
-            jtPrecio.setEnabled(true);
-            jbImg.setEnabled(true);
-            jTcantidad.setEnabled(true);
-            ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
-            ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+            if (veri_Bedit == true) {
+                System.out.println("Entre al positivo malo");
+                dateChooser.setEnabled(true);
+                jCBmedida.setEnabled(true);
+                jtMarca.setEnabled(true);
+                jtNom_prod.setEnabled(true);
+                jtPrecio.setEnabled(true);
+                jbImg.setEnabled(true);
+                jTcantidad.setEnabled(true);
+                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
+                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
-            // establece el icono en el botón
-            jBIng.setIcon(mitad_1);
-            jBIng.setToolTipText("Guardar");
+                // establece el icono en el botón
+                jBIng.setIcon(mitad_1);
+                jBIng.setToolTipText("Guardar");
 
-            //Esto para que la condicion del bloque del boton cobre sentido
-            archivo = null;
+                jtNom_prod.setForeground(Color.BLACK);
+                jTcantidad.setForeground(Color.BLACK);
+                jtMarca.setForeground(Color.BLACK);
+                jtPrecio.setForeground(Color.BLACK);
+            } else {
+                System.out.println("entre al falso e impar");
+                
+                //Para que se bloquen los botones
+                bloq_grup=true;
+                bloq_grup();
+                
+                //Esto para que la condicion del bloque del boton cobre sentido
+                archivo = null;
 
-            //Volver a poner vacios los jtextfield
-            jtMarca.setText("");
-            jtNom_prod.setText("");
-            jtPrecio.setText("");
-            jTcantidad.setText("");
-            Date Vacio_fech = null;
-            dateChooser.setDate(Vacio_fech);
+                //Volver a poner vacios los jtextfield
+                jtMarca.setText("");
+                jtNom_prod.setText("");
+                jtPrecio.setText("");
+                jTcantidad.setText("");
+                Date Vacio_fech = null;
+                dateChooser.setDate(Vacio_fech);
 
-            jCBmedida.setSelectedIndex(0);
+                jCBmedida.setSelectedIndex(0);
 
-            Pjolder();
+                //Para que se reinicie el label
+                ImageIcon proRei = new ImageIcon(getClass().getResource(""));
+                ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                jLImg.setIcon(rei_pro);
 
-            //Para que se reinicie el label
-            ImageIcon proRei = new ImageIcon(getClass().getResource(""));
-            ImageIcon rei_pro = new ImageIcon(proRei.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(rei_pro);
+                //ingreso
+                dateChooser.setEnabled(true);
+                jCBmedida.setEnabled(true);
+                jtMarca.setEnabled(true);
+                jtNom_prod.setEnabled(true);
+                jtPrecio.setEnabled(true);
+                jbImg.setEnabled(true);
+                jTcantidad.setEnabled(true);
+                ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[1]));
+                ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
-            rec_dat();
+                // establece el icono en el botón
+                jBIng.setIcon(mitad_1);
+                jBIng.setToolTipText("Guardar");
+
+                Pjolder();
+
+                rec_dat();
+            }
 
         }
     }
@@ -1057,7 +1156,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jBEliActionPerformed
 
-    
 
     private void jBGuiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuiaActionPerformed
         File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Producto_2/src/imagenes/CRUD.pdf");
@@ -1404,29 +1502,124 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         contador_edit++;
 
         if (contador_edit % 2 == 0) {
-            
+
             System.out.println("entre 2");
-               //segundo toque en caso de que no quiera hacer la edicion 
+            //segundo toque en caso de que no quiera hacer la edicion 
             //que bloque y boolean de confirmacion para saber asi que no le resta al contador
+            //cambio de icono
             ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
             ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
-
             // establece el icono en el botón
             jBEdit.setIcon(mitad_edit2);
-            
-            
-        }else{
-         
+
+            //bloqueo de cajas
+            jtMarca.setEnabled(false);
+            jtNom_prod.setEnabled(false);
+            jtPrecio.setEnabled(false);
+            jbImg.setEnabled(false);
+            dateChooser.setEnabled(false);
+            jCBmedida.setEnabled(false);
+            jTcantidad.setEnabled(false);
+
+            //contador en 2 para que cuando vuelvan a darle a ingresar siga correctamente
+            //veri_Bedit en false para que no active las condiciones
+            veri_Bedit = false;
+            contador = 2;
+
+            //le restablecemos el icono de ingreso al boton
+            ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
+            ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+
+            // establece el icono en el botón
+            jBIng.setIcon(mitad_1);
+
+            jtNom_prod.setForeground(Color.GRAY);
+            jTcantidad.setForeground(Color.GRAY);
+            jtMarca.setForeground(Color.GRAY);
+            jtPrecio.setForeground(Color.GRAY);
+
+            //Reintegracion 
+            try {
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
+
+                ResultSet res = (ResultSet) stp.executeQuery();
+
+                if (res.next()) {
+
+                    jtNom_prod.setText(res.getString("nombre_prod"));
+                    jtMarca.setText(res.getString("marca"));
+                    jtPrecio.setText(res.getString("precio"));
+                    jTcantidad.setText(res.getString("cantidad"));
+
+                    //Poner fecha
+                    String fech_actual = res.getString("fecha_venci");
+                    SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date fechaVenciS = S.parse(fech_actual);
+                        dateChooser.setDate(fechaVenciS);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //set tipo de Medida
+                    String selec_act = res.getString("medida");
+                    System.out.println(selec_act);
+
+                    switch (selec_act.trim()) {
+                        case "Libra":
+                            jCBmedida.setSelectedIndex(1);
+                            break;
+                        case "Kilo":
+                            jCBmedida.setSelectedIndex(2);
+                            break;
+                        case "Unidad":
+                            jCBmedida.setSelectedIndex(3);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    //Poner la imagen en el label
+                    ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                    ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                    jLImg.setIcon(icono_pro2);
+
+                }
+            } catch (SQLException ex) {
+                Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+        } else {
+
             System.out.println("entre 1");
             ImageIcon foto_edit = new ImageIcon(getClass().getResource("/imagenes/deshacer.png"));
             ImageIcon mitad_edit = new ImageIcon(foto_edit.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
-
             // establece el icono en el botón
             jBEdit.setIcon(mitad_edit);
+
             //Primer toque
-            
+            contador = 0;
+            veri_Bedit = true;
+
+            try {
+
+                //Codigo para mandar ordenes a la base de datos 
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("select img_prod from productos where id_prod = ?");
+                stp.setInt(1, cont_flec);
+
+                ResultSet res = (ResultSet) stp.executeQuery();
+
+                if (res.next()) {
+                    String paht = res.getString("img_prod");
+                    archivo = new File(paht);
+                }
+            } catch (SQLException ex) {
+                System.out.println("Error paht no encotrado");
+            }
+
+            ingreso();
             //va la imagen y desbloqueo
-            
+
 //            dateChooser.setEnabled(true);
 //            jCBmedida.setEnabled(true);
 //            jtMarca.setEnabled(true);
@@ -1434,21 +1627,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 //            jtPrecio.setEnabled(true);
 //            jbImg.setEnabled(true);
 //            jTcantidad.setEnabled(true);
-            
-            
             //jBIng.setToolTipText("Guardar");
-            
             //iria un metodo que ponga el bton ingreso a guardar pero le reste uno al contador 
         }
     }//GEN-LAST:event_jBEditActionPerformed
 
-    public static void updateEdit(){
-    
-        
-        
-    }
-    
-    
 //    public static void main(String args[]) {
     /* Set the Nimbus look and feel */
     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
