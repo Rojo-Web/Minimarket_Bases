@@ -20,16 +20,43 @@ public class Empresa extends javax.swing.JInternalFrame {
         
         lbId.setText("Id");
         lbId.setFont(typeF);
-        
+        lbId.setForeground(new Color(240, 113, 1));
+
         lblNomEmp.setText("Empresa");
+        lblNomEmp.setFont(typeF);
+        lblNomEmp.setForeground(new Color(240, 113, 1));
+
         lblNit.setText("Nit");
+        lblNit.setFont(typeF);
+        lblNit.setForeground(new Color(240, 113, 1));
+
         lblCorreo.setText("Correo");
+        lblCorreo.setFont(typeF);
+        lblCorreo.setForeground(new Color(240, 113, 1));
+
         lblTel.setText("Telefono");
+        lblTel.setFont(typeF);
+        lblTel.setForeground(new Color(240, 113, 1));
+
         lblDirec.setText("Direccion");
+        lblDirec.setFont(typeF);
+        lblDirec.setForeground(new Color(240, 113, 1));
+
         lblFotoEmpre.setText("");
+        lblFotoEmpre.setFont(typeF);
+        lblFotoEmpre.setForeground(new Color(240, 113, 1));
+
         lblFondo.setText("");
+        lblFondo.setFont(typeF);
+        lblFondo.setForeground(new Color(240, 113, 1));
+
         lblFondo2.setText("");
+        lblFondo2.setFont(typeF);
+        lblFondo2.setForeground(new Color(240, 113, 1));
+
         lblFondo3.setText("");
+        lblFondo3.setFont(typeF);
+        lblFondo3.setForeground(new Color(240, 113, 1));
         
         
         txtId.setText("");
@@ -401,7 +428,7 @@ public class Empresa extends javax.swing.JInternalFrame {
                         .addComponent(lblFotoEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(jPanRecursos2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanRecursos2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 487, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -410,7 +437,7 @@ public class Empresa extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(lblFondo)
                     .addComponent(lblFotoEmpre, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 8, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                         .addGroup(layout.createSequentialGroup()
