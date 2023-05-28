@@ -5,9 +5,11 @@
 package vista;
 
 import Modelo.MySQL;
+import java.awt.Font;
 import vista.Producto.frmiProducto;
 import java.awt.Image;
 import java.awt.Toolkit;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import vista.Cliente.frmiCliente;
 import vista.empresa.Empresa;
@@ -26,6 +28,10 @@ public class frmiPrincipal extends javax.swing.JFrame {
     private frmiCliente cliente = null;
     private Empresa emp = null;
 
+    private int ancho = 35, alto = 35;
+    public static Font Helvetica = new Font("Helvetica", Font.ITALIC, 17);
+    public static Font FontMenu = new Font("Helvetica", Font.ITALIC, 14);
+
     public frmiPrincipal() {
         //titulo
         setTitle("Minimarket");
@@ -34,57 +40,86 @@ public class frmiPrincipal extends javax.swing.JFrame {
         setIconImage(icon_inter);
 
         initComponents();
-        
 
         //Seccion del menu
         fileMenu.setMnemonic('f');
         fileMenu.setText("Entidades");
-
+        fileMenu.setFont(Helvetica);
+        
         JmPrincipales.setText("Principales");
+        JmPrincipales.setFont(Helvetica);
 
         jMIProducto.setText("Producto");
+        jMIProducto.setFont(FontMenu);
         JmPrincipales.add(jMIProducto);
 
         jMICliente.setText("Cliente");
+        jMICliente.setFont(FontMenu);
         JmPrincipales.add(jMICliente);
 
+        jMIEmpresa.setFont(FontMenu);
         jMIEmpresa.setText("Empresa");
         JmPrincipales.add(jMIEmpresa);
-
 
         fileMenu.add(JmPrincipales);
 
         jMSecundarias.setText("Admin");
+        jMSecundarias.setFont(Helvetica);
 
         jMIEmpleado.setText("Empleado");
+        jMIEmpleado.setFont(FontMenu);
         jMSecundarias.add(jMIEmpleado);
-
 
         fileMenu.add(jMSecundarias);
 
-        exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
-            }
-        });
-        fileMenu.add(exitMenuItem);
+        ItemExit.setMnemonic('x');
+        ItemExit.setText("Cerrar Programa");
+        ItemExit.setFont(Helvetica);
+        fileMenu.add(ItemExit);
 
         menuBar.add(fileMenu);
-        
+
         jMSecundarias.setEnabled(false);
 
         //BLoque por si no es admin
-        if (Modelo.C_login.Val_admin==true) {
+        if (Modelo.C_login.Val_admin == true) {
             jMSecundarias.setEnabled(true);
         }
-        
+
         //Fin del seccion del menu nav
         setLocationRelativeTo(null);
         //setSize(700,600);
         setResizable(false);
         //setLayout(null);
+
+        //ITEMS
+        ImageIcon productoImg = new ImageIcon(getClass().getResource("/imagenes/Product.png"));
+        ImageIcon MitadProductoImg = new ImageIcon(productoImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        jMIProducto.setIcon(MitadProductoImg);
+
+        ImageIcon clienteImg = new ImageIcon(getClass().getResource("/imagenes/Usuario.png"));
+        ImageIcon MitadClienteImg = new ImageIcon(clienteImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        jMICliente.setIcon(MitadClienteImg);
+
+        ImageIcon empresaImg = new ImageIcon(getClass().getResource("/imagenes/Empresa.png"));
+        ImageIcon MitadEmpresaImg = new ImageIcon(empresaImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        jMIEmpresa.setIcon(MitadEmpresaImg);
+        
+        ImageIcon salirImg = new ImageIcon(getClass().getResource("/imagenes/Salir.png"));
+        ImageIcon MitadSalirImg = new ImageIcon(salirImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        ItemExit.setIcon(MitadSalirImg);
+        
+        ImageIcon empleadoImg = new ImageIcon(getClass().getResource("/imagenes/Empleado.png"));
+        ImageIcon MitadEmpleadoImg = new ImageIcon(empleadoImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        jMIEmpleado.setIcon(MitadEmpleadoImg);
+        
+        ImageIcon adminImg = new ImageIcon(getClass().getResource("/imagenes/Admin.png"));
+        ImageIcon MitadAdminImg = new ImageIcon(adminImg.getImage().getScaledInstance(45, 45, Image.SCALE_SMOOTH));
+        jMSecundarias.setIcon(MitadAdminImg);
+        
+        ImageIcon principalesImg = new ImageIcon(getClass().getResource("/imagenes/Principales.png"));
+        ImageIcon MitadPrincipalesImg = new ImageIcon(principalesImg.getImage().getScaledInstance(ancho, alto, Image.SCALE_SMOOTH));
+        JmPrincipales.setIcon(MitadPrincipalesImg);
     }
 
     /**
@@ -105,7 +140,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMIEmpresa = new javax.swing.JMenuItem();
         jMSecundarias = new javax.swing.JMenu();
         jMIEmpleado = new javax.swing.JMenuItem();
-        exitMenuItem = new javax.swing.JMenuItem();
+        ItemExit = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -147,14 +182,14 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
         fileMenu.add(jMSecundarias);
 
-        exitMenuItem.setMnemonic('x');
-        exitMenuItem.setText("Exit");
-        exitMenuItem.addActionListener(new java.awt.event.ActionListener() {
+        ItemExit.setMnemonic('x');
+        ItemExit.setText("Exit");
+        ItemExit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                exitMenuItemActionPerformed(evt);
+                ItemExitActionPerformed(evt);
             }
         });
-        fileMenu.add(exitMenuItem);
+        fileMenu.add(ItemExit);
 
         menuBar.add(fileMenu);
 
@@ -176,19 +211,19 @@ public class frmiPrincipal extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void exitMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_exitMenuItemActionPerformed
+    private void ItemExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ItemExitActionPerformed
         System.exit(0);
-    }//GEN-LAST:event_exitMenuItemActionPerformed
+    }//GEN-LAST:event_ItemExitActionPerformed
 
     private void jMIProductoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIProductoActionPerformed
         try {
 
             if (producto == null || producto.isClosed()) {
-                
+
                 producto = new frmiProducto();
                 this.desktopPane.add(producto);
-                frmiProducto.contador=0;
-                frmiProducto.contador_edit=0;
+                frmiProducto.contador = 0;
+                frmiProducto.contador_edit = 0;
 
             }
             producto.setVisible(true);
@@ -201,22 +236,22 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
     private void jMIClienteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIClienteActionPerformed
         if (cliente == null || cliente.isClosed()) {
-                
-                cliente = new frmiCliente();
-                this.desktopPane.add(cliente);
 
-            }
-            cliente.setVisible(true);
+            cliente = new frmiCliente();
+            this.desktopPane.add(cliente);
+
+        }
+        cliente.setVisible(true);
     }//GEN-LAST:event_jMIClienteActionPerformed
 
     private void jMIEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIEmpresaActionPerformed
         if (emp == null || emp.isClosed()) {
-                
-                emp = new Empresa();
-                this.desktopPane.add(emp);
 
-            }
-            emp.setVisible(true);
+            emp = new Empresa();
+            this.desktopPane.add(emp);
+
+        }
+        emp.setVisible(true);
     }//GEN-LAST:event_jMIEmpresaActionPerformed
 
     /**
@@ -249,9 +284,9 @@ public class frmiPrincipal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenuItem ItemExit;
     private javax.swing.JMenu JmPrincipales;
     private javax.swing.JDesktopPane desktopPane;
-    private javax.swing.JMenuItem exitMenuItem;
     private javax.swing.JMenu fileMenu;
     private javax.swing.JMenuItem jMICliente;
     private javax.swing.JMenuItem jMIEmpleado;
