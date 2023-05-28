@@ -239,9 +239,12 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
             cliente = new frmiCliente();
             this.desktopPane.add(cliente);
+            frmiCliente.contador = 0;
+            frmiCliente.contador_edit = 0;
 
         }
         cliente.setVisible(true);
+        MySQL.Ctabla_clie();
     }//GEN-LAST:event_jMIClienteActionPerformed
 
     private void jMIEmpresaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIEmpresaActionPerformed

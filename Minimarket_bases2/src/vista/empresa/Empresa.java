@@ -12,7 +12,7 @@ import javax.swing.border.Border;
 
 
 public class Empresa extends javax.swing.JInternalFrame {
-    public Font typeF = new Font("Arial",Font.BOLD,16);
+    public Font typeF = new Font("Tw Cen MT Condensed Extra Bold",Font.BOLD,16);
 
    public int W=135,H=254,W2=501,H2=395, W3=694,H3=134, H4=694,W4=134, W5=458,H5=78; 
     public Empresa() {
@@ -20,16 +20,43 @@ public class Empresa extends javax.swing.JInternalFrame {
         
         lbId.setText("Id");
         lbId.setFont(typeF);
-        
+        lbId.setForeground(new Color(240, 113, 1));
+
         lblNomEmp.setText("Empresa");
+        lblNomEmp.setFont(typeF);
+        lblNomEmp.setForeground(new Color(240, 113, 1));
+
         lblNit.setText("Nit");
+        lblNit.setFont(typeF);
+        lblNit.setForeground(new Color(240, 113, 1));
+
         lblCorreo.setText("Correo");
+        lblCorreo.setFont(typeF);
+        lblCorreo.setForeground(new Color(240, 113, 1));
+
         lblTel.setText("Telefono");
+        lblTel.setFont(typeF);
+        lblTel.setForeground(new Color(240, 113, 1));
+
         lblDirec.setText("Direccion");
+        lblDirec.setFont(typeF);
+        lblDirec.setForeground(new Color(240, 113, 1));
+
         lblFotoEmpre.setText("");
+        lblFotoEmpre.setFont(typeF);
+        lblFotoEmpre.setForeground(new Color(240, 113, 1));
+
         lblFondo.setText("");
+        lblFondo.setFont(typeF);
+        lblFondo.setForeground(new Color(240, 113, 1));
+
         lblFondo2.setText("");
+        lblFondo2.setFont(typeF);
+        lblFondo2.setForeground(new Color(240, 113, 1));
+
         lblFondo3.setText("");
+        lblFondo3.setFont(typeF);
+        lblFondo3.setForeground(new Color(240, 113, 1));
         
         
         txtId.setText("");
@@ -101,6 +128,30 @@ public class Empresa extends javax.swing.JInternalFrame {
         ImageIcon iconoRedimension4 = new ImageIcon(imgRedimension4); //Crear instancia de ImageIcon con la imagen redimensionada
         btnSalir.setIcon(iconoRedimension4); //Asignar imagen redimensionada al botón
         btnSalir.setToolTipText("Salir");
+        
+        //GUIA********************************************************************************************************************************
+        
+        jBGuia.setHorizontalAlignment(SwingConstants.CENTER); //Centrar imagen
+        jBGuia.setText(""); //Quitar texto al label
+        jBGuia.setBackground(Color.decode("#7498b6")); //Color de fondo del botón
+        ImageIcon iconoGuia = new ImageIcon(getClass().getResource("/imagenes/manual.png")); //Cargar imagen original
+        Image imagenOriginal5 = iconoGuia.getImage(); //Obtener imagen original
+        Image imgRedimension5 = imagenOriginal5.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH); //Redimensionar imagen
+        ImageIcon iconoRedimension5 = new ImageIcon(imgRedimension5); //Crear instancia de ImageIcon con la imagen redimensionada
+        jBGuia.setIcon(iconoRedimension5); //Asignar imagen redimensionada al botón
+        jBGuia.setToolTipText("Guia");
+        
+        //Impresion********************************************************************************************************************************
+        
+        btnImpr.setHorizontalAlignment(SwingConstants.CENTER); //Centrar imagen
+        btnImpr.setText(""); //Quitar texto al label
+        btnImpr.setBackground(Color.decode("#7498b6")); //Color de fondo del botón
+        ImageIcon iconoImpr = new ImageIcon(getClass().getResource("/imagenes/impresora.png")); //Cargar imagen original
+        Image imagenOriginal6 = iconoImpr.getImage(); //Obtener imagen original
+        Image imgRedimension6 = imagenOriginal6.getScaledInstance(35, 35, java.awt.Image.SCALE_SMOOTH); //Redimensionar imagen
+        ImageIcon iconoRedimension6 = new ImageIcon(imgRedimension6); //Crear instancia de ImageIcon con la imagen redimensionada
+        btnSalir.setIcon(iconoRedimension4); //Asignar imagen redimensionada al botón
+        btnSalir.setToolTipText("Imprimir");
         
         // Imagen Logo ***********************************************************************************************************************
         ImageIcon FotoEmpre = new ImageIcon(getClass().getResource("/imagenes/pic/MM1P.png")); //Cargar imagen original
@@ -176,6 +227,8 @@ public class Empresa extends javax.swing.JInternalFrame {
         btnConsulta = new javax.swing.JButton();
         btnSalir = new javax.swing.JButton();
         lblFondo3 = new javax.swing.JLabel();
+        jBGuia = new javax.swing.JButton();
+        btnImpr = new javax.swing.JButton();
         lblFondo2 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
         lblNit = new javax.swing.JLabel();
@@ -237,41 +290,61 @@ public class Empresa extends javax.swing.JInternalFrame {
 
         lblFondo3.setText("jLabel2");
 
+        jBGuia.setText("jButton1");
+        jBGuia.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBGuiaActionPerformed(evt);
+            }
+        });
+
+        btnImpr.setText("jButton1");
+        btnImpr.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnImprActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jpGrupoLayout = new javax.swing.GroupLayout(jpGrupo);
         jpGrupo.setLayout(jpGrupoLayout);
         jpGrupoLayout.setHorizontalGroup(
             jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpGrupoLayout.createSequentialGroup()
-                .addGap(28, 28, 28)
-                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lblFondo3)
-                .addGap(18, 18, 18)
-                .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 52, Short.MAX_VALUE)
-                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(47, 47, 47)
-                .addComponent(btnConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(49, 49, 49)
-                .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
+                .addGroup(jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jpGrupoLayout.createSequentialGroup()
+                        .addGap(69, 69, 69)
+                        .addComponent(lblFondo3))
+                    .addGroup(jpGrupoLayout.createSequentialGroup()
+                        .addGap(21, 21, 21)
+                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(27, 27, 27)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jBGuia, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnImpr, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
         jpGrupoLayout.setVerticalGroup(
             jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpGrupoLayout.createSequentialGroup()
-                .addGroup(jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpGrupoLayout.createSequentialGroup()
-                        .addGap(56, 56, 56)
-                        .addComponent(lblFondo3))
-                    .addGroup(jpGrupoLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                .addGap(14, 14, 14)
+                .addGroup(jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jpGrupoLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(btnImpr, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(jBGuia, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnSalir, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnConsulta, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 7, Short.MAX_VALUE)
+                .addComponent(lblFondo3, javax.swing.GroupLayout.PREFERRED_SIZE, 6, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         lblFondo2.setText("jLabel2");
@@ -401,7 +474,7 @@ public class Empresa extends javax.swing.JInternalFrame {
                         .addComponent(lblFotoEmpre, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
-            .addComponent(jPanRecursos2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jPanRecursos2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 489, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -515,13 +588,23 @@ public class Empresa extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_btnNuevoActionPerformed
 
+    private void jBGuiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuiaActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBGuiaActionPerformed
+
+    private void btnImprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnImprActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnImprActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnConsulta;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnImpr;
     private javax.swing.JButton btnNuevo;
     private javax.swing.JButton btnSalir;
+    private javax.swing.JButton jBGuia;
     private javax.swing.JPanel jPanRecursos2;
     private javax.swing.JPanel jpGrupo;
     private javax.swing.JLabel lbId;
