@@ -8,6 +8,8 @@ import Modelo.MySQL;
 import static Modelo.MySQL.Conexion;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.ResultSet;
+import com.mysql.jdbc.ResultSetMetaData;
+import com.mysql.jdbc.Statement;
 import com.toedter.calendar.JDateChooser;
 import java.awt.Color;
 import java.awt.Desktop;
@@ -17,6 +19,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.File;
 import java.io.IOException;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -35,7 +38,7 @@ import static vista.frmiPrincipal.nFils;
  * @author santi
  */
 public class frmiProducto extends javax.swing.JInternalFrame {
-    
+
     public static int contador = 0, contador_edit = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
@@ -43,9 +46,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private static boolean veri_Bedit = false, bloq_grup = false;
 
     //Tabla de consulta
-    public static String[] sCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca", "Vence", "Medida", "Ruta_foto"};
-    public static String[][] tabla_p = new String[frmiPrincipal.nFils][7];
-    public static String[][] Datos_p = new String[frmiPrincipal.nFils][7];
+    public static String[] sCabecera = {"id_prod", "nombre_prod", "marca", "precio", "fecha_venci", "cantidad","medida", "Ruta_foto"};
+    //public static String[][] tabla_p = new String[frmiPrincipal.nFils][7];
+    public static String[][] tabla_p;
+
     public static File archivo;
     //final de tabla
 
@@ -63,7 +67,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
      * Creates new form frmiProducto
      */
     public frmiProducto() {
-        
+
         setTitle("Tabla Producto");
         //Para que no se cierre si cierra otra
         //setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
@@ -74,17 +78,17 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 //        setIconifiable(false);
 
         initComponents();
-        
+
         setSize(501, 395);
         jBVenci.setEnabled(false);
         setResizable(false); // Deshabilitar el redimensionamiento
         setLocation(0, 0);
-        
+
         componets();
-        
+
         Pjolder();
     }
-    
+
     public void componets() {
         //**********COMPONENTES************
         //Labels
@@ -132,7 +136,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         //lblinfo
         cant_prods = MySQL.cantRegistros(Tabla, ID);
         System.out.println("hola cantida_prd: " + cant_prods);
-        
+
         cont_label = 0;
         jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
         //lblFech
@@ -243,7 +247,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         //btn fechVenci
         dateChooser = new JDateChooser();
-        
+
         jBVenci.add(dateChooser);
 
 //        //Bloqueo del nav
@@ -267,32 +271,32 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             jBUltim.setEnabled(false);
             jBAnterior.setEnabled(false);
         }
-        
+
     }
-    
+
     public void Pjolder() {
         //Caajas de texto
         jtNom_prod.setForeground(Color.GRAY);
         jtNom_prod.setText("Nombre");
         jtNom_prod.setColumns(5);
-        
+
         jtMarca.setForeground(Color.GRAY);
         jtMarca.setText("Marca");
         jtMarca.setColumns(5);
-        
+
         jtPrecio.setForeground(Color.GRAY);
         jtPrecio.setText("$$$$");
         jtPrecio.setColumns(5);
-        
+
         jTcantidad.setForeground(Color.GRAY);
         jTcantidad.setText("cantidad");
         jTcantidad.setColumns(5);
-        
+
     }
-    
+
     public void bloc_sigui() {
         int ult_regis = MySQL.cantRegistros(Tabla, ID);
-        
+
         if (cont_flec == ult_regis) {
             jBSigui.setEnabled(false);
             jBUltim.setEnabled(false);
@@ -306,7 +310,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         //bloc_ant();
 
     }
-    
+
     public void bloc_ant() {
         if (cont_flec == 1) {
             jBAnterior.setEnabled(false);
@@ -321,7 +325,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         //bloc_sigui();
 
     }
-    
+
     public void rec_dat() {
         if (jTcantidad.getText().equalsIgnoreCase("cantidad") || jtMarca.getText().equalsIgnoreCase("Marca") || jtNom_prod.getText().equalsIgnoreCase("Nombre") || jtPrecio.getText().equalsIgnoreCase("$$$$") || dateChooser.getDate() == null || jCBmedida.getSelectedIndex() == 0) {
             jbImg.setEnabled(false);
@@ -810,10 +814,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBIngActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBIngActionPerformed
         ingreso();
-        
+
 
     }//GEN-LAST:event_jBIngActionPerformed
-    
+
     public void bloq_grup() {
         if (bloq_grup == true) {
             JBImpr.setEnabled(false);
@@ -826,7 +830,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             jBPrimer1.setEnabled(false);
             jBUltim.setEnabled(false);
             jBSigui.setEnabled(false);
-            
+
         } else {
             JBImpr.setEnabled(true);
             jBAnterior.setEnabled(true);
@@ -845,20 +849,20 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         contador++;
         System.out.println(contador);
         System.out.println(veri_Bedit);
-        
+
         if (contador % 2 == 0) {
             if (archivo != null) {
-                
+
                 if (veri_Bedit == true) {
                     Date fechaVenci = dateChooser.getDate();
                     SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
                     String fechaV = form.format(fechaVenci);
-                    
+
                     String img_paht_U = MySQL.imgenEnviar(archivo.getAbsolutePath());
-                    
+
                     MySQL.edit_prod(cont_flec, jtNom_prod.getText(), jtMarca.getText(), Integer.parseInt(jtPrecio.getText()), fechaV, Integer.parseInt(jTcantidad.getText()), selec_med, img_paht_U);
                     veri_Bedit = false;
-                    
+
                     jtMarca.setEnabled(false);
                     jtNom_prod.setEnabled(false);
                     jtPrecio.setEnabled(false);
@@ -870,18 +874,18 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     jTcantidad.setForeground(Color.GRAY);
                     jtMarca.setForeground(Color.GRAY);
                     jtPrecio.setForeground(Color.GRAY);
-                    
+
                     ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
                     ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
                     // establece el icono en el botón
                     jBIng.setIcon(mitad_1);
-                    
+
                     ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
                     ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
                     // establece el icono en el botón
                     jBEdit.setIcon(mitad_edit2);
-                    
+
                     contador_edit = 0;
                 } else {
                     //Desbloque el grupo de botones
@@ -896,7 +900,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     dateChooser.setEnabled(false);
                     jCBmedida.setEnabled(false);
                     jTcantidad.setEnabled(false);
-                    
+
                     ImageIcon foto = new ImageIcon(getClass().getResource(ruta_img[0]));
                     ImageIcon mitad_1 = new ImageIcon(foto.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
@@ -918,10 +922,10 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
 //                MIRAR COMO VAN A FUNCIONAR AHORA ESTOS CONTADORES
                     cant_prods = MySQL.cantRegistros(Tabla, ID);
-                    
+
                     cont_label = cant_prods;
                     jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
-                    
+
                     jCBmedida.setSelectedIndex(0);
 
 //                  AQUI ESTABA LA CONDICION DE CUANDO LLEGABA A EL TOPE
@@ -937,17 +941,17 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                         jBUltim.setEnabled(false);
                     }
                     jBIng.setToolTipText("Ingreso");
-                    
+
                     MySQL.closeConnection();
                     bloc_sigui();
                     bloc_ant();
                 }
-                
+
             } else {
                 JOptionPane.showMessageDialog(rootPane, "Porfavor llena todos los campos faltantes", "Error de insercion", JOptionPane.WARNING_MESSAGE);
-                
+
             }
-            
+
         } else {
             if (veri_Bedit == true) {
                 System.out.println("Entre al positivo malo");
@@ -964,7 +968,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 // establece el icono en el botón
                 jBIng.setIcon(mitad_1);
                 jBIng.setToolTipText("Guardar");
-                
+
                 jtNom_prod.setForeground(Color.BLACK);
                 jTcantidad.setForeground(Color.BLACK);
                 jtMarca.setForeground(Color.BLACK);
@@ -986,7 +990,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 jTcantidad.setText("");
                 Date Vacio_fech = null;
                 dateChooser.setDate(Vacio_fech);
-                
+
                 jCBmedida.setSelectedIndex(0);
 
                 //Para que se reinicie el label
@@ -1008,22 +1012,65 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 // establece el icono en el botón
                 jBIng.setIcon(mitad_1);
                 jBIng.setToolTipText("Guardar");
-                
+
                 Pjolder();
-                
+
                 rec_dat();
             }
-            
+
         }
     }
 
     private void jBConsultaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBConsultaActionPerformed
-        
-        for (int i = 0; i < tabla_p.length; i++) {
-            for (int l = 0; l <= 6; l++) {
-                tabla_p[i][l] = frmiProducto.Datos_p[i][l];
+        MySQL.MySQLConnection("root", "", "minimarket");
+        Connection connection = null;
+        Statement statement = null;
+        ResultSet resultSet = null;
+        try {
+            System.out.println("query");
+            String query = "SELECT * FROM productos";
+            connection = Conexion;
+            statement = (Statement) connection.createStatement();
+
+            resultSet = (ResultSet) statement.executeQuery(query);
+
+            ResultSetMetaData metaData = (ResultSetMetaData) resultSet.getMetaData();
+            int columnCount = metaData.getColumnCount();
+
+            
+            int rowCount = 0;
+
+            System.out.println("avance 2");
+            if (resultSet.last()) {
+                rowCount = resultSet.getRow();
+                resultSet.beforeFirst(); // Regresar al inicio del conjunto de resultados
             }
+
+            System.out.println(rowCount);
+
+            //int columnCount = 8; // Número de columnas en la tabla
+            tabla_p = new String[rowCount][columnCount];
+
+            int row = 0;
+            
+            System.out.println("avance 3");
+            while (resultSet.next()) {
+                System.out.println("avance 4");
+                for (int col = 0; col < columnCount; col++) {
+                    tabla_p[row][col] = resultSet.getObject(col + 1).toString();
+
+                }
+
+                row++;
+
+            }
+            // Resto del código para almacenar los datos en una matriz
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            // Cierre de recursos (resultSet, statement, connection)
         }
+
         
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
@@ -1042,7 +1089,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jtNom_prodFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusLost
         if (!jtNom_prod.getText().isEmpty()) {
-            
+
         } else {
             jtNom_prod.setForeground(Color.GRAY);
             jtNom_prod.setText("Nombre");
@@ -1060,7 +1107,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtMarcaFocusLost
         if (!jtMarca.getText().isEmpty()) {
-            
+
         } else {
             jtMarca.setForeground(Color.GRAY);
             jtMarca.setText("Marca");
@@ -1078,7 +1125,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jtPrecioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPrecioFocusLost
         if (!jtPrecio.getText().isEmpty()) {
-            
+
         } else {
             jtPrecio.setForeground(Color.GRAY);
             jtPrecio.setText("$$$$");
@@ -1092,7 +1139,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
 // Establecer la carpeta de inicio del JFileChooser
         jf.setCurrentDirectory(directorioInicio);
-        
+
         jf.showOpenDialog(this);
         archivo = jf.getSelectedFile();
         if (archivo != null) {
@@ -1107,73 +1154,73 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         int borrado = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea borrar este registro?", "Eliminar", JOptionPane.OK_CANCEL_OPTION);
         if (borrado == 0) {
             MySQL.deleteRecord(Tabla, ID, cont_flec);
-            
+
             cont_flec++;
-        
-        try {
-            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
-            
-            ResultSet res = (ResultSet) stp.executeQuery();
-            
-            if (res.next()) {
-                
-                jtNom_prod.setText(res.getString("nombre_prod"));
-                jtMarca.setText(res.getString("marca"));
-                jtPrecio.setText(res.getString("precio"));
-                jTcantidad.setText(res.getString("cantidad"));
 
-                //Poner fecha
-                String fech_actual = res.getString("fecha_venci");
-                SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
-                try {
-                    Date fechaVenciS = S.parse(fech_actual);
-                    dateChooser.setDate(fechaVenciS);
-                } catch (ParseException e) {
-                    e.printStackTrace();
+            try {
+                PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
+
+                ResultSet res = (ResultSet) stp.executeQuery();
+
+                if (res.next()) {
+
+                    jtNom_prod.setText(res.getString("nombre_prod"));
+                    jtMarca.setText(res.getString("marca"));
+                    jtPrecio.setText(res.getString("precio"));
+                    jTcantidad.setText(res.getString("cantidad"));
+
+                    //Poner fecha
+                    String fech_actual = res.getString("fecha_venci");
+                    SimpleDateFormat S = new SimpleDateFormat("dd/MM/yyyy");
+                    try {
+                        Date fechaVenciS = S.parse(fech_actual);
+                        dateChooser.setDate(fechaVenciS);
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+
+                    //set tipo de Medida
+                    String selec_act = res.getString("medida");
+                    System.out.println(selec_act);
+
+                    switch (selec_act.trim()) {
+                        case "Libra":
+                            jCBmedida.setSelectedIndex(1);
+                            break;
+                        case "Kilo":
+                            jCBmedida.setSelectedIndex(2);
+                            break;
+                        case "Unidad":
+                            jCBmedida.setSelectedIndex(3);
+                            break;
+                        default:
+                            throw new AssertionError();
+                    }
+
+                    //Poner la imagen en el label
+                    ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
+                    ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+                    jLImg.setIcon(icono_pro2);
+
                 }
-
-                //set tipo de Medida
-                String selec_act = res.getString("medida");
-                System.out.println(selec_act);
-                
-                switch (selec_act.trim()) {
-                    case "Libra":
-                        jCBmedida.setSelectedIndex(1);
-                        break;
-                    case "Kilo":
-                        jCBmedida.setSelectedIndex(2);
-                        break;
-                    case "Unidad":
-                        jCBmedida.setSelectedIndex(3);
-                        break;
-                    default:
-                        throw new AssertionError();
-                }
-
-                //Poner la imagen en el label
-                ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
-                ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-                jLImg.setIcon(icono_pro2);
-                
+            } catch (SQLException ex) {
+                Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
             }
-        } catch (SQLException ex) {
-            Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
-        }
 
-        // RESET PARA EL LABEL DE POSICIONES 
-        jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
-        
-        bloc_sigui();
-        bloc_ant();
+            // RESET PARA EL LABEL DE POSICIONES 
+            jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
+
+            bloc_sigui();
+            bloc_ant();
         }
         if (borrado == 2) {
         }
-        
+
     }//GEN-LAST:event_jBEliActionPerformed
-    
+
 
     private void jBGuiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuiaActionPerformed
-        File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Producto_2/src/imagenes/CRUD.pdf");
+        File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Minimarket_Bases/Minimarket_bases2/src/imagenes/GuiaProducto.pdf");
         if (Desktop.isDesktopSupported()) {
             Desktop escritorio = Desktop.getDesktop();
             try {
@@ -1207,11 +1254,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         //Base de datos
         try {
             PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = 1;");
-            
+
             ResultSet res = (ResultSet) stp.executeQuery();
-            
+
             if (res.next()) {
-                
+
                 jtNom_prod.setText(res.getString("nombre_prod"));
                 jtMarca.setText(res.getString("marca"));
                 jtPrecio.setText(res.getString("precio"));
@@ -1230,7 +1277,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 //set tipo de Medida
                 String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                
+
                 switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
@@ -1249,7 +1296,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
                 ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
                 jLImg.setIcon(icono_pro2);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -1257,14 +1304,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         // RESET PARA EL LABEL DE POSICIONES 
         jLInfo.setText("Tabla: Producto registro  1  al " + (cant_prods));
-        
+
         cont_flec = 1;
-        
+
         jBUltim.setEnabled(true);
         jBSigui.setEnabled(true);
-        
+
         bloc_ant();
-        
+
 
     }//GEN-LAST:event_jBPrimer1ActionPerformed
 
@@ -1273,16 +1320,16 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         *Lo que hacemos aqui es para primero entre al ciclo y lo lleve al ultimo registro que hizo
         *Esto mismo ejecuta un contador para los botones del medio del nav se ejecuten correctamente y el contador del label se ejecute contando los registros en los que vamos 
          */
-        
+
         int ult_regis = MySQL.cantRegistros(Tabla, ID);
-        
+
         try {
             PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + ult_regis + ";");
-            
+
             ResultSet res = (ResultSet) stp.executeQuery();
-            
+
             if (res.next()) {
-                
+
                 jtNom_prod.setText(res.getString("nombre_prod"));
                 jtMarca.setText(res.getString("marca"));
                 jtPrecio.setText(res.getString("precio"));
@@ -1301,7 +1348,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 //set tipo de Medida
                 String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                
+
                 switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
@@ -1320,7 +1367,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
                 ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
                 jLImg.setIcon(icono_pro2);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -1328,14 +1375,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         // RESET PARA EL LABEL DE POSICIONES 
         jLInfo.setText("Tabla: Producto registro " + cant_prods + "  al " + (cant_prods));
-        
+
         cont_flec = ult_regis;
-        
+
         jBPrimer1.setEnabled(true);
         jBAnterior.setEnabled(true);
-        
+
         bloc_sigui();
-        
+
 
     }//GEN-LAST:event_jBUltimActionPerformed
 
@@ -1343,14 +1390,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         //Bases de datos
         cont_flec++;
-        
+
         try {
             PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
-            
+
             ResultSet res = (ResultSet) stp.executeQuery();
-            
+
             if (res.next()) {
-                
+
                 jtNom_prod.setText(res.getString("nombre_prod"));
                 jtMarca.setText(res.getString("marca"));
                 jtPrecio.setText(res.getString("precio"));
@@ -1369,7 +1416,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 //set tipo de Medida
                 String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                
+
                 switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
@@ -1388,7 +1435,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
                 ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
                 jLImg.setIcon(icono_pro2);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -1396,7 +1443,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         // RESET PARA EL LABEL DE POSICIONES 
         jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
-        
+
         bloc_sigui();
         bloc_ant();
 
@@ -1406,14 +1453,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBAnteriorActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAnteriorActionPerformed
         cont_flec--;
-        
+
         try {
             PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
-            
+
             ResultSet res = (ResultSet) stp.executeQuery();
-            
+
             if (res.next()) {
-                
+
                 jtNom_prod.setText(res.getString("nombre_prod"));
                 jtMarca.setText(res.getString("marca"));
                 jtPrecio.setText(res.getString("precio"));
@@ -1432,7 +1479,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 //set tipo de Medida
                 String selec_act = res.getString("medida");
                 System.out.println(selec_act);
-                
+
                 switch (selec_act.trim()) {
                     case "Libra":
                         jCBmedida.setSelectedIndex(1);
@@ -1451,7 +1498,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
                 ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
                 jLImg.setIcon(icono_pro2);
-                
+
             }
         } catch (SQLException ex) {
             Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
@@ -1459,7 +1506,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         // RESET PARA EL LABEL DE POSICIONES 
         jLInfo.setText("Tabla: Producto registro  " + cont_flec + "  al " + (cant_prods));
-        
+
         bloc_ant();
         bloc_sigui();
 
@@ -1505,7 +1552,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jTcantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusLost
         if (!jTcantidad.getText().isEmpty()) {
-            
+
         } else {
             jTcantidad.setForeground(Color.GRAY);
             jTcantidad.setText("cantidad");
@@ -1515,9 +1562,9 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         contador_edit++;
-        
+
         if (contador_edit % 2 == 0) {
-            
+
             System.out.println("entre 2");
             //segundo toque en caso de que no quiera hacer la edicion 
             //que bloque y boolean de confirmacion para saber asi que no le resta al contador
@@ -1547,7 +1594,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
             // establece el icono en el botón
             jBIng.setIcon(mitad_1);
-            
+
             jtNom_prod.setForeground(Color.GRAY);
             jTcantidad.setForeground(Color.GRAY);
             jtMarca.setForeground(Color.GRAY);
@@ -1556,11 +1603,11 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             //Reintegracion 
             try {
                 PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SELECT * FROM productos where id_prod = " + cont_flec + ";");
-                
+
                 ResultSet res = (ResultSet) stp.executeQuery();
-                
+
                 if (res.next()) {
-                    
+
                     jtNom_prod.setText(res.getString("nombre_prod"));
                     jtMarca.setText(res.getString("marca"));
                     jtPrecio.setText(res.getString("precio"));
@@ -1579,7 +1626,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     //set tipo de Medida
                     String selec_act = res.getString("medida");
                     System.out.println(selec_act);
-                    
+
                     switch (selec_act.trim()) {
                         case "Libra":
                             jCBmedida.setSelectedIndex(1);
@@ -1598,14 +1645,14 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     ImageIcon proFoto2 = new ImageIcon(getClass().getResource(res.getString("img_prod")));
                     ImageIcon icono_pro2 = new ImageIcon(proFoto2.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
                     jLImg.setIcon(icono_pro2);
-                    
+
                 }
             } catch (SQLException ex) {
                 Logger.getLogger(frmiProducto.class.getName()).log(Level.SEVERE, null, ex);
             }
-            
+
         } else {
-            
+
             System.out.println("entre 1");
             ImageIcon foto_edit = new ImageIcon(getClass().getResource("/imagenes/deshacer.png"));
             ImageIcon mitad_edit = new ImageIcon(foto_edit.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
@@ -1615,15 +1662,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             //Primer toque
             contador = 0;
             veri_Bedit = true;
-            
+
             try {
 
                 //Codigo para mandar ordenes a la base de datos 
                 PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("select img_prod from productos where id_prod = ?");
                 stp.setInt(1, cont_flec);
-                
+
                 ResultSet res = (ResultSet) stp.executeQuery();
-                
+
                 if (res.next()) {
                     String paht = res.getString("img_prod");
                     archivo = new File(paht);
@@ -1631,7 +1678,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             } catch (SQLException ex) {
                 System.out.println("Error paht no encotrado");
             }
-            
+
             ingreso();
             //va la imagen y desbloqueo
 
