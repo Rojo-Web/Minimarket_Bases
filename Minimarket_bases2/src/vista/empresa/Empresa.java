@@ -12,10 +12,9 @@ import javax.swing.border.Border;
 
 
 public class Empresa extends javax.swing.JInternalFrame {
-   public Font typeF = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
-   
+    public Font typeF = new Font("Tw Cen MT Condensed Extra Bold",Font.BOLD,16);
 
-   public int W=135,H=254,W2=500,H2=300, W3=60,H3=60, H4=200,W4=465, W5=563,H5=108; 
+   public int W=135,H=254,W2=501,H2=395, W3=694,H3=134, H4=694,W4=134, W5=458,H5=78; 
     public Empresa() {
         initComponents();
         

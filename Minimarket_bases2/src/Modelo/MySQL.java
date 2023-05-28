@@ -94,30 +94,29 @@ public class MySQL {
         }
     }
 
-    public static void obtValores(String table_name, String camp_id, int id_fila) {
+    
+
+    public static void deleteRecord(String table_name,String camp_very, int ID) {
         try {
-            String Query = "SELECT * FROM " + table_name;
-            Statement st = Conexion.createStatement();
-            java.sql.ResultSet resultSet;
-            resultSet = st.executeQuery(Query);
-
-            while (resultSet.next()) {
-                System.out.println("ID: " + resultSet.getString("ID") + " " + "Nombre: " + resultSet.getString("Nombre") + " " + resultSet.getString("Apellido") + "" + "Edad: " + resultSet.getString("Edad") + "" + "Sexo:" + resultSet.getString("Sexo"));
-
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error en la adquisicion de datos");
-        }
-    }
-
-    public static void deleteRecord(String table_name, String ID) {
-        try {
-            String Query = "DELETE FROM " + table_name + " WHERE ID= \"" + ID + "\"";
+            String Query = "DELETE FROM " + table_name + " WHERE "+camp_very+" = \"" + ID + "\"";
             Statement st = Conexion.createStatement();
             st.executeUpdate(Query);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             JOptionPane.showMessageDialog(null, "Error borrando el registro especificado ");
+        }
+        
+        
+        //ESTO ES PARA QUE APENAS BORRE EL DATO EL ID QUE ESTA AUTO INCREMENTANDO SE REINICIE 
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SET @num := 0;");
+            stp.executeUpdate();
+            PreparedStatement stp2 = (PreparedStatement) Conexion.prepareStatement("UPDATE "+table_name+" SET "+camp_very+" = @num := (@num+1);");
+            stp2.executeUpdate();
+            PreparedStatement stp3 = (PreparedStatement) Conexion.prepareStatement("ALTER TABLE "+table_name+" AUTO_INCREMENT = 1;");
+            stp3.executeUpdate();
+
+        } catch (SQLException ex) {
         }
     }
 
@@ -303,15 +302,100 @@ public class MySQL {
             int res = stp.executeUpdate();
 
             if (res > 0) {
-                JOptionPane.showConfirmDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+                JOptionPane.showMessageDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
             } else {
-                JOptionPane.showConfirmDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
-
+                JOptionPane.showMessageDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
             }
         } catch (SQLException ex) {
             System.out.println("Error en actualizacion");
         }
 
-        closeConnection();
+        
+    }
+    
+    //**********************************************TODO PARA CLIENTES*********************************************************************************************
+    public static void Ctabla_clie() {
+        int exist = verif_table("clientes");
+        System.out.println(exist);
+
+        if (exist == 1) {
+
+        } else {
+            try {
+
+                String Query = "CREATE TABLE " + "clientes (ID_C int(100) auto_increment, Id_Clie int(100) NOT NULL, nombre varchar(30) NOT NULL, apellidos varchar(50) NOT NULL, direccion varchar(100) NOT NULL, telefono varchar(70) NOT NULL, genero varchar(70) NOT NULL, F_nacimiento varchar(100) NOT NULL, Edad_C int(100) NOT NULL, estado_civil varchar(100) NOT NULL, img_clie varchar(1000), primary key(ID_C))";
+                JOptionPane.showMessageDialog(null, "Se ha creado la tabla clientes de forma exitosa");
+                Statement st = Conexion.createStatement();
+                st.executeUpdate(Query);
+            } catch (SQLException ex) {
+                Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
+    public static void insert_clie(String table_name,int id_clie, String name_clie, String apellido, String direccion, String telefono, String genero, String F_nacimiento,int edad, String estado, String img_clie) {
+        MySQLConnection("root", "", "minimarket");
+
+        int ID_C = cantRegistros("clientes", "ID_C");
+        ID_C++;
+        System.out.println(ID_C);
+
+        try {
+            System.out.println("Entre");
+            String Query = "INSERT INTO " + table_name + "(ID_C, Id_Clie, nombre, apellidos, direccion, telefono, genero, F_nacimiento, Edad_C, estado_civil, img_clie) VALUES("
+                    + ID_C + ","
+                    + "'" + id_clie + "' ,"
+                    + "'" + name_clie + "' ,"
+                    + "'" + apellido + "' ,"
+                    + "'" + direccion + "' ,"
+                    + "'" + telefono + "' ,"
+                    + "'" + genero + "' ,"
+                    + "'" + F_nacimiento + "' ,"
+                    + "'" + edad + "' ,"
+                    + "'" + estado + "' ,"
+                    + "'" + img_clie + "')";
+            Statement st = Conexion.createStatement();
+            st.executeUpdate(Query);
+
+            JOptionPane.showMessageDialog(null, "Nuevo cliente almacenado de forma exitosa");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos cliente");
+        }
+    }
+    
+    public static void edit_clie(int id_flec, String name_clie, String apellido, String direccion, String telefono, String genero, String F_nacimiento, int edad, String estado, String img_clie) {
+        MySQLConnection("root", "", "minimarket");
+
+        try {
+
+            System.out.println(id_flec);
+
+            //Codigo para mandar ordenes a la base de datos
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("UPDATE clientes SET  nombre = ?, apellidos = ?, direccion = ?, telefono = ?, genero = ?, F_nacimiento = ?, Edad_C = ?, estado_civil = ?, img_clie = ? WHERE ID_C = ?");
+            stp.setString(1, name_clie);
+            stp.setString(2, apellido);
+            stp.setString(3, direccion);
+            stp.setString(4, telefono);
+            stp.setString(5, genero);
+            stp.setString(6, F_nacimiento);
+            stp.setInt(7, edad);
+            stp.setString(8, estado);
+            stp.setString(9, img_clie);
+            stp.setInt(10, id_flec);
+
+            int res = stp.executeUpdate();
+
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en actualizacion");
+        }
+
+        
     }
 }

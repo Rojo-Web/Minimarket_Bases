@@ -33,7 +33,7 @@ public class JFconsulta extends javax.swing.JFrame {
      * Creates new form JFconsulta
      */
     public static int pos_comb = 0;
-    public static Object[] OpsCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca"};
+    public static Object[] OpsCabecera = {"Id_producto", "nombre_prod", "marca", "precio","fecha_venci","cantidad","medida"};
 
     public JFconsulta() {
 
@@ -62,6 +62,7 @@ public class JFconsulta extends javax.swing.JFrame {
                 int indice = jCBfilt.getSelectedIndex();
                 pos_comb = 0;
                 switch (indice) {
+
                     case 1:
                         pos_comb = 0;
                         break;
@@ -81,6 +82,10 @@ public class JFconsulta extends javax.swing.JFrame {
                     case 6:
                         pos_comb = 5;
                         break;    
+                    case 7:
+                        pos_comb = 6;
+                        break;    
+                      
                 }
                 System.out.println("Número seleccionado: " + pos_comb);
             }
@@ -96,9 +101,9 @@ public class JFconsulta extends javax.swing.JFrame {
                 if (e.getClickCount() == 1) { // detecta un solo clic
                     int filaSeleccionada = jTconsulta.getSelectedRow(); // obtiene la fila seleccionada
                     int columnaSeleccionada = jTconsulta.getSelectedColumn(); // obtiene la columna seleccionada
-                    if (columnaSeleccionada == 6) {
+                    if (columnaSeleccionada == 7) {
                         rut_tab =jTconsulta.getValueAt(filaSeleccionada, columnaSeleccionada).toString();
-                        System.out.println(rut_tab);
+                        Muestra_tab.rec_paht(rut_tab);
                         java.awt.EventQueue.invokeLater(new Runnable() {
                             public void run() {
                                 new Muestra_tab().setVisible(true);
@@ -182,7 +187,7 @@ public class JFconsulta extends javax.swing.JFrame {
             }
         });
 
-        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion", "Id_producto", "Precio", "Nom_prod", "Marca", "Vencimiento", "Medida" }));
+        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion", "id_prod", "nombre_prod", "marca", "precio", "Vencimiento", "cantidad", "medida" }));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);

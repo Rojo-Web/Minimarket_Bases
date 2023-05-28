@@ -157,14 +157,15 @@
     <Component class="javax.swing.JComboBox" name="jCBfilt">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="7">
+          <StringArray count="8">
             <StringItem index="0" value="seleccion"/>
-            <StringItem index="1" value="Id_producto"/>
-            <StringItem index="2" value="Precio"/>
-            <StringItem index="3" value="Nom_prod"/>
-            <StringItem index="4" value="Marca"/>
+            <StringItem index="1" value="id_prod"/>
+            <StringItem index="2" value="nombre_prod"/>
+            <StringItem index="3" value="marca"/>
+            <StringItem index="4" value="precio"/>
             <StringItem index="5" value="Vencimiento"/>
-            <StringItem index="6" value="Medida"/>
+            <StringItem index="6" value="cantidad"/>
+            <StringItem index="7" value="medida"/>
           </StringArray>
         </Property>
       </Properties>
