@@ -12,15 +12,21 @@ import static Modelo.MySQL.Conexion;
 import com.mysql.jdbc.PreparedStatement;
 import com.mysql.jdbc.ResultSet;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Image;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.sql.SQLException;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
+import javax.swing.SwingConstants;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 
 public class LoginM extends javax.swing.JFrame {
 
@@ -31,7 +37,7 @@ public class LoginM extends javax.swing.JFrame {
     public static Timer tmr;
     public ActionListener escuchar;
     public int intervalo = 0, id;
-    int ancho = 72, alto = 72;
+    
     
     
     public LoginM() {
@@ -80,24 +86,65 @@ public class LoginM extends javax.swing.JFrame {
         components();
         setLocationRelativeTo(null);
     }
+        public Font typeFE = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
     
     private void components(){
-    
-        jLcarga.setText("0%");
-        jTuser.setText("");
-        jPFclave.setEchoChar('#');
-        jPBcarga.setStringPainted(false);
-
-        ImageIcon img_0 = new ImageIcon(getClass().getResource("/imagenes/informacion.png"));
-        ImageIcon foto_0 = new ImageIcon(img_0.getImage().getScaledInstance(jLfoto.getWidth(), jLfoto.getHeight(), Image.SCALE_DEFAULT));
+        
+        
+        //Imagen USUARIO NN *************************************************************************************************
+        
+        int nuevoAncho = 122,nuevoAlto = 122; // ancho deseado, alto deseado
+        int wFLogin=303 , hFlogin=264;
+        jBsingUp.setText("SingUp");
+        jBsingUp.setFont(typeFE);
+        jBsingUp.setForeground(new Color(240, 113, 1));
+        
+        // SELECCION img BACKGROUND
+        lblFondoLogin.setText("");
+        ImageIcon fondoLog = new ImageIcon(getClass().getResource("/imagenes/pic/fondo5.jpg")); // Cargar imagen original
+        Image imagenLog = fondoLog.getImage(); // Obtener imagen original
+        Image reSize = imagenLog.getScaledInstance(wFLogin, hFlogin, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
+        ImageIcon imgFondoLog = new ImageIcon(reSize); // Crear instancia de ImageIcon con la imagen redimensionada
+        JLabel lblFondoLogin = new JLabel(imgFondoLog);
+        lblFondoLogin.setBounds(0, 0, wFLogin, hFlogin); // Establecer el tamaño del JLabel para que cubra todo el JInternalFrame
+        getContentPane().add(lblFondoLogin); // Agregar el JLabel al contenido del JInternalFrame
+     
+        // SELECCION IMG LABEL USER 
+        ImageIcon img_0 = new ImageIcon(getClass().getResource("/imagenes/pic/user3.png"));
+        ImageIcon foto_0 = new ImageIcon(img_0.getImage().getScaledInstance(jLfoto.getWidth(), jLfoto.getHeight(), Image.SCALE_SMOOTH));
         jLfoto.setText("");
         jLfoto.setIcon(foto_0);
         jLfoto.setToolTipText("Usuario img");
-
-
-
-
-        Color gris_1 = new Color(90, 90, 90);
+        
+        // REDIMENSION IMAGEN LABEL
+        Image imgOrigi = foto_0.getImage();
+        Image imagenRedimensionada = imgOrigi.getScaledInstance(nuevoAncho, nuevoAlto, Image.SCALE_SMOOTH);
+        ImageIcon fotoRedimensionada = new ImageIcon(imagenRedimensionada);
+        jLfoto.setPreferredSize(new Dimension(nuevoAncho, nuevoAlto));
+        jLfoto.setIcon(fotoRedimensionada);
+        jLfoto.setHorizontalAlignment(SwingConstants.CENTER); //Centrar imagen
+        //jLfoto.setVerticalAlignment(SwingConstants.BOTTOM);
+            
+        // BORDE FONDOLABEL
+        Color bordeColor = new Color(219, 220, 221);
+        int grosorBorde = 3; // Grosor del borde en píxeles
+        Border borde = BorderFactory.createLineBorder(bordeColor, grosorBorde);
+        jLfoto.setBorder(borde);
+        
+        // Color fondo label
+        Color color = new Color (235, 236, 237);
+        jLfoto.setBackground(color);
+        jLfoto.setOpaque(true); // para que se muestre el color de fondo
+        jLfoto.setForeground(Color.WHITE);        
+        
+       //****************************************************************************************************************************
+        
+       jLcarga.setText("0%");
+        jTuser.setText("");
+        jPFclave.setEchoChar('#');
+        jPBcarga.setStringPainted(false);
+       
+       Color gris_1 = new Color(90, 90, 90);
         jTuser.setText("Digite su usuario");
         jTuser.setForeground(gris_1);
 
@@ -143,6 +190,7 @@ public class LoginM extends javax.swing.JFrame {
         jLcarga = new javax.swing.JLabel();
         jPBcarga = new javax.swing.JProgressBar();
         jBsingUp = new javax.swing.JButton();
+        lblFondoLogin = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -180,6 +228,8 @@ public class LoginM extends javax.swing.JFrame {
             }
         });
 
+        lblFondoLogin.setText("jLabel1");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -190,35 +240,42 @@ public class LoginM extends javax.swing.JFrame {
                     .addComponent(jLcarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jLfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                                     .addComponent(jTuser)
                                     .addComponent(jPFclave, javax.swing.GroupLayout.DEFAULT_SIZE, 137, Short.MAX_VALUE))
                                 .addGap(0, 0, Short.MAX_VALUE))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jBsingUp)
-                                .addGap(28, 28, 28))))
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(jBsingUp)
+                                        .addGap(28, 28, 28))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                        .addComponent(lblFondoLogin, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(53, 53, 53))))))
                     .addComponent(jPBcarga, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
+                .addGap(20, 20, 20)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(20, 20, 20)
                         .addComponent(jTuser, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(63, 63, 63)
+                        .addGap(18, 18, 18)
+                        .addComponent(lblFondoLogin)
+                        .addGap(29, 29, 29)
                         .addComponent(jPFclave, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 31, Short.MAX_VALUE)
-                        .addComponent(jBsingUp)))
-                .addGap(18, 18, 18)
+                        .addComponent(jBsingUp)
+                        .addGap(18, 18, 18))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jLfoto, javax.swing.GroupLayout.PREFERRED_SIZE, 160, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                 .addComponent(jLcarga)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jPBcarga, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -357,5 +414,6 @@ public class LoginM extends javax.swing.JFrame {
     private javax.swing.JProgressBar jPBcarga;
     private javax.swing.JPasswordField jPFclave;
     private javax.swing.JTextField jTuser;
+    private javax.swing.JLabel lblFondoLogin;
     // End of variables declaration//GEN-END:variables
 }

@@ -25,6 +25,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
 import vista.frmiPrincipal;
@@ -40,6 +41,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
     private static String Tabla = "productos", ID = "id_prod";
+    public Font typeFP = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
 
     //Tabla de consulta
     public static String[] sCabecera = {"Id_producto", "Precio", "Nom_prod", "Marca", "Vence", "Medida", "Ruta_foto"};
@@ -71,6 +73,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 //        setBorder(null); // Eliminar el borde de arrastre
 //        setClosable(false); // Deshabilitar cierre
 //        setIconifiable(false);
+        
 
         initComponents();
 
@@ -91,30 +94,51 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
         jlPrecio.setFont(new Font("Arial", Font.BOLD, 14));
         jlPrecio.setText("Precio_c/u");
+        jlPrecio.setForeground(new Color(240, 113, 1));
+        jlPrecio.setFont(typeFP);
+        
         //lblMarca
         jlMarca.setForeground(new java.awt.Color(0, 0, 0));
         jlMarca.setFont(new Font("Arial", Font.BOLD, 14));
         jlMarca.setText("Marca");
+        jlMarca.setForeground(new Color(240, 113, 1));
+        jlMarca.setFont(typeFP);
         //lblNombre
         jlNom_prod.setForeground(new java.awt.Color(0, 0, 0));
         jlNom_prod.setFont(new Font("Arial", Font.BOLD, 14));
         jlNom_prod.setText("Nombre");
+        
+        jlNom_prod.setForeground(new Color(240, 113, 1));
+        jlNom_prod.setFont(typeFP);
+      
         //lblNav
         jlNav.setForeground(new java.awt.Color(0, 0, 0));
         jlNav.setFont(new Font("Arial", Font.BOLD, 14));
         jlNav.setText("Nav");
+        jlNav.setForeground(new Color(240, 113, 1));
+        jlNav.setFont(typeFP);
+        
         //lblmmto
         jLCrud.setForeground(new java.awt.Color(0, 0, 0));
         jLCrud.setFont(new Font("Arial", Font.BOLD, 14));
         jLCrud.setText("Mtto");
+        jLCrud.setForeground(new Color(240, 113, 1));
+        jLCrud.setFont(typeFP);
+        
         //lblFN
         jLFn.setForeground(new java.awt.Color(0, 0, 0));
         jLFn.setFont(new Font("Arial", Font.BOLD, 14));
         jLFn.setText("Fn Especiales");
+        jLFn.setForeground(new Color(240, 113, 1));
+        jLFn.setFont(typeFP);
+        
         //lblVenci
         jLVenci.setForeground(new java.awt.Color(0, 0, 0));
         jLVenci.setFont(new Font("Arial", Font.BOLD, 14));
         jLVenci.setText("Fecha de vencimiento");
+        jLVenci.setForeground(new Color(240, 113, 1));
+        jLVenci.setFont(typeFP);
+        
         //lblMedida
         jLmedida.setForeground(new java.awt.Color(0, 0, 0));
         jLmedida.setFont(new Font("Arial", Font.BOLD, 14));
@@ -536,7 +560,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addGap(4, 4, 4)
                                 .addComponent(jlNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jlFoto)
                         .addGap(76, 76, 76))
                     .addGroup(jPCentLayout.createSequentialGroup()
