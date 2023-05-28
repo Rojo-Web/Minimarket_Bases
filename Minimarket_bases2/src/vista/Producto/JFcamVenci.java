@@ -11,7 +11,6 @@ import java.awt.Toolkit;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import javax.swing.JOptionPane;
-import static vista.Producto.frmiProducto.Datos_p;
 import static vista.Producto.frmiProducto.cont_filM;
 
 
@@ -121,7 +120,6 @@ public class JFcamVenci extends javax.swing.JFrame {
                 Date fechaVenci = dateChooserC.getDate();
                 SimpleDateFormat form = new SimpleDateFormat("dd/MM/yyyy");
                 String fechaVc = form.format(fechaVenci);
-                Datos_p[cont_filM][4] = fechaVc;
                 
                 setVisible(false);
                 JOptionPane.showMessageDialog(rootPane, "El dato a sido cambiado", "Dato cambiado", JOptionPane.PLAIN_MESSAGE);

@@ -9,7 +9,6 @@ import java.awt.Image;
 import java.awt.Toolkit;
 import javax.swing.JOptionPane;
 
-import static vista.Producto.frmiProducto.Datos_p;
 import static vista.Producto.frmiProducto.cont_filM;
 
 
@@ -140,7 +139,6 @@ public class JFcamMedida extends javax.swing.JFrame {
     }//GEN-LAST:event_jCBmedidaCActionPerformed
 
     private void jBListoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBListoActionPerformed
-        Datos_p[cont_filM][5] = combo_resultC;
         setVisible(false);
         JOptionPane.showMessageDialog(rootPane, "El dato a sido cambiado", "Dato cambiado", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jBListoActionPerformed

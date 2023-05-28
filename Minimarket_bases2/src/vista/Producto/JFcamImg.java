@@ -12,7 +12,6 @@ import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-import static vista.Producto.frmiProducto.Datos_p;
 import static vista.Producto.frmiProducto.cont_filM;
 
 
@@ -135,7 +134,6 @@ public class JFcamImg extends javax.swing.JFrame {
     }//GEN-LAST:event_jBcFotoActionPerformed
 
     private void jBlisCActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBlisCActionPerformed
-        Datos_p[cont_filM][6] = archivoC.getAbsolutePath();
         setVisible(false);
         JOptionPane.showMessageDialog(rootPane, "El dato a sido cambiado", "Dato cambiado", JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_jBlisCActionPerformed
