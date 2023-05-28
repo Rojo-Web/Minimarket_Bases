@@ -459,7 +459,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
 
                 dateChooser.setEnabled(true);
                 comboGenero.setEnabled(true);
-                txtIdCli.setEnabled(true);
+                
                 txtNomCli.setEnabled(true);
                 txtApeCli.setEnabled(true);
                 txtDireCli.setEnabled(true);
@@ -473,7 +473,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 jBIng.setIcon(mitad_1);
                 jBIng.setToolTipText("Guardar");
 
-                txtIdCli.setForeground(Color.BLACK);
+                
                 txtNomCli.setForeground(Color.BLACK);
                 txtApeCli.setForeground(Color.BLACK);
                 txtDireCli.setForeground(Color.BLACK);
@@ -1711,7 +1711,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             }
 
         } else {
-
+            
             System.out.println("entre 1");
             ImageIcon foto_edit = new ImageIcon(getClass().getResource("/imagenes/deshacer.png"));
             ImageIcon mitad_edit = new ImageIcon(foto_edit.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
