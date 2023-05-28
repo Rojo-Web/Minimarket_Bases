@@ -29,9 +29,11 @@
                   <Component id="jLcarga" max="32767" attributes="0"/>
                   <Group type="102" attributes="0">
                       <Component id="jLfoto" min="-2" pref="130" max="-2" attributes="0"/>
+
                       <EmptySpace type="unrelated" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
+
                               <Group type="103" groupAlignment="0" max="-2" attributes="0">
                                   <Component id="jTuser" max="32767" attributes="0"/>
                                   <Component id="jPFclave" pref="137" max="32767" attributes="0"/>
@@ -39,6 +41,7 @@
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                           </Group>
                           <Group type="102" alignment="1" attributes="0">
+
                               <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" alignment="1" attributes="0">
@@ -79,6 +82,7 @@
                       <EmptySpace max="32767" attributes="0"/>
                   </Group>
               </Group>
+
               <Component id="jLcarga" min="-2" max="-2" attributes="0"/>
               <EmptySpace type="unrelated" max="-2" attributes="0"/>
               <Component id="jPBcarga" min="-2" pref="17" max="-2" attributes="0"/>
@@ -127,6 +131,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBsingUpActionPerformed"/>
       </Events>
     </Component>
+
     <Component class="javax.swing.JLabel" name="lblFondoLogin">
       <Properties>
         <Property name="text" type="java.lang.String" value="jLabel1"/>

@@ -19,13 +19,13 @@ import vista.Producto.Muestra_tab;
 
 public class frmConsultaCliente extends javax.swing.JFrame {
 
-    public static String rut_tab;
+    public static String rut_tab_c;
     TableRowSorter fil;
     /**
      * Creates new form JFconsulta
      */
     public static int pos_comb = 0;
-    public static Object[] OpsCabecera = {"Id", "Nombres", "Apellidos", "Direccion", "Telefono", "Genero", "FechaNacimiento" ,"Edad" ,"EstadoCivil" , "Ruta_foto"};
+//    public static Object[] OpsCabecera = {"Id", "Nombres", "Apellidos", "Direccion", "Telefono", "Genero", "FechaNacimiento" ,"Edad" ,"EstadoCivil" , "Ruta_foto"};
 
     public frmConsultaCliente() {
         System.out.println("Existimos tabla consulta Cliente");
@@ -40,7 +40,7 @@ public class frmConsultaCliente extends javax.swing.JFrame {
         jTconsulta.setModel(new javax.swing.table.DefaultTableModel(frmiCliente.tablaCli, frmiCliente.sCabecera));
         jScrollPane1.setViewportView(jTconsulta);
         
-        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion", "IdCliente", "Nombres", "Apellidos", "Direccion", "Telefono", "Genero", "FechaNac", "EstadoCivil" }));
+        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion","Id_Clie", "IdCliente", "Nombres", "Apellidos", "Direccion", "Telefono", "Genero", "FechaNac", "EstadoCivil" }));
 
         comp_consult();
         setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
@@ -75,6 +75,18 @@ public class frmConsultaCliente extends javax.swing.JFrame {
                     case 6:
                         pos_comb = 5;
                         break;
+                    case 7:
+                        pos_comb = 6;
+                        break;
+                    case 8:
+                        pos_comb = 7;
+                        break;
+                    case 9:
+                        pos_comb = 8;
+                        break;
+                    case 10:
+                        pos_comb = 9;
+                        break;
                 }
                 System.out.println("Número seleccionado: " + pos_comb);
             }
@@ -90,9 +102,9 @@ public class frmConsultaCliente extends javax.swing.JFrame {
                 if (e.getClickCount() == 1) { // detecta un solo clic
                     int filaSeleccionada = jTconsulta.getSelectedRow(); // obtiene la fila seleccionada
                     int columnaSeleccionada = jTconsulta.getSelectedColumn(); // obtiene la columna seleccionada
-                    if (columnaSeleccionada == 6) {
-                        rut_tab = jTconsulta.getValueAt(filaSeleccionada, columnaSeleccionada).toString();
-                        System.out.println(rut_tab);
+                    if (columnaSeleccionada == 10) {
+                        rut_tab_c = jTconsulta.getValueAt(filaSeleccionada, columnaSeleccionada).toString();
+                        Muestra_tab.rec_paht(rut_tab_c);
                         java.awt.EventQueue.invokeLater(new Runnable() {
                             public void run() {
                                 new Muestra_tab().setVisible(true);
@@ -157,7 +169,7 @@ public class frmConsultaCliente extends javax.swing.JFrame {
             }
         });
 
-        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion", "Id_producto", "Precio", "Nom_prod", "Marca", "Vencimiento", "Medida" }));
+        jCBfilt.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "seleccion", "ID_C", "Id_Clie", "nombre", "apellidos", "direccion", "telefono", "genero", "F_nacimiento", "Edad", "Estado_Civ" }));
 
         jScrollPane3.setMaximumSize(new java.awt.Dimension(528, 245));
 
