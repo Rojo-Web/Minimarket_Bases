@@ -94,30 +94,29 @@ public class MySQL {
         }
     }
 
-    public static void obtValores(String table_name, String camp_id, int id_fila) {
+    
+
+    public static void deleteRecord(String table_name,String camp_very, int ID) {
         try {
-            String Query = "SELECT * FROM " + table_name;
-            Statement st = Conexion.createStatement();
-            java.sql.ResultSet resultSet;
-            resultSet = st.executeQuery(Query);
-
-            while (resultSet.next()) {
-                System.out.println("ID: " + resultSet.getString("ID") + " " + "Nombre: " + resultSet.getString("Nombre") + " " + resultSet.getString("Apellido") + "" + "Edad: " + resultSet.getString("Edad") + "" + "Sexo:" + resultSet.getString("Sexo"));
-
-            }
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(null, "Error en la adquisicion de datos");
-        }
-    }
-
-    public static void deleteRecord(String table_name, String ID) {
-        try {
-            String Query = "DELETE FROM " + table_name + " WHERE ID= \"" + ID + "\"";
+            String Query = "DELETE FROM " + table_name + " WHERE "+camp_very+" = \"" + ID + "\"";
             Statement st = Conexion.createStatement();
             st.executeUpdate(Query);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             JOptionPane.showMessageDialog(null, "Error borrando el registro especificado ");
+        }
+        
+        
+        //ESTO ES PARA QUE APENAS BORRE EL DATO EL ID QUE ESTA AUTO INCREMENTANDO SE REINICIE 
+        try {
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("SET @num := 0;");
+            stp.executeUpdate();
+            PreparedStatement stp2 = (PreparedStatement) Conexion.prepareStatement("UPDATE "+table_name+" SET "+camp_very+" = @num := (@num+1);");
+            stp2.executeUpdate();
+            PreparedStatement stp3 = (PreparedStatement) Conexion.prepareStatement("ALTER TABLE "+table_name+" AUTO_INCREMENT = 1;");
+            stp3.executeUpdate();
+
+        } catch (SQLException ex) {
         }
     }
 
