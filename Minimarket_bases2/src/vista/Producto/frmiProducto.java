@@ -45,10 +45,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     public static String selec_med = "", combo_result = "";
     private static String Tabla = "productos", ID = "id_prod";
     private static boolean veri_Bedit = false, bloq_grup = false;
-    public static int contador = 0,contador_edit=0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
-    public final int ancho = 15, alto = 15;
-    public static String selec_med = "", combo_result = "";
-    private static String Tabla = "productos", ID = "id_prod";
     public Font typeFP = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
 
     //Tabla de consulta

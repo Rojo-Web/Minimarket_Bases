@@ -36,11 +36,8 @@
                               <Component id="lblDirec" alignment="0" min="-2" pref="135" max="-2" attributes="0"/>
                           </Group>
                       </Group>
-<<<<<<< HEAD
                       <EmptySpace pref="36" max="32767" attributes="0"/>
-=======
-                      <EmptySpace pref="22" max="32767" attributes="0"/>
->>>>>>> sebastian
+
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="103" alignment="0" groupAlignment="0" max="-2" attributes="0">
                               <Component id="txtNom" alignment="0" max="32767" attributes="0"/>
@@ -68,11 +65,8 @@
               </Group>
               <EmptySpace max="-2" attributes="0"/>
           </Group>
-<<<<<<< HEAD
-          <Component id="jPanRecursos2" alignment="1" pref="0" max="32767" attributes="0"/>
-=======
+
           <Component id="jPanRecursos2" alignment="1" pref="487" max="32767" attributes="0"/>
->>>>>>> sebastian
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -83,11 +77,9 @@
                   <Component id="lblFondo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="lblFotoEmpre" alignment="3" pref="56" max="32767" attributes="0"/>
               </Group>
-<<<<<<< HEAD
+
               <EmptySpace pref="8" max="32767" attributes="0"/>
-=======
-              <EmptySpace max="32767" attributes="0"/>
->>>>>>> sebastian
+
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="103" groupAlignment="1" attributes="0">
                       <Group type="102" attributes="0">

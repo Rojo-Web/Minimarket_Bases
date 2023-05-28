@@ -29,6 +29,7 @@ import javax.swing.Timer;
 import vista.Producto.JFimp;
 import vista.frmiPrincipal;
 import static vista.frmiPrincipal.nFils;
+import vista.Cliente.frmConsultaCliente;
 
 public class frmiCliente extends javax.swing.JInternalFrame {
 
