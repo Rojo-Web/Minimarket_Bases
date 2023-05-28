@@ -36,7 +36,7 @@ import static vista.frmiPrincipal.nFils;
  */
 public class frmiProducto extends javax.swing.JInternalFrame {
 
-    public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
+    public static int contador = 0,contador_edit=0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_prods = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", combo_result = "";
     private static String Tabla = "productos", ID = "id_prod";
@@ -81,7 +81,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
         componets();
 
-        //Pjolder();
+        Pjolder();
     }
 
     public void componets() {
@@ -246,10 +246,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jBVenci.add(dateChooser);
 
 //        //Bloqueo del nav
-//        jBSigui.setEnabled(false);
         jBAnterior.setEnabled(false);
         jBPrimer1.setEnabled(false);
-//        jBUltim.setEnabled(false);
 
         //Panel principal Bloqueado
         jtMarca.setEnabled(false);
@@ -259,6 +257,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         dateChooser.setEnabled(false);
         jCBmedida.setEnabled(false);
         jTcantidad.setEnabled(false);
+
+        //Esto se hace para que si no hay productos pues no se activen los botones del nav
+        int cant_regis = MySQL.cantRegistros(Tabla, ID);
+        if (cant_regis == 0) {
+            jBSigui.setEnabled(false);
+            jBPrimer1.setEnabled(false);
+            jBUltim.setEnabled(false);
+            jBAnterior.setEnabled(false);
+        }
 
     }
 
@@ -332,6 +339,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jToggleButton1 = new javax.swing.JToggleButton();
         jPCent = new javax.swing.JPanel();
         jlNom_prod = new javax.swing.JLabel();
         jtNom_prod = new javax.swing.JTextField();
@@ -357,8 +365,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jBUltim = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
         jBIng = new javax.swing.JButton();
-        jBEdit = new javax.swing.JButton();
         jBEli = new javax.swing.JButton();
+        jBEdit = new javax.swing.JToggleButton();
         jLCrud = new javax.swing.JLabel();
         jPFn = new javax.swing.JPanel();
         jBExit = new javax.swing.JButton();
@@ -381,6 +389,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 100, Short.MAX_VALUE)
         );
+
+        jToggleButton1.setText("jToggleButton1");
 
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
 
@@ -554,8 +564,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jlPrecio)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                                .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addGroup(jPCentLayout.createSequentialGroup()
                                 .addComponent(jlMarca)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -571,8 +580,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                                     .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jTcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))))
+                                    .addComponent(jTcantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -635,15 +644,15 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             }
         });
 
-        jBEdit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBEditActionPerformed(evt);
-            }
-        });
-
         jBEli.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jBEliActionPerformed(evt);
+            }
+        });
+
+        jBEdit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jBEditActionPerformed(evt);
             }
         });
 
@@ -665,9 +674,9 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 42, Short.MAX_VALUE)
-                    .addComponent(jBEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBEli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 36, Short.MAX_VALUE)
+                    .addComponent(jBEli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBEdit, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -769,7 +778,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLCrud, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 47, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPFn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLFn, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -786,7 +795,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     .addComponent(jlNav)
                     .addComponent(jLCrud)
                     .addComponent(jLFn))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -983,7 +992,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
 // Establecer la carpeta de inicio del JFileChooser
         jf.setCurrentDirectory(directorioInicio);
-        
+
         jf.showOpenDialog(this);
         archivo = jf.getSelectedFile();
         if (archivo != null) {
@@ -1048,35 +1057,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jBEliActionPerformed
 
-    private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
-        String Dato_mod = JOptionPane.showInputDialog(rootPane, "Digita el ID del producto que desea modificar");
-
-        boolean Scuentra = false;//bandera de while
-        int pos = 0;
-        int columna = 0;
-        cont_filM = 0;
-
-        while (!Scuentra && pos < nFils) {
-            //la cadena de esa posicion es igual a nfils
-            if (Dato_mod.equals(Datos_p[pos][0])) {
-                Scuentra = true;// halla la fila
-            } else {
-                pos++;
-                cont_filM++;
-            }
-        }
-
-        if (pos < nFils) {
-            //System.out.println("Digite Valor: [0-Id_producto][1-Precio][2-Nom_prod][3-Marca][4][] ");
-            String Dato_coluMod = JOptionPane.showInputDialog(rootPane, "Digite Valor: [0-Id_producto][1-Precio][2-Nom_prod][3-Marca][4-Vencimiento][5-Medida][6-rut_foto]");
-            columna = Integer.parseInt(Dato_coluMod);//conversion a entero
-            modificarDatos(pos, columna);
-
-        } else {
-            System.out.println("El identificador ingresado no existe");
-        }
-    }//GEN-LAST:event_jBEditActionPerformed
-
+    
 
     private void jBGuiaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBGuiaActionPerformed
         File file = new File("C:/Users/santi/Downloads/Segundo consolidado/Producto_2/src/imagenes/CRUD.pdf");
@@ -1093,7 +1074,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     private void jBExitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExitActionPerformed
         setVisible(false);
-        contador=0;
+        contador = 0;
     }//GEN-LAST:event_jBExitActionPerformed
 
     private void JBImprActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_JBImprActionPerformed
@@ -1419,36 +1400,55 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_jTcantidadFocusLost
 
-    public void modificarDatos(int fils, int cols) {
-        if (cols == 6) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new JFcamImg().setVisible(true);
-                }
-            });
-        } else if (cols == 4) {
+    private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
+        contador_edit++;
 
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new JFcamVenci().setVisible(true);
-                }
-            });
+        if (contador_edit % 2 == 0) {
+            
+            System.out.println("entre 2");
+               //segundo toque en caso de que no quiera hacer la edicion 
+            //que bloque y boolean de confirmacion para saber asi que no le resta al contador
+            ImageIcon foto_edit2 = new ImageIcon(getClass().getResource(ruta_img[7]));
+            ImageIcon mitad_edit2 = new ImageIcon(foto_edit2.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
 
-        } else if (cols == 5) {
-            java.awt.EventQueue.invokeLater(new Runnable() {
-                public void run() {
-                    new JFcamMedida().setVisible(true);
-                }
-            });
-        } else {
-            String Dato_cambia = JOptionPane.showInputDialog(rootPane, "Digite el nuevo dato de " + sCabecera[cols] + " :");
-            System.out.println("Digite su " + sCabecera[cols] + ":");
-            Datos_p[fils][cols] = Dato_cambia;
-            JOptionPane.showMessageDialog(rootPane, "El dato a sido cambiado", "Dato cambiado", JOptionPane.PLAIN_MESSAGE);
+            // establece el icono en el botón
+            jBEdit.setIcon(mitad_edit2);
+            
+            
+        }else{
+         
+            System.out.println("entre 1");
+            ImageIcon foto_edit = new ImageIcon(getClass().getResource("/imagenes/deshacer.png"));
+            ImageIcon mitad_edit = new ImageIcon(foto_edit.getImage().getScaledInstance(ancho, alto, Image.SCALE_DEFAULT));
+
+            // establece el icono en el botón
+            jBEdit.setIcon(mitad_edit);
+            //Primer toque
+            
+            //va la imagen y desbloqueo
+            
+//            dateChooser.setEnabled(true);
+//            jCBmedida.setEnabled(true);
+//            jtMarca.setEnabled(true);
+//            jtNom_prod.setEnabled(true);
+//            jtPrecio.setEnabled(true);
+//            jbImg.setEnabled(true);
+//            jTcantidad.setEnabled(true);
+            
+            
+            //jBIng.setToolTipText("Guardar");
+            
+            //iria un metodo que ponga el bton ingreso a guardar pero le reste uno al contador 
         }
+    }//GEN-LAST:event_jBEditActionPerformed
 
+    public static void updateEdit(){
+    
+        
+        
     }
-
+    
+    
 //    public static void main(String args[]) {
     /* Set the Nimbus look and feel */
     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1493,7 +1493,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JButton JBImpr;
     private javax.swing.JButton jBAnterior;
     private javax.swing.JButton jBConsulta;
-    private javax.swing.JButton jBEdit;
+    private javax.swing.JToggleButton jBEdit;
     private javax.swing.JButton jBEli;
     private javax.swing.JButton jBExit;
     private javax.swing.JButton jBGuia;
@@ -1520,6 +1520,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPfoto;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JTextField jTcantidad;
+    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JButton jbImg;
     private javax.swing.JLabel jlFoto;
     private javax.swing.JLabel jlMarca;
