@@ -398,4 +398,82 @@ public class MySQL {
 
         
     }
+    
+    
+    //**********************************************TODO PARA Empresa*********************************************************************************************
+    public static void Ctabla_emp() {
+        int exist = verif_table("empresa");
+        System.out.println(exist);
+
+        if (exist == 1) {
+
+        } else {
+            try {
+                                                            //En esta ocacion el campo id se llena con ID_E
+                String Query = "CREATE TABLE " + "empresa (ID_E int(100) auto_increment, nom_empresa varchar(30) NOT NULL, correo varchar(100) NOT NULL, direccion varchar(100) NOT NULL, telefono varchar(70) NOT NULL,  NIT varchar(1000) NOT NULL, primary key(ID_E))";
+                JOptionPane.showMessageDialog(null, "Se ha creado la tabla Empresa de forma exitosa");
+                Statement st = Conexion.createStatement();
+                st.executeUpdate(Query);
+            } catch (SQLException ex) {
+                Logger.getLogger(MySQL.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+    }
+    
+    public static void insert_emp(String table_name, String name_emp, String correo, String direccion, String telefono,  String NIT) {
+        MySQLConnection("root", "", "minimarket");
+
+        int ID_E = cantRegistros("empresa", "ID_E");
+        ID_E++;
+        System.out.println(ID_E);
+
+        try {
+            System.out.println("Entre");
+            String Query = "INSERT INTO " + table_name + "(ID_E, nom_empresa, correo, direccion, telefono, NIT) VALUES("
+                    + ID_E + ","
+                    + "'" + name_emp + "' ,"
+                    + "'" + correo + "' ,"
+                    + "'" + direccion + "' ,"
+                    + "'" + telefono + "' ,"
+                    + "'" + NIT + "')";
+            Statement st = Conexion.createStatement();
+            st.executeUpdate(Query);
+
+            JOptionPane.showMessageDialog(null, "Nueva Empresa almacenada de forma exitosa");
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos Empresa");
+        }
+    }
+    
+    public static void edit_emp(String name_emp, String correo, String direccion, String telefono,  String NIT) {
+        MySQLConnection("root", "", "minimarket");
+
+        try {
+
+            
+
+            //Codigo para mandar ordenes a la base de datos
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("UPDATE empresa SET  nom_empresa = ?, correo = ?, direccion = ?, telefono = ?, NIT = ? WHERE ID_E = ?");
+            stp.setString(1, name_emp);
+            stp.setString(2, correo);
+            stp.setString(3, direccion);
+            stp.setString(4, telefono);
+            stp.setString(5, NIT);
+            stp.setInt(6, 1);
+
+            int res = stp.executeUpdate();
+
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Empresa actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en actualizacion emp");
+        }
+
+        
+    }
 }

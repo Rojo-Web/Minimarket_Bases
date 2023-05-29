@@ -252,9 +252,12 @@ public class frmiPrincipal extends javax.swing.JFrame {
 
             emp = new Empresa();
             this.desktopPane.add(emp);
+            Empresa.contador = 0;
+            Empresa.contador_edit = 0;
 
         }
         emp.setVisible(true);
+        MySQL.Ctabla_emp();
     }//GEN-LAST:event_jMIEmpresaActionPerformed
 
     /**
