@@ -33,7 +33,7 @@ public class JFconsulta extends javax.swing.JFrame {
      * Creates new form JFconsulta
      */
     public static int pos_comb = 0;
-    public static Object[] OpsCabecera = {"Id_producto", "nombre_prod", "marca", "precio","fecha_venci","cantidad","medida"};
+//    public static Object[] OpsCabecera = {"Id_producto", "nombre_prod", "marca", "precio","fecha_venci","cantidad","medida"};
 
     public JFconsulta() {
 

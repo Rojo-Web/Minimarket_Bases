@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 import vista.Cliente.frmiCliente;
 import vista.empresa.Empresa;
+import vista.Empleado.frmiEmpleados;
 
 /**
  *
@@ -26,6 +27,7 @@ public class frmiPrincipal extends javax.swing.JFrame {
     public static int nFils = 0;
     private frmiProducto producto = null;
     private frmiCliente cliente = null;
+    private frmiEmpleados empl = null;
     private Empresa emp = null;
 
     private int ancho = 35, alto = 35;
@@ -178,6 +180,11 @@ public class frmiPrincipal extends javax.swing.JFrame {
         jMSecundarias.setText("jMenu1");
 
         jMIEmpleado.setText("jMenuItem7");
+        jMIEmpleado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMIEmpleadoActionPerformed(evt);
+            }
+        });
         jMSecundarias.add(jMIEmpleado);
 
         fileMenu.add(jMSecundarias);
@@ -259,6 +266,19 @@ public class frmiPrincipal extends javax.swing.JFrame {
         emp.setVisible(true);
         MySQL.Ctabla_emp();
     }//GEN-LAST:event_jMIEmpresaActionPerformed
+
+    private void jMIEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMIEmpleadoActionPerformed
+        if (empl == null || empl.isClosed()) {
+
+            empl = new frmiEmpleados();
+            this.desktopPane.add(empl);
+            frmiEmpleados.contador = 0;
+            frmiEmpleados.contador_edit = 0;
+
+        }
+        empl.setVisible(true);
+        MySQL.Ctabla_emp();
+    }//GEN-LAST:event_jMIEmpleadoActionPerformed
 
     /**
      * @param args the command line arguments

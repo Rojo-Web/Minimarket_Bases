@@ -49,7 +49,6 @@ public class frmiProducto extends javax.swing.JInternalFrame {
 
     //Tabla de consulta
     public static String[] sCabecera = {"id_prod", "nombre_prod", "marca", "precio", "fecha_venci", "cantidad","medida", "Ruta_foto"};
-    //public static String[][] tabla_p = new String[frmiPrincipal.nFils][7];
     public static String[][] tabla_p;
 
     private static File archivo;

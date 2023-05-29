@@ -231,6 +231,38 @@ public class MySQL {
             JOptionPane.showMessageDialog(null, "Error en el almacenamiento de datos");
         }
     }
+    
+    public static void edit_empl(int id, String name, String lastname, String clave, String turno, String nivel, String fech_naci, String edad) {
+        MySQLConnection("root", "", "minimarket");
+
+        try {
+
+            System.out.println(id);
+
+            //Codigo para mandar ordenes a la base de datos
+            PreparedStatement stp = (PreparedStatement) Conexion.prepareStatement("UPDATE empleados SET nombre = ?, apellido = ?, turno = ?, fecha_nacimi = ?, edad = ?, nivel = ?, clave = ? WHERE id_empl = ?");
+            stp.setString(1, name);
+            stp.setString(2, lastname);
+            stp.setString(3, turno);
+            stp.setString(4, fech_naci);
+            stp.setString(5, edad);
+            stp.setString(6, nivel);
+            stp.setString(7, clave);
+            stp.setInt(8, id);
+
+            int res = stp.executeUpdate();
+
+            if (res > 0) {
+                JOptionPane.showMessageDialog(null, "Registro actualizado correctamente", "Dato actualizado", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(null, "Error en actualizacion", "Error en actualizacion", JOptionPane.INFORMATION_MESSAGE);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error en actualizacion");
+        }
+
+        
+    }
 
     //**********************************************TODO PARA PRODUCTOS*********************************************************************************************
     public static void Ctabla_prod() {
