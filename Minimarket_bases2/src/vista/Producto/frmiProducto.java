@@ -26,13 +26,13 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
-import vista.frmiPrincipal;
-import static vista.frmiPrincipal.nFils;
+import javax.swing.border.Border;
 
 /**
  *
@@ -47,6 +47,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     private static boolean veri_Bedit = false, bloq_grup = false;
     public Font typeFP = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
 
+    public int WProd=501,HProd=395;
+    
     //Tabla de consulta
     public static String[] sCabecera = {"id_prod", "nombre_prod", "marca", "precio", "fecha_venci", "cantidad","medida", "Ruta_foto"};
     //public static String[][] tabla_p = new String[frmiPrincipal.nFils][7];
@@ -93,80 +95,128 @@ public class frmiProducto extends javax.swing.JInternalFrame {
     }
 
     public void componets() {
+        jLImg.setBackground(new Color(191, 191, 191));
+        jPfoto.setOpaque(false);
+        
+        
+        
+        // BakcGround
+        //FONDO 1
+       
+        jlFondo1.setText("");
+        ImageIcon fondoProd = new ImageIcon(getClass().getResource("/imagenes/pic/orangeF2.jpg")); // Cargar imagen original
+        Image imgOriProd = fondoProd.getImage(); // Obtener imagen original
+        Image reSizeProd = imgOriProd.getScaledInstance(WProd, HProd, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
+        ImageIcon imgFondoProd = new ImageIcon(reSizeProd); // Crear instancia de ImageIcon con la imagen redimensionada
+        JLabel jlFondo1 = new JLabel(imgFondoProd);
+        jlFondo1.setBounds(0, 0, WProd, HProd); // Establecer el tamaño del JLabel para que cubra todo el JInternalFrame
+        jPCent.add(jlFondo1); // Agregar el JLabel al contenido del JInternalFrame
+ 
+        //FONDO2**************************************************************************************************************************
+        
+        ImageIcon fondoProd1 = new ImageIcon(getClass().getResource("/imagenes/pic/fondo7.jpg")); // Cargar imagen original
+        Image imgOriProd1 = fondoProd1.getImage(); // Obtener imagen original
+        Image reSizeProd1 = imgOriProd1.getScaledInstance(WProd, HProd, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
+        ImageIcon imgFondoProd1 = new ImageIcon(reSizeProd1); // Crear instancia de ImageIcon con la imagen redimensionada
+        JLabel lblFondo2Prod = new JLabel(imgFondoProd1);
+        lblFondo2Prod.setBounds(0, 0, WProd, HProd); // Establecer el tamaño del JLabel para que cubra todo el JInternalFrame
+        getContentPane().add(lblFondo2Prod); // Agregar el JLabel al contenido del JInternalFrame
+        
+  
         //**********COMPONENTES************
         //Labels
         //lblprecio
-        jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
-        jlPrecio.setFont(new Font("Arial", Font.BOLD, 14));
-        jlPrecio.setText("Precio_c/u");
-        jlPrecio.setForeground(new Color(240, 113, 1));
+        
+        jlPrecio.setText("Precio c/u");
         jlPrecio.setFont(typeFP);
+        jlPrecio.setForeground(new java.awt.Color(0, 0, 0));
+        jlPrecio.setForeground(new Color(240, 113, 1));
+        jlPrecio.setOpaque(true);
+        
         
         //lblMarca
-        jlMarca.setForeground(new java.awt.Color(0, 0, 0));
-        jlMarca.setFont(new Font("Arial", Font.BOLD, 14));
-        jlMarca.setText("Marca");
-        jlMarca.setForeground(new Color(240, 113, 1));
-        jlMarca.setFont(typeFP);
-        //lblNombre
-        jlNom_prod.setForeground(new java.awt.Color(0, 0, 0));
-        jlNom_prod.setFont(new Font("Arial", Font.BOLD, 14));
-        jlNom_prod.setText("Nombre");
         
+        jlMarca.setText("Marca");
+        jlMarca.setFont(typeFP);
+        jlMarca.setForeground(new java.awt.Color(0, 0, 0));
+        jlMarca.setForeground(new Color(240, 113, 1));
+        jlMarca.setOpaque(true);
+        
+        //lblNombre
+        
+        jlNom_prod.setText("Nombre");
+        jlNom_prod.setForeground(new java.awt.Color(0, 0, 0));
         jlNom_prod.setForeground(new Color(240, 113, 1));
         jlNom_prod.setFont(typeFP);
-      
+        jlNom_prod.setOpaque(true); 
+        
         //lblNav
-        jlNav.setForeground(new java.awt.Color(0, 0, 0));
-        jlNav.setFont(new Font("Arial", Font.BOLD, 14));
-        jlNav.setText("Nav");
-        jlNav.setForeground(new Color(240, 113, 1));
+        jlNav.setBackground(new java.awt.Color(0, 0, 0));
         jlNav.setFont(typeFP);
+        jlNav.setText("          Navega");
+        jlNav.setForeground(new Color(240, 113, 1));
+       
+      
         
         //lblmmto
-        jLCrud.setForeground(new java.awt.Color(0, 0, 0));
-        jLCrud.setFont(new Font("Arial", Font.BOLD, 14));
-        jLCrud.setText("Mtto");
-        jLCrud.setForeground(new Color(240, 113, 1));
+        jLCrud.setBackground(new java.awt.Color(0, 0, 0));
         jLCrud.setFont(typeFP);
+        jLCrud.setText("         Mtto");
+        jLCrud.setForeground(new Color(240, 113, 1));
+        
+        
         
         //lblFN
-        jLFn.setForeground(new java.awt.Color(0, 0, 0));
-        jLFn.setFont(new Font("Arial", Font.BOLD, 14));
-        jLFn.setText("Fn Especiales");
-        jLFn.setForeground(new Color(240, 113, 1));
+        jLFn.setBackground(new java.awt.Color(0, 0, 0));
         jLFn.setFont(typeFP);
+        jLFn.setText("      Fun Especiales");
+        jLFn.setForeground(new Color(240, 113, 1));
+        
+        
+        
         
         //lblVenci
-        jLVenci.setForeground(new java.awt.Color(0, 0, 0));
-        jLVenci.setFont(new Font("Arial", Font.BOLD, 14));
+        
         jLVenci.setText("Fecha de vencimiento");
+        jLVenci.setForeground(new java.awt.Color(0, 0, 0));
         jLVenci.setForeground(new Color(240, 113, 1));
         jLVenci.setFont(typeFP);
+        jLVenci.setOpaque(true); 
+        
         
         //lblMedida
-        jLmedida.setForeground(new java.awt.Color(0, 0, 0));
-        jLmedida.setFont(new Font("Arial", Font.BOLD, 14));
+        
         jLmedida.setText("Medida de venta");
+        jLmedida.setForeground(new java.awt.Color(0, 0, 0));
+        jLmedida.setForeground(new Color(240, 113, 1));
+        jLmedida.setFont(typeFP);
+        jLmedida.setOpaque(true);
+        
         //lblFoto
-        jlFoto.setForeground(new java.awt.Color(0, 0, 0));
-        jlFoto.setFont(new Font("Arial", Font.BOLD, 14));
-        jlFoto.setText("Foto");
+        jlFondo1.setBackground(new java.awt.Color(0, 0, 0));
+        jlFondo1.setFont(typeFP);
+        jlFondo1.setText("       Foto");
+        jlFondo1.setForeground(new Color(240, 113, 1));
+       
+        
         //lbl cantidad
+        
+        jLcantidad.setText("Cantidad");
+        jLcantidad.setFont(typeFP);
         jLcantidad.setForeground(new java.awt.Color(0, 0, 0));
-        jLcantidad.setFont(new Font("Arial", Font.BOLD, 14));
-        jLcantidad.setText("Cantidad:");
-
+        jLcantidad.setForeground(new Color(240, 113, 1));
+        jLcantidad.setOpaque(true);
         //lblinfo
         cant_prods = MySQL.cantRegistros(Tabla, ID);
         System.out.println("hola cantida_prd: " + cant_prods);
+        
 
         cont_label = 0;
         jLInfo.setText("Tabla: Producto registro " + cont_label + " al " + (cant_prods));
         //lblFech
         //jLfech.setT
-        jLfech.setForeground(new java.awt.Color(255, 0, 0));
-        jLfech.setFont(new Font("Arial", Font.PLAIN, 14));
+        jLfech.setForeground(new java.awt.Color(0, 0, 0));
+        jLfech.setForeground(new Color(240, 113, 1));
         jLfech.setText("");
         //Fecha
         Timer timer = new Timer(1000, new ActionListener() {
@@ -179,6 +229,23 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         });
         timer.start();
 
+        // BORDES PANELES BAJOS
+        //Panel1
+        Color colorBorde = new Color (241, 246, 248); // Color del borde
+        int grosorBorde = 3; // Grosor del borde
+        Border bordeNav = BorderFactory.createLineBorder(colorBorde, grosorBorde);//color aplicado al borde
+        jPNav.setBorder(bordeNav);
+        
+        
+        //Panel2
+        Border bordePanel1 = BorderFactory.createLineBorder(colorBorde, grosorBorde);//color aplicado al borde
+        jPanel1.setBorder(bordePanel1);
+        
+        //Panle3
+        Border bordePFn = BorderFactory.createLineBorder(colorBorde, grosorBorde);//color aplicado al borde
+        jPFn.setBorder(bordePFn);
+        
+        
         //Iconos de los botonos
         //mtto
         //Btn ing
@@ -379,7 +446,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jPfoto = new javax.swing.JPanel();
         jLImg = new javax.swing.JLabel();
         jbImg = new javax.swing.JButton();
-        jlFoto = new javax.swing.JLabel();
+        jlFondo1 = new javax.swing.JLabel();
         jLVenci = new javax.swing.JLabel();
         jBVenci = new javax.swing.JButton();
         jLmedida = new javax.swing.JLabel();
@@ -488,7 +555,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jlFoto.setText("jLabel1");
+        jlFondo1.setText("jLabel1");
 
         jLVenci.setText("jLabel1");
 
@@ -534,45 +601,39 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jPCentLayout.setHorizontalGroup(
             jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPCentLayout.createSequentialGroup()
+                .addGap(14, 14, 14)
+                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jBVenci, javax.swing.GroupLayout.DEFAULT_SIZE, 172, Short.MAX_VALUE)
+                    .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jLmedida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jCBmedida, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                        .addComponent(jlMarca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(jtMarca, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 97, Short.MAX_VALUE)))
+                .addGap(37, 37, 37)
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGap(14, 14, 14)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLVenci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLmedida, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jlMarca)
-                                    .addComponent(jtMarca, javax.swing.GroupLayout.PREFERRED_SIZE, 97, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jBVenci, javax.swing.GroupLayout.PREFERRED_SIZE, 172, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 0, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18))
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGap(43, 43, 43)
-                        .addComponent(jCBmedida, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jLcantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTcantidad))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(20, 20, 20))
-                    .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jlPrecio)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGap(4, 4, 4)
-                                .addComponent(jlNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 97, Short.MAX_VALUE)
-                        .addComponent(jlFoto)
-                        .addGap(76, 76, 76))
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jtNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jtPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addContainerGap())
+                    .addGroup(jPCentLayout.createSequentialGroup()
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jlPrecio, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jTcantidad, javax.swing.GroupLayout.DEFAULT_SIZE, 101, Short.MAX_VALUE)
+                            .addGroup(jPCentLayout.createSequentialGroup()
+                                .addGap(4, 4, 4)
+                                .addComponent(jlNom_prod, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                            .addComponent(jLcantidad, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
+                                .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(20, 20, 20))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
+                                .addComponent(jlFondo1)
+                                .addGap(76, 76, 76))))))
         );
         jPCentLayout.setVerticalGroup(
             jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -580,7 +641,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(jlFoto)
+                        .addComponent(jlFondo1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -785,13 +846,12 @@ public class frmiProducto extends javax.swing.JInternalFrame {
         jPPieLayout.setVerticalGroup(
             jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPPieLayout.createSequentialGroup()
-                .addContainerGap()
                 .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLInfo)
                     .addComponent(jLfech))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 26, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -805,8 +865,8 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     .addComponent(jPNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLCrud, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLCrud, javax.swing.GroupLayout.PREFERRED_SIZE, 104, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPFn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -819,7 +879,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPCent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jlNav)
                     .addComponent(jLCrud)
@@ -829,7 +889,7 @@ public class frmiProducto extends javax.swing.JInternalFrame {
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPNav, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jPFn, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(12, 12, 12)
+                .addGap(23, 23, 23)
                 .addComponent(jPPie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
@@ -1103,77 +1163,6 @@ cant_prods = MySQL.cantRegistros(Tabla, ID);
             }
         });
     }//GEN-LAST:event_jBConsultaActionPerformed
-
-    private void jtNom_prodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusGained
-        if (jtNom_prod.getText().equals("Nombre")) {
-            jtNom_prod.setForeground(Color.BLACK);
-            jtNom_prod.setText("");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtNom_prodFocusGained
-
-    private void jtNom_prodFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusLost
-        if (!jtNom_prod.getText().isEmpty()) {
-
-        } else {
-            jtNom_prod.setForeground(Color.GRAY);
-            jtNom_prod.setText("Nombre");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtNom_prodFocusLost
-
-    private void jtMarcaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtMarcaFocusGained
-        if (jtMarca.getText().equals("Marca")) {
-            jtMarca.setForeground(Color.BLACK);
-            jtMarca.setText("");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtMarcaFocusGained
-
-    private void jtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtMarcaFocusLost
-        if (!jtMarca.getText().isEmpty()) {
-
-        } else {
-            jtMarca.setForeground(Color.GRAY);
-            jtMarca.setText("Marca");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtMarcaFocusLost
-
-    private void jtPrecioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPrecioFocusGained
-        if (jtPrecio.getText().equals("$$$$")) {
-            jtPrecio.setForeground(Color.BLACK);
-            jtPrecio.setText("");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtPrecioFocusGained
-
-    private void jtPrecioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPrecioFocusLost
-        if (!jtPrecio.getText().isEmpty()) {
-
-        } else {
-            jtPrecio.setForeground(Color.GRAY);
-            jtPrecio.setText("$$$$");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jtPrecioFocusLost
-
-    private void jbImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbImgActionPerformed
-        JFileChooser jf = new JFileChooser();
-        File directorioInicio = new File("C:\\Users\\santi\\Downloads\\Segundo consolidado\\Minimarket_Bases\\Minimarket_bases2\\src\\imagenes\\productos");
-
-// Establecer la carpeta de inicio del JFileChooser
-        jf.setCurrentDirectory(directorioInicio);
-
-        jf.showOpenDialog(this);
-        archivo = jf.getSelectedFile();
-        if (archivo != null) {
-            //Poner la imagen en el label
-            ImageIcon proFoto = new ImageIcon(archivo.getAbsolutePath());
-            ImageIcon icono_pro = new ImageIcon(proFoto.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
-            jLImg.setIcon(icono_pro);
-        }
-    }//GEN-LAST:event_jbImgActionPerformed
 
     private void jBEliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEliActionPerformed
         int borrado = JOptionPane.showConfirmDialog(null, "¿Esta seguro que desea borrar este registro?", "Eliminar", JOptionPane.OK_CANCEL_OPTION);
@@ -1544,54 +1533,6 @@ cant_prods = MySQL.cantRegistros(Tabla, ID);
 
     }//GEN-LAST:event_jBAnteriorActionPerformed
 
-    private void jBVenciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVenciActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jBVenciActionPerformed
-
-    private void jCBmedidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBmedidaActionPerformed
-        int indice = jCBmedida.getSelectedIndex();
-        switch (indice) {
-            case 0:
-                selec_med = null;
-                break;
-            case 1:
-                selec_med = "Libra";
-                break;
-            case 2:
-                selec_med = "Kilo";
-                break;
-            case 3:
-                selec_med = "Unidad";
-                break;
-        }
-    }//GEN-LAST:event_jCBmedidaActionPerformed
-
-    private void jCBmedidaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusGained
-        rec_dat();
-    }//GEN-LAST:event_jCBmedidaFocusGained
-
-    private void jCBmedidaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusLost
-        rec_dat();
-    }//GEN-LAST:event_jCBmedidaFocusLost
-
-    private void jTcantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusGained
-        if (jTcantidad.getText().equals("cantidad")) {
-            jTcantidad.setForeground(Color.BLACK);
-            jTcantidad.setText("");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jTcantidadFocusGained
-
-    private void jTcantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusLost
-        if (!jTcantidad.getText().isEmpty()) {
-
-        } else {
-            jTcantidad.setForeground(Color.GRAY);
-            jTcantidad.setText("cantidad");
-            rec_dat();
-        }
-    }//GEN-LAST:event_jTcantidadFocusLost
-
     private void jBEditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBEditActionPerformed
         contador_edit++;
 
@@ -1716,6 +1657,125 @@ cant_prods = MySQL.cantRegistros(Tabla, ID);
             }
     }//GEN-LAST:event_jBEditActionPerformed
 
+    private void jTcantidadFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusLost
+        if (!jTcantidad.getText().isEmpty()) {
+
+        } else {
+            jTcantidad.setForeground(Color.GRAY);
+            jTcantidad.setText("cantidad");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jTcantidadFocusLost
+
+    private void jTcantidadFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jTcantidadFocusGained
+        if (jTcantidad.getText().equals("cantidad")) {
+            jTcantidad.setForeground(Color.BLACK);
+            jTcantidad.setText("");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jTcantidadFocusGained
+
+    private void jCBmedidaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCBmedidaActionPerformed
+        int indice = jCBmedida.getSelectedIndex();
+        switch (indice) {
+            case 0:
+            selec_med = null;
+            break;
+            case 1:
+            selec_med = "Libra";
+            break;
+            case 2:
+            selec_med = "Kilo";
+            break;
+            case 3:
+            selec_med = "Unidad";
+            break;
+        }
+    }//GEN-LAST:event_jCBmedidaActionPerformed
+
+    private void jCBmedidaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusLost
+        rec_dat();
+    }//GEN-LAST:event_jCBmedidaFocusLost
+
+    private void jCBmedidaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jCBmedidaFocusGained
+        rec_dat();
+    }//GEN-LAST:event_jCBmedidaFocusGained
+
+    private void jBVenciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBVenciActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jBVenciActionPerformed
+
+    private void jbImgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jbImgActionPerformed
+        JFileChooser jf = new JFileChooser();
+        File directorioInicio = new File("C:\\Users\\santi\\Downloads\\Segundo consolidado\\Minimarket_Bases\\Minimarket_bases2\\src\\imagenes\\productos");
+
+        // Establecer la carpeta de inicio del JFileChooser
+        jf.setCurrentDirectory(directorioInicio);
+
+        jf.showOpenDialog(this);
+        archivo = jf.getSelectedFile();
+        if (archivo != null) {
+            //Poner la imagen en el label
+            ImageIcon proFoto = new ImageIcon(archivo.getAbsolutePath());
+            ImageIcon icono_pro = new ImageIcon(proFoto.getImage().getScaledInstance(jLImg.getWidth(), jLImg.getHeight(), Image.SCALE_DEFAULT));
+            jLImg.setIcon(icono_pro);
+        }
+    }//GEN-LAST:event_jbImgActionPerformed
+
+    private void jtPrecioFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPrecioFocusLost
+        if (!jtPrecio.getText().isEmpty()) {
+
+        } else {
+            jtPrecio.setForeground(Color.GRAY);
+            jtPrecio.setText("$$$$");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtPrecioFocusLost
+
+    private void jtPrecioFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtPrecioFocusGained
+        if (jtPrecio.getText().equals("$$$$")) {
+            jtPrecio.setForeground(Color.BLACK);
+            jtPrecio.setText("");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtPrecioFocusGained
+
+    private void jtMarcaFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtMarcaFocusLost
+        if (!jtMarca.getText().isEmpty()) {
+
+        } else {
+            jtMarca.setForeground(Color.GRAY);
+            jtMarca.setText("Marca");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtMarcaFocusLost
+
+    private void jtMarcaFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtMarcaFocusGained
+        if (jtMarca.getText().equals("Marca")) {
+            jtMarca.setForeground(Color.BLACK);
+            jtMarca.setText("");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtMarcaFocusGained
+
+    private void jtNom_prodFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusLost
+        if (!jtNom_prod.getText().isEmpty()) {
+
+        } else {
+            jtNom_prod.setForeground(Color.GRAY);
+            jtNom_prod.setText("Nombre");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtNom_prodFocusLost
+
+    private void jtNom_prodFocusGained(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_jtNom_prodFocusGained
+        if (jtNom_prod.getText().equals("Nombre")) {
+            jtNom_prod.setForeground(Color.BLACK);
+            jtNom_prod.setText("");
+            rec_dat();
+        }
+    }//GEN-LAST:event_jtNom_prodFocusGained
+
 //    public static void main(String args[]) {
     /* Set the Nimbus look and feel */
     //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
@@ -1789,7 +1849,7 @@ cant_prods = MySQL.cantRegistros(Tabla, ID);
     private javax.swing.JTextField jTcantidad;
     private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JButton jbImg;
-    private javax.swing.JLabel jlFoto;
+    private javax.swing.JLabel jlFondo1;
     private javax.swing.JLabel jlMarca;
     private javax.swing.JLabel jlNav;
     private javax.swing.JLabel jlNom_prod;

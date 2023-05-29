@@ -16,26 +16,16 @@
     <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
   </AuxValues>
 
-  <Layout>
-    <DimensionLayout dim="0">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" attributes="0">
-              <Component id="jPCent" min="-2" max="-2" attributes="0"/>
-              <EmptySpace max="32767" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
-    <DimensionLayout dim="1">
-      <Group type="103" groupAlignment="0" attributes="0">
-          <Group type="102" alignment="0" attributes="0">
-              <Component id="jPCent" max="32767" attributes="0"/>
-              <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-          </Group>
-      </Group>
-    </DimensionLayout>
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout">
+    <Property name="useNullLayout" type="boolean" value="true"/>
   </Layout>
   <SubComponents>
     <Container class="javax.swing.JPanel" name="jPCent">
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
+          <AbsoluteConstraints x="0" y="0" width="-1" height="-1"/>
+        </Constraint>
+      </Constraints>
 
       <Layout>
         <DimensionLayout dim="0">
@@ -43,47 +33,43 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Group type="102" alignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblFecNac" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
-                              <Component id="lblIdCli" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
-                              <Component id="txtIdCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                              <Component id="lblApeCli" alignment="0" min="-2" max="-2" attributes="0"/>
-                              <Component id="txtApeCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                              <Component id="lblTelCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
-                              <Component id="txtTelCli" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
-                              <Component id="jCalFecNac" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
-                          </Group>
-                          <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="lblGenCli" max="32767" attributes="0"/>
-                              <Group type="102" attributes="0">
-                                  <Group type="103" groupAlignment="0" attributes="0">
-                                      <Component id="lblEstCiv" min="-2" max="-2" attributes="0"/>
-                                      <Component id="comboGenero" min="-2" max="-2" attributes="0"/>
-                                      <Component id="lblDireCli" alignment="0" min="-2" max="-2" attributes="0"/>
-                                      <Component id="txtNomCli" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
-                                      <Component id="txtDireCli" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
-                                      <Component id="lblNomCli" min="-2" pref="70" max="-2" attributes="0"/>
-                                      <Component id="jCBestado" min="-2" max="-2" attributes="0"/>
-                                  </Group>
-                                  <EmptySpace min="0" pref="31" max="32767" attributes="0"/>
-                              </Group>
-                          </Group>
-                          <EmptySpace type="separate" max="-2" attributes="0"/>
-                          <Group type="103" groupAlignment="0" attributes="0">
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jPfoto" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="20" max="-2" attributes="0"/>
-                              </Group>
-                              <Group type="102" alignment="1" attributes="0">
-                                  <Component id="jlFoto" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
-                              </Group>
-                          </Group>
-                      </Group>
-                      <Component id="jPPie" alignment="1" max="32767" attributes="0"/>
+                      <Component id="lblFecNac" alignment="0" min="-2" pref="99" max="-2" attributes="0"/>
+                      <Component id="lblIdCli" alignment="0" min="-2" pref="50" max="-2" attributes="0"/>
+                      <Component id="txtIdCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                      <Component id="lblApeCli" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtApeCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                      <Component id="lblTelCli" alignment="0" min="-2" pref="71" max="-2" attributes="0"/>
+                      <Component id="txtTelCli" alignment="0" min="-2" pref="100" max="-2" attributes="0"/>
+                      <Component id="jCalFecNac" alignment="0" min="-2" pref="103" max="-2" attributes="0"/>
                   </Group>
+                  <EmptySpace min="-2" pref="52" max="-2" attributes="0"/>
+                  <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                      <Component id="lblEstCiv" min="-2" max="-2" attributes="0"/>
+                      <Component id="lblDireCli" alignment="0" min="-2" max="-2" attributes="0"/>
+                      <Component id="txtNomCli" alignment="0" pref="99" max="32767" attributes="0"/>
+                      <Component id="txtDireCli" alignment="0" pref="99" max="32767" attributes="0"/>
+                      <Component id="lblNomCli" alignment="0" min="-2" pref="70" max="-2" attributes="0"/>
+                      <Component id="lblGenCli" max="32767" attributes="0"/>
+                      <Component id="comboGenero" alignment="0" max="32767" attributes="0"/>
+                      <Component id="jCBestado" alignment="0" max="32767" attributes="0"/>
+                  </Group>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace min="-2" pref="42" max="-2" attributes="0"/>
+                          <Component id="lblFondoCli1" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="110" max="-2" attributes="0"/>
+                      </Group>
+                      <Group type="102" alignment="1" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="jPfoto" min="-2" max="-2" attributes="0"/>
+                          <EmptySpace min="-2" pref="84" max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+              </Group>
+              <Group type="102" alignment="0" attributes="0">
+                  <Component id="jPPie" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -93,7 +79,7 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" attributes="0">
                           <EmptySpace min="-2" pref="4" max="-2" attributes="0"/>
-                          <Component id="jlFoto" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblFondoCli1" min="-2" max="-2" attributes="0"/>
                           <EmptySpace max="-2" attributes="0"/>
                           <Component id="jPfoto" max="32767" attributes="0"/>
                       </Group>
@@ -146,7 +132,7 @@
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jPPie" min="-2" max="-2" attributes="0"/>
-                  <EmptySpace max="-2" attributes="0"/>
+                  <EmptySpace min="-2" pref="23" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -255,7 +241,7 @@
             </Component>
           </SubComponents>
         </Container>
-        <Component class="javax.swing.JLabel" name="jlFoto">
+        <Component class="javax.swing.JLabel" name="lblFondoCli1">
           <Properties>
             <Property name="text" type="java.lang.String" value="jLabel1"/>
           </Properties>
@@ -344,33 +330,33 @@
             <DimensionLayout dim="0">
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
-                      <EmptySpace max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="102" alignment="1" attributes="0">
-                              <Component id="jLInfo" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jSeparator1" max="32767" attributes="0"/>
-                              <EmptySpace max="-2" attributes="0"/>
-                              <Component id="jLfech" min="-2" pref="196" max="-2" attributes="0"/>
-                          </Group>
                           <Group type="102" attributes="0">
+                              <EmptySpace pref="16" max="32767" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jlNav" alignment="0" min="-2" max="-2" attributes="0"/>
                                   <Component id="jPNav" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                              <EmptySpace type="separate" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Component id="jLCrud" alignment="0" min="-2" pref="49" max="-2" attributes="0"/>
                                   <Component id="jPanel1" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
-                              <EmptySpace max="32767" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="jPFn" alignment="0" min="-2" max="-2" attributes="0"/>
-                                  <Component id="jLFn" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
-                              </Group>
+                          </Group>
+                          <Group type="102" attributes="0">
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jLInfo" max="32767" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="jSeparator1" max="32767" attributes="0"/>
                           </Group>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="separate" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jLfech" min="-2" pref="196" max="-2" attributes="0"/>
+                          <Component id="jPFn" alignment="0" min="-2" max="-2" attributes="0"/>
+                          <Component id="jLFn" alignment="0" min="-2" pref="118" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="26" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -395,7 +381,7 @@
                           <Component id="jLInfo" min="-2" max="-2" attributes="0"/>
                           <Component id="jLfech" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace pref="28" max="32767" attributes="0"/>
+                      <EmptySpace pref="21" max="32767" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
@@ -497,7 +483,7 @@
                       <Group type="102" alignment="0" attributes="0">
                           <EmptySpace max="-2" attributes="0"/>
                           <Group type="103" groupAlignment="0" attributes="0">
-                              <Component id="jBIng" alignment="0" pref="25" max="32767" attributes="0"/>
+                              <Component id="jBIng" alignment="0" pref="22" max="32767" attributes="0"/>
                               <Component id="jBEdit" alignment="1" max="32767" attributes="0"/>
                               <Component id="jBEli" alignment="0" max="32767" attributes="0"/>
                           </Group>

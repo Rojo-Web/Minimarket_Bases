@@ -101,7 +101,7 @@ public class LoginM extends javax.swing.JFrame {
         
         // SELECCION img BACKGROUND
         lblFondoLogin.setText("");
-        ImageIcon fondoLog = new ImageIcon(getClass().getResource("/imagenes/pic/fondo5.jpg")); // Cargar imagen original
+        ImageIcon fondoLog = new ImageIcon(getClass().getResource("/imagenes/pic/fondo5b.jpg")); // Cargar imagen original
         Image imagenLog = fondoLog.getImage(); // Obtener imagen original
         Image reSize = imagenLog.getScaledInstance(wFLogin, hFlogin, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
         ImageIcon imgFondoLog = new ImageIcon(reSize); // Crear instancia de ImageIcon con la imagen redimensionada

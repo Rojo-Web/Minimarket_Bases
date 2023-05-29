@@ -22,17 +22,19 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
 import javax.swing.JFileChooser;
+import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.Timer;
+import javax.swing.border.Border;
 import vista.Producto.JFimp;
 import vista.frmiPrincipal;
-import static vista.frmiPrincipal.nFils;
-import vista.Cliente.frmConsultaCliente;
 
 public class frmiCliente extends javax.swing.JInternalFrame {
-
+    
+    
     public static int contador = 0, contador_eli = 0, cont_fil = 0, cont_fil_nav = 0, cont_flec = 0, cont_label = 0, columna = 0, cont_filM = 0, cant_med = 0, cant_clies = 0;
     public final int ancho = 15, alto = 15;
     public static String selec_med = "", selec_estado = "", combo_result = "";
@@ -42,6 +44,9 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     public static int contador_edit = 0;
 
     public Font Arial = new Font("Arial", Font.BOLD, 14);
+    
+    public Font typeFC = new Font("Tw Cen MT Condensed Extra Bold",Font.PLAIN,16);
+    public int WProd=501,HProd=395;
 
     //Vector de iconos
     //                                  0                           1                       2                           3                       4                       5                       6
@@ -60,10 +65,14 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     //Fecha de vencimiento
     public static String fechaNac = "";
     private static JDateChooser dateChooser;
+    public int WClie2=490,HClie2=151, WClie1=490, HClie1=800;
 
     public frmiCliente() {
         initComponents();
-
+        
+        
+        jPfoto.setOpaque(false);
+        
         setSize(501, 395);
         jCalFecNac.setEnabled(false);
         setResizable(false); // Deshabilitar el redimensionamiento
@@ -76,38 +85,100 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         comboGenero.addItem("Masculino");
         comboGenero.addItem("Femenino");
 
+        //Fondo1
+        lblFondoCli1.setText("");
+        ImageIcon fondoCli1 = new ImageIcon(getClass().getResource("/imagenes/pic/orangeF2.jpg")); // Cargar imagen original
+        Image fondoCli1Ori = fondoCli1.getImage(); // Obtener imagen original
+        Image reSizeClien1 = fondoCli1Ori.getScaledInstance(WClie1, HClie1, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
+        ImageIcon imgFondoCli1 = new ImageIcon(reSizeClien1); // Crear instancia de ImageIcon con la imagen redimensionada
+        JLabel lblFondoCli1 = new JLabel(imgFondoCli1);
+        lblFondoCli1.setBounds(0, 0, WClie1, HClie1); // Establecer el tamaño del JLabel para que cubra todo el JInternalFrame
+        jPCent.add(lblFondoCli1); // Agregar el JLabel al contenido del JInternalFrame
+                
+        //FONDO 3*************************************************************************
+        ImageIcon fondoPPie = new ImageIcon(getClass().getResource("/imagenes/pic/fondo5.jpg")); // Cargar imagen original
+        Image imgClienOri = fondoPPie.getImage(); // Obtener imagen original
+        Image reSizeClien = imgClienOri.getScaledInstance(WClie2, HClie2, Image.SCALE_SMOOTH); // Redimensionar imagen al tamaño del JLabel
+        ImageIcon imgFondoCli = new ImageIcon(reSizeClien); // Crear instancia de ImageIcon con la imagen redimensionada
+        JLabel lblFondoPie = new JLabel(imgFondoCli);
+        lblFondoPie.setBounds(0, 0, WClie2, HClie2); // Establecer el tamaño del JLabel para que cubra todo el JInternalFrame
+        jPPie.add(lblFondoPie); // Agregar el JLabel al contenido del JInternalFrame
+        
+        Color colorBorde = new Color (184, 184, 184); // Color del borde
+        int grosorBorde = 4; // Grosor del borde
+        Border bordeGrueso = BorderFactory.createLineBorder(colorBorde, grosorBorde);//color aplicado al borde
+        lblFondoPie.setBorder(bordeGrueso);
+        
         //LBLS
-        jlFoto.setText("Foto");
+        jLImg.setText("          Foto");
+        jLImg.setFont(typeFC);
+        jLImg.setForeground(new java.awt.Color(0, 0, 0));
+        jLImg.setForeground(new Color(188, 188, 188));
+        jLImg.setBackground(new Color(229, 230, 231));
+        jLImg.setOpaque(true);
+        
+       
+        
         lblIdCli.setText("ID");
+        lblIdCli.setFont(typeFC);
+        lblIdCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblIdCli.setForeground(new Color(240, 113, 1));
+        lblIdCli.setOpaque(true);
+        
         lblNomCli.setText("Nombre");
+        lblNomCli.setFont(typeFC);
+        lblNomCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblNomCli.setForeground(new Color(240, 113, 1));
+        lblNomCli.setOpaque(true);
+        
         lblApeCli.setText("Apellidos");
+        lblApeCli.setFont(typeFC);
+        lblApeCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblApeCli.setForeground(new Color(240, 113, 1));
+        lblApeCli.setOpaque(true);
+        
         lblDireCli.setText("Dirección");
+        lblDireCli.setFont(typeFC);
+        lblDireCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblDireCli.setForeground(new Color(240, 113, 1));
+        lblDireCli.setOpaque(true);
+        
         lblEstCiv.setText("Estado Civil");
+        lblEstCiv.setFont(typeFC);
+        lblEstCiv.setForeground(new java.awt.Color(0, 0, 0));
+        lblEstCiv.setForeground(new Color(240, 113, 1));
+        lblEstCiv.setOpaque(true);
+        
         lblTelCli.setText("Telefono");
+        lblTelCli.setFont(typeFC);
+        lblTelCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblTelCli.setForeground(new Color(240, 113, 1));
+        lblTelCli.setOpaque(true);
+        
         lblFecNac.setText("Fecha Nacimiento");
+        lblFecNac.setFont(typeFC);
+        lblFecNac.setForeground(new java.awt.Color(0, 0, 0));
+        lblFecNac.setForeground(new Color(240, 113, 1));
+        lblFecNac.setOpaque(true);
+        
+        
         lblGenCli.setText("Genero");
-
-        jlFoto.setFont(Arial);
-        lblIdCli.setFont(Arial);
-        lblApeCli.setFont(Arial);
-        lblDireCli.setFont(Arial);
-        lblEstCiv.setFont(Arial);
-        lblFecNac.setFont(Arial);
-        lblGenCli.setFont(Arial);
-        lblNomCli.setFont(Arial);
-        lblTelCli.setFont(Arial);
+        lblGenCli.setFont(typeFC);
+        lblGenCli.setForeground(new java.awt.Color(0, 0, 0));
+        lblGenCli.setForeground(new Color(240, 113, 1));
+        lblGenCli.setOpaque(true);
 
         //lblNav
-        jlNav.setForeground(new java.awt.Color(0, 0, 0));
-        jlNav.setFont(Arial);
+        jlNav.setForeground(new Color(240, 113, 1));
+        jlNav.setFont(typeFC);
         jlNav.setText("Nav");
         //lblmmto
-        jLCrud.setForeground(new java.awt.Color(0, 0, 0));
-        jLCrud.setFont(Arial);
+        jLCrud.setForeground(new Color(240, 113, 1));
+        jLCrud.setFont(typeFC);
         jLCrud.setText("Mtto");
         //lblFN
-        jLFn.setForeground(new java.awt.Color(0, 0, 0));
-        jLFn.setFont(Arial);
+        jLFn.setForeground(new Color(240, 113, 1));
+        jLFn.setFont(typeFC);
         jLFn.setText("Fn Especiales");
 
         //lblinfo
@@ -549,7 +620,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jPfoto = new javax.swing.JPanel();
         jLImg = new javax.swing.JLabel();
         jbImg = new javax.swing.JButton();
-        jlFoto = new javax.swing.JLabel();
+        lblFondoCli1 = new javax.swing.JLabel();
         lblFecNac = new javax.swing.JLabel();
         jCalFecNac = new javax.swing.JButton();
         lblGenCli = new javax.swing.JLabel();
@@ -579,6 +650,8 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         JBImpr = new javax.swing.JButton();
         jBConsulta = new javax.swing.JButton();
         jBGuia = new javax.swing.JButton();
+
+        getContentPane().setLayout(null);
 
         lblIdCli.setText("jLabel1");
 
@@ -669,7 +742,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
-        jlFoto.setText("jLabel1");
+        lblFondoCli1.setText("jLabel1");
 
         lblFecNac.setText("jLabel1");
 
@@ -821,7 +894,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 25, Short.MAX_VALUE)
+                    .addComponent(jBIng, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE)
                     .addComponent(jBEdit, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBEli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
@@ -887,27 +960,27 @@ public class frmiCliente extends javax.swing.JInternalFrame {
         jPPieLayout.setHorizontalGroup(
             jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPPieLayout.createSequentialGroup()
-                .addContainerGap()
                 .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPPieLayout.createSequentialGroup()
-                        .addComponent(jLInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jSeparator1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jLfech, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPPieLayout.createSequentialGroup()
+                        .addContainerGap(16, Short.MAX_VALUE)
                         .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jlNav)
                             .addComponent(jPNav, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(18, 18, 18)
                         .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLCrud, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jPFn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLFn, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap())
+                            .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(jPPieLayout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLInfo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator1)))
+                .addGap(18, 18, 18)
+                .addGroup(jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLfech, javax.swing.GroupLayout.PREFERRED_SIZE, 196, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPFn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLFn, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26))
         );
         jPPieLayout.setVerticalGroup(
             jPPieLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -927,7 +1000,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                     .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLInfo)
                     .addComponent(jLfech))
-                .addContainerGap(28, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPCentLayout = new javax.swing.GroupLayout(jPCent);
@@ -937,38 +1010,37 @@ public class frmiCliente extends javax.swing.JInternalFrame {
             .addGroup(jPCentLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblApeCli)
+                    .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jCalFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(52, 52, 52)
+                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblEstCiv)
+                    .addComponent(lblDireCli)
+                    .addComponent(txtNomCli, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                    .addComponent(txtDireCli, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
+                    .addComponent(lblNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblGenCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(comboGenero, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jCBestado, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtIdCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblApeCli)
-                            .addComponent(txtApeCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 71, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTelCli, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jCalFecNac, javax.swing.GroupLayout.PREFERRED_SIZE, 103, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(52, 52, 52)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(lblGenCli, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPCentLayout.createSequentialGroup()
-                                .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(lblEstCiv)
-                                    .addComponent(comboGenero, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblDireCli)
-                                    .addComponent(txtNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtDireCli, javax.swing.GroupLayout.PREFERRED_SIZE, 99, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lblNomCli, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jCBestado, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(0, 31, Short.MAX_VALUE)))
-                        .addGap(18, 18, 18)
-                        .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
-                                .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(20, 20, 20))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
-                                .addComponent(jlFoto)
-                                .addGap(76, 76, 76))))
-                    .addComponent(jPPie, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(42, 42, 42)
+                        .addComponent(lblFondoCli1)
+                        .addGap(110, 110, 110))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPCentLayout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPfoto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(84, 84, 84))))
+            .addGroup(jPCentLayout.createSequentialGroup()
+                .addComponent(jPPie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         jPCentLayout.setVerticalGroup(
             jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -976,7 +1048,7 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                 .addGroup(jPCentLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPCentLayout.createSequentialGroup()
                         .addGap(4, 4, 4)
-                        .addComponent(jlFoto)
+                        .addComponent(lblFondoCli1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPfoto, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(jPCentLayout.createSequentialGroup()
@@ -1017,23 +1089,11 @@ public class frmiCliente extends javax.swing.JInternalFrame {
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPPie, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addGap(23, 23, 23))
         );
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPCent, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPCent, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(14, 14, 14))
-        );
+        getContentPane().add(jPCent);
+        jPCent.setBounds(0, 0, 560, 388);
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
@@ -1914,12 +1974,12 @@ public class frmiCliente extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPfoto;
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JButton jbImg;
-    private javax.swing.JLabel jlFoto;
     private javax.swing.JLabel jlNav;
     private javax.swing.JLabel lblApeCli;
     private javax.swing.JLabel lblDireCli;
     private javax.swing.JLabel lblEstCiv;
     private javax.swing.JLabel lblFecNac;
+    private javax.swing.JLabel lblFondoCli1;
     private javax.swing.JLabel lblGenCli;
     private javax.swing.JLabel lblIdCli;
     private javax.swing.JLabel lblNomCli;
